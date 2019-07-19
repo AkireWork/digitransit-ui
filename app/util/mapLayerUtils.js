@@ -47,6 +47,11 @@ export const isFeatureLayerEnabled = (
     if (layerName === 'stop' && feature.properties.stops) {
       return isFeatureLayerEnabled(feature, 'terminal', mapLayers, config);
     }
+    if (featureType.indexOf(',') > -1) {
+      return featureType
+        .split(',')
+        .some(type => Object.keys(mapLayers[layerName]).includes(type));
+    }
     return Boolean(mapLayers[layerName][featureType]);
   }
   if (layerName === 'ticketSales' && feature.properties.TYYPPI && config) {

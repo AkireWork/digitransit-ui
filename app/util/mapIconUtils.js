@@ -43,7 +43,9 @@ const getStyleOrDefault = (selector, defaultValue = {}) => {
   return (cssRule && cssRule.style) || defaultValue;
 };
 
-export const getColor = memoize(selector => getStyleOrDefault(selector).color);
+export const getColor = memoize(
+  selector => getStyleOrDefault(selector, { color: 'black' }).color,
+);
 
 export const getFill = memoize(selector => getStyleOrDefault(selector).fill);
 
@@ -142,6 +144,7 @@ export function drawRoundIcon(tile, geom, type, large, platformNumber) {
     tile.ctx.fill();
 
     tile.ctx.beginPath();
+    console.log('i am here');
     tile.ctx.fillStyle = getModeColor(type);
     tile.ctx.arc(
       geom.x / tile.ratio,
@@ -277,11 +280,9 @@ export function drawParkAndRideIcon(tile, geom, width, height) {
 }
 
 export function drawParkAndRideBicycleIcon(tile, geom, width, height) {
-  getImageFromSpriteCache('icon-icon_bicycle', width, height).then(
-    image => {
-      drawIconImage(image, tile, geom, width, height);
-    },
-  );
+  getImageFromSpriteCache('icon-icon_bicycle', width, height).then(image => {
+    drawIconImage(image, tile, geom, width, height);
+  });
 }
 
 export function drawCitybikeNotInUseIcon(tile, geom, imageSize) {
