@@ -133,4 +133,9 @@ export default {
 
     active: true,
   },
+  estonia: {
+    mqttTopicResolver: function mqttTopicResolver(route) {
+      return '/hfp/v1/journey/ongoing/+/+/+/' + route + '/#';
+    },
+  }
 };

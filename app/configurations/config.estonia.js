@@ -73,6 +73,7 @@ export default {
     realTime: {
         /* sources per feed Id */
         estonia: {
+            active: true,
             mqtt: `${VEHICLES_URL}`,
             agency: 'Tallinna TA',
             routeSelector: function selectRoute(routePageProps) {
