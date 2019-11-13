@@ -543,19 +543,20 @@ export default {
       {
         header: 'About this service',
         paragraphs: [
-          'The service covers public transport, walking, cycling, and some private car use. Service is built on Digitransit platform.',
+          'Welcome to the Journey Planner!',
+          'The Journey Planner helps you find the fastest and easiest way of getting to your destination by public transport in Estonia. On this site, you can also plan your journey by entering the place of departure and destination, or picking them from the map. The Journey Planner will display various journey options according to the place of departure and destination as well as the other parameters you’ve entered.',
         ],
       },
       {
         header: 'Digitransit platform',
         paragraphs: [
-          'The Digitransit service platform is an open source routing platform developed by HSL and Traficom.',
+          'The Journey Planner uses the Digitransit platform (https://digitransit.fi/en/). It is an open source routing platform developed by HSL (Helsinki Regional Transport Authority) and Traficom.',
         ],
       },
       {
         header: 'Data sources',
         paragraphs: [
-          "Maps, streets, buildings, stop locations etc. are provided by © OpenStreetMap contributors. Address data is retrieved from the Building and Dwelling Register of the Finnish Population Register Center. Public transport routes and timetables are downloaded from Traficom's national public transit database.",
+          'The maps, streets, buildings, etc. are provided by © OpenStreetMap users. Address data is obtained from the database of the Estonian Land Board. The data relating to public transport routes and stops are obtained from the Public Transport Register of the Road Administration.',
         ],
       },
     ],
@@ -563,39 +564,41 @@ export default {
       {
         header: 'Teenusest',
         paragraphs: [
-          'Teenus hõlmab ühistransporti, kõndimist, jalgrattasõitu ja mõnda isiklikku auto kasutamist. Teenus on ehitatud Digitransit platvormil.',
+          'Tere tulemast reisiplaneerijasse!',
+          'Reisiplaneerija aitab sul leida kõige kiirema ja mugavama võimaluse sihtkohta jõudmiseks kasutades selleks ühistransporti terves Eestis. Sellel lehel saate planeerida oma reisi, sisestades algus- ja lõpp-punkti või määrates selle kaardilt. Reisiplaneerija kuvab Teile erinevaid teekonna võimalusi vastavalt Teie poolt sisestatud lähte- ja sihtkohale ning muudele otsinguparameetritele.',
         ],
       },
       {
         header: 'Digitransit platvorm',
         paragraphs: [
-          'Digitransit teenindusplatvorm on avatud lähtekoodiga marsruutimisplatvorm, mille on välja töötanud HSL ja Traficom.',
+          'Reisiplaneerija kasutab Digitransit platvormi (https://digitransit.fi/en/). See on avatud lähtekoodiga marsruutimisplatvorm, mille on välja töötanud HSL (Helsingi Regiooni Transpordiamet) ja Traficom.',
         ],
       },
       {
         header: 'Andmeallikad',
         paragraphs: [
-          'Kaardid, tänavad, hooned, peatuste asukohad jne on antud © OpenStreetMap kasutajate poolt. Aadressiandmed saadakse Soome Rahvastikuregistri Keskuse Elukoha ja Kinnistute registrist. Ühistranspordiliinid ja sõiduplaanid laaditakse alla riiklikust ühistranspordi andmebaasist Traficom.',
+          'Kaardid, tänavad, hooned jne on antud © OpenStreetMap kasutajate poolt. Aadressandmed saadakse Maa-ameti andmestikust. Ühistranspordiliinide ja peatuste andmed pärinevad Maanteeameti Ühistranspordiregistrist.',
         ],
       },
     ],
     fi: [
       {
-        header: 'Tietoja palvelusta',
+        header: 'Palvelusta',
         paragraphs: [
-          'Palvelu kattaa joukkoliikenteen, kävelyn, pyöräilyn ja yksityisautoilun rajatuilta osin. Palvelu perustuu Digitransit-palvelualustaan.',
+          'Tervetuloa reittiopas-palveluun!',
+          'Reittiopas auttaa sinua löytämään nopeimman ja helpoimman vaihtoehdon kohteeseen pääsyyn joukkoliikenteellä koko Virossa. Tällä sivulla voit suunnitella matkasi syöttämällä lähtöpaikan ja määränpään tai määrittelemällä ne kartalta. Reittiopas kuvaa sinulle erilaisia reittivaihtoehtoja syöttämäsi lähtöpaikan ja määränpään sekä muiden hakuehtojen mukaisesti.',
         ],
       },
       {
         header: 'Digitransit-palvelualusta',
         paragraphs: [
-          'Digitransit-palvelualusta on HSL:n ja Traficomin kehittämä avoimen lähdekoodin reititystuote.',
+          'Reittiopas käyttää Digitransit-alustaa (https://digitransit.fi/en/). Se on HSL:n (Helsingin seudun liikenne) ja Traficomin työstämä avoimen lähdekoodin reitinsuunnittelun palvelualusta.',
         ],
       },
       {
         header: 'Tietolähteet',
         paragraphs: [
-          'Kartat, tiedot kaduista, rakennuksista, pysäkkien sijainnista ynnä muusta tarjoaa © OpenStreetMap contributors. Osoitetiedot tuodaan Väestörekisterikeskuksen rakennustietorekisteristä. Joukkoliikenteen reitit ja aikataulut ladataan Traficomin valtakunnallisesta joukkoliikenteen tietokannasta.',
+          'Kartat, kadut, rakennukset jne. on saatu © OpenStreetMap -käyttäjiltä. Osoitetiedot saadaan Viron tielaitoksen tiedostoista. Joukkoliikenteen ja pysäkkien tiedot ovat peräisin Viron tielaitoksen joukkoliikennerekisteristä.',
         ],
       },
     ],
@@ -603,19 +606,20 @@ export default {
       {
         header: 'Об услуге',
         paragraphs: [
-          'Услуга распространяется на общественный транспорт, прогулку пешком и велосипедные прогулки, а также на частном автомобиле. Сервис построен на платформе Digitransit.',
+          'Добро пожаловать в планировщик поездок!',
+          'Планировщик поездок поможет Вам найти самый быстрый и удобный вариант маршрута до места назначения, используя для этого общественный транспорт Эстонии. На этой странице Вы можете спланировать свою поездку, введя исходный и конечный пункты или указав их на карте. Планировщик поездок покажет Вам разные варианты маршрута согласно введенному Вами исходному пункту и пункту назначения, а также иным параметрам поиска.',
         ],
       },
       {
         header: 'Платформа Digitransit',
         paragraphs: [
-          "Сервисная платформа Digitransit - это платформа маршрутизации с открытым исходным кодом, разработанная компаниями HSL и Traficom. ',",
+          'Планировщик поездок использует платформу Digitransit (https://digitransit.fi/en/). Эту платформу маршрутов с открытым исходным кодом разработали HSL (Транспортное управление Хельсинки) и Traficom.',
         ],
       },
       {
         header: 'Источники данных',
         paragraphs: [
-          'Карты, улицы, здания, местоположения остановок и т. д. предоставлены ️ участниками © ️OpenStreetMap. Адресные данные извлекаются из Системы Финского регистра народонаселения. Маршруты и расписание общественного транспорта загружаются из национальной базы данных общественного транспорта Traficom.',
+          'Карты, улицы, здания и т. д. предоставлены пользователями © OpenStreetMap. Адресные данные поступают из базы данных Земельного департамента. Данные по линиям и остановкам общественного транспорта берутся из регистра общественного транспорта Департамента шоссейных дорог.',
         ],
       },
     ],
