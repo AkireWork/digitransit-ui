@@ -1,4 +1,4 @@
-/* HSL theme */
+/* Estonia theme */
 
 /* Base theme */
 @import '../default/theme';
@@ -41,12 +41,12 @@ $rail-color: $estonian-rail;
 $ferry-color: $hsl-ferry-blue;
 
 /* Fonts */
-$font-family: "Gotham Rounded SSm A","Gotham Rounded SSm B", Arial, Georgia, Serif;
+$font-family: GothamRounded, Arial, Georgia, Serif;
 $font-weight-medium: 500;
 $letter-spacing: -0.025em;
 $font-size-medium-large: 1rem;
 
-$font-family-narrow: "Gotham XNarrow SSm A","Gotham XNarrow SSm B", Arial, Georgia, Serif;
+$font-family-narrow: GothamRounded, Arial, Georgia, Serif;
 
 /* Spinner */
 $spinner-image: url('hsl-spinner.png');

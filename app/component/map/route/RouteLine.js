@@ -48,7 +48,7 @@ function RouteLine(props) {
           <StopMarker
             stop={stop}
             key={`${stop.gtfsId}-${props.pattern.code}${i ===
-              props.pattern.stops.length - 1 && '-last'}`}
+              props.pattern.stops.length - 1 && '-last'}${Math.random()}`}
             mode={modeClass + (props.thin ? ' thin' : '')}
             thin={props.thin}
           />

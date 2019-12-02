@@ -1,4 +1,8 @@
 /* Default theme */
+@font-face {
+  font-family: GothamRounded;
+  src: url("../estonia/fonts/GothamRounded-Medium.otf");
+}
 
 /* General palette */
 $white: #ffffff;
@@ -71,17 +75,17 @@ $bicycle-color: #64be14;
 $car-color: #333;
 
 /* Fonts */
-$font-family: Lato, Arial, Georgia, Serif;
-$font-weight-book: 400;
-$font-weight-medium: 400;
+$font-family: GothamRounded,Arial,Georgia,Serif;
+$font-weight-book: 500;
+$font-weight-medium: 500;
 $font-weight-bold: 700;
 $font-weight-map-container: $font-weight-book;
-$letter-spacing: 0;
+$letter-spacing: -.025em;
 
-$font-family-narrow: 'PT Sans Narrow', 'Arial Condensed', Arial, Georgia, Serif;
-$font-narrow-weight-book: 400;
+$font-family-narrow: GothamRounded, Arial, Georgia, Serif;
+$font-narrow-weight-book: 500;
 $font-narrow-weight-medium: 500;
-$narrow-letter-spacing: 0;
+$narrow-letter-spacing: -.025em;
 
 $line-height-normal: 1.2;
 

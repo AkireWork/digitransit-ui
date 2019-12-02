@@ -224,6 +224,10 @@ module.exports = {
         loader: isDevelopment ? 'file-loader' : 'url-loader',
         options: { limit: 10000, outputPath: 'assets' },
       },
+      {
+        test: /\.(otf)$/,
+        loader: 'file-loader',
+      },
     ],
   },
   devtool: isProduction ? 'source-map' : 'eval',

@@ -144,7 +144,6 @@ export function drawRoundIcon(tile, geom, type, large, platformNumber) {
     tile.ctx.fill();
 
     tile.ctx.beginPath();
-    console.log('i am here');
     tile.ctx.fillStyle = getModeColor(type);
     tile.ctx.arc(
       geom.x / tile.ratio,
