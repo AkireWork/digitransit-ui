@@ -425,7 +425,7 @@ function getRoutes(input, config) {
     return Promise.resolve([]);
   }
   const number = input.match(/^\d+$/);
-  if (number && number[0].length > 3) {
+  if (number && number[0].length > 4) {
     return Promise.resolve([]);
   }
 
