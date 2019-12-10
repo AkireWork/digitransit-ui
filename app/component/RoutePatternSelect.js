@@ -66,7 +66,7 @@ class RoutePatternSelect extends Component {
     const options = sortBy(patterns, 'code').map(pattern => {
       return (
         <option key={pattern.code} value={pattern.code}>
-          {pattern.stops[0].name} ➔ {pattern.headsign}
+          {pattern.route.longName}
         </option>
       );
     });
@@ -188,6 +188,12 @@ const withStore = connectToStores(
           headsign
           stops {
             name
+          }
+          route {
+            longName
+          }
+          trips {
+            tripHeadsign
           }
           tripsForDate(serviceDay: $serviceDay) {
             id
