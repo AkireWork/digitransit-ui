@@ -435,9 +435,8 @@ const IndexPageWithPosition = connectToStores(
     if (
       isBrowser &&
       locationState.isLocationingInProgress !== true &&
-      locationState.hasLocation === false &&
-      (newProps.origin.gps === true || newProps.destination.gps === true)
-    ) {
+      locationState.hasLocation === false
+    ){
       checkPositioningPermission().then(status => {
         if (
           // check logic for starting geolocation
@@ -447,7 +446,7 @@ const IndexPageWithPosition = connectToStores(
           debug('Auto Initialising geolocation');
 
           context.executeAction(initGeolocation);
-        } else {
+        } else if (newProps.origin.gps === true || newProps.destination.gps === true){
           // clear gps & redirect
           if (newProps.origin.gps === true) {
             newProps.origin.gps = false;

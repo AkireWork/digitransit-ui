@@ -323,7 +323,7 @@ class MapWithTrackingStateHandler extends React.Component {
       this.state.origin.lon != null
     ) {
       location = this.state.origin;
-    } else if (this.state.mapTracking && position.hasLocation) {
+    } else if (position.hasLocation) {
       location = position;
     } else if (this.state.shouldShowDefaultLocation) {
       location = config.defaultMapCenter || config.defaultEndpoint;
