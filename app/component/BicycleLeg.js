@@ -22,7 +22,7 @@ function BicycleLeg({ focusAction, index, leg }, { config }) {
   const distance = displayDistance(parseInt(leg.distance, 10), config);
   const duration = durationToString(leg.duration * 1000);
   let { mode } = leg;
-  let legDescription = <span>{leg.from.name}</span>;
+  let legDescription = <span>{leg.from.name.charAt(0).toUpperCase() + leg.from.name.slice(1)}</span>;
   const firstLegClassName = index === 0 ? 'start' : '';
   let modeClassName = 'bicycle';
 
