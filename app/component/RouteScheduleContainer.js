@@ -4,7 +4,6 @@ import Relay from 'react-relay/classic';
 import moment from 'moment';
 import connectToStores from 'fluxible-addons-react/connectToStores';
 import { intlShape, FormattedMessage } from 'react-intl';
-import keyBy from 'lodash/keyBy';
 import sortBy from 'lodash/sortBy';
 
 import RouteScheduleHeader from './RouteScheduleHeader';

@@ -8,7 +8,7 @@ const outputFilename = 'schema.json';
 
 fetch(
   `${process.env.SERVER_ROOT ||
-    'https://dev-api.digitransit.fi/routing/v1'}/routers/hsl/index/graphql`,
+    'https://api.dev.peatus.ee/routing/v1'}/routers/estonia/index/graphql`,
   {
     method: 'post',
     headers: {

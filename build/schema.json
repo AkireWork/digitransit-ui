@@ -2849,6 +2849,18 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "tripLongName",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "routeShortName",
                         "description": "Short name of the route this trip is running. See field `shortName` of Route.",
                         "args": [],
