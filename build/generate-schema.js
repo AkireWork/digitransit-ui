@@ -5,10 +5,10 @@ const { introspectionQuery } = require('graphql/utilities/introspectionQuery');
 const fetch = require('node-fetch');
 
 const outputFilename = 'schema.json';
-
+//https://api.dev.peatus.ee/routing/v1/routers/estonia/
 fetch(
   `${process.env.SERVER_ROOT ||
-    'https://api.dev.peatus.ee/routing/v1'}/routers/estonia/index/graphql`,
+    'https://dev-api.digitransit.fi/routing/v1'}/routers/hsl/index/graphql`,
   {
     method: 'post',
     headers: {
