@@ -243,6 +243,7 @@ function getOldSearches(oldSearches, input, dropLayers) {
     'properties.address',
     'properties.shortName',
     'properties.longName',
+      'properties.competentAuthority',
   ]);
 
   if (dropLayers) {
@@ -325,6 +326,7 @@ function getFavouriteRoutes(favourites, input) {
         shortName
         mode
         longName
+        competentAuthority
         patterns { code }
       }
     }`,
@@ -439,6 +441,7 @@ function getRoutes(input, config) {
           shortName
           mode
           longName
+          competentAuthority
           patterns { 
             code
           }
@@ -449,7 +452,9 @@ function getRoutes(input, config) {
   );
 
   return getRelayQuery(query)
-    .then(data =>
+    .then(data => {
+      console.log("Data");
+      console.log(data);
       data[0].routes
         .filter(
           item =>
@@ -457,8 +462,8 @@ function getRoutes(input, config) {
             config.feedIds.indexOf(item.gtfsId.split(':')[0]) > -1,
         )
         .map(mapRoute)
-        .sort((x, y) => routeNameCompare(x.properties, y.properties)),
-    )
+        .sort((x, y) => routeNameCompare(x.properties, y.properties))
+    })
     .then(suggestions => take(suggestions, 10));
 }
 
@@ -559,7 +564,8 @@ export const sortSearchResults = (config, results, term = '') => {
   if (!Array.isArray(results)) {
     return results;
   }
-
+  console.log("Results");
+  console.log(results);
   const isLineIdentifier = value =>
     isString(value) &&
     config.search &&

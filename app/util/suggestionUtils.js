@@ -43,6 +43,10 @@ export const getGTFSId = ({ id, gtfsId }) => {
   return undefined;
 };
 
+export const getCompetentAuthority = () => {
+
+};
+
 export const isStop = ({ layer }) =>
   layer === 'stop' || layer === 'favouriteStop';
 
@@ -82,6 +86,8 @@ export const getNameLabel = memoize(
       case 'route-SUBWAY':
       case 'route-FERRY':
       case 'route-AIRPLANE':
+        console.log("Suggestion");
+        console.log(suggestion);
         return !plain && suggestion.shortName
           ? [
               <span key={suggestion.gtfsId}>

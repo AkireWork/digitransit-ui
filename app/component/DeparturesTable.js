@@ -5,6 +5,7 @@ import cx from 'classnames';
 import withBreakpoint from '../util/withBreakpoint';
 
 function DeparturesTable({ headers, content, breakpoint }) {
+    console.log(content);
   return (
     <div
       className={cx('nearby-table-container', {

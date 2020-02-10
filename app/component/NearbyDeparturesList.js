@@ -6,105 +6,116 @@ import sortBy from 'lodash/sortBy';
 import DeparturesTable from './DeparturesTable';
 import DepartureRowContainer from './DepartureRowContainer';
 import BicycleRentalStationRowContainer from './BicycleRentalStationRowContainer';
-import { round } from './Distance';
+import {round} from './Distance';
 
 /* eslint-enable no-underscore-dangle */
 
-const testStopTimes = stoptimes => stoptimes && stoptimes.length > 0;
+const isStoptimes = stoptimes => stoptimes && stoptimes.length > 0;
 
 /* eslint-disable no-underscore-dangle */
 
-const constructPlacesList = values => {
-  const sortedList = sortBy(
-    values.places.edges.filter(
-      ({ node }) =>
-        node.place.__typename !== 'DepartureRow' ||
-        testStopTimes(node.place.stoptimes),
-    ),
-    [
-      ({ node }) => round(node.distance),
-      ({ node }) =>
-        testStopTimes(node.place.stoptimes) &&
-        node.place.stoptimes[0].serviceDay +
-          node.place.stoptimes[0].realtimeDeparture,
-    ],
-  ).map(o => {
-    let place;
-    if (o.node.place.__typename === 'DepartureRow') {
-      place = (
-        <DepartureRowContainer
-          key={o.node.place.id}
-          distance={o.node.distance}
-          departure={o.node.place}
-          currentTime={values.currentTime}
-          timeRange={values.timeRange}
-        />
-      );
-    } else if (o.node.place.__typename === 'BikeRentalStation') {
-      place = (
-        <BicycleRentalStationRowContainer
-          key={o.node.place.id}
-          distance={o.node.distance}
-          station={o.node.place}
-          currentTime={values.currentTime}
-        />
-      );
+const constructPlacesList = (values) => {
+    console.log("Values");
+    console.log(values);
+
+    function extracted() {
+        return ({node}) => round(node.distance);
     }
-    return place;
-  });
-  return sortedList;
+
+    function extracted2() {
+        return ({node}) =>
+            isStoptimes(node.place.stoptimes) &&
+            node.place.stoptimes[0].serviceDay +
+            node.place.stoptimes[0].realtimeDeparture;
+    }
+
+    let filter = values.places.edges.filter(
+        ({node}) =>
+            node.place.__typename !== 'DepartureRow' ||
+            isStoptimes(node.place.stoptimes),
+    );
+    console.log("Filter");
+    console.log(filter);
+    let sortBy1 = sortBy(filter, [extracted(), extracted2()],);
+
+    const sortedList = sortBy1.map(o => {
+        let place;
+        if (o.node.place.__typename === 'DepartureRow') {
+            place = (
+                <DepartureRowContainer
+                    key={o.node.place.id}
+                    distance={o.node.distance}
+                    departure={o.node.place}
+                    currentTime={values.currentTime}
+                    timeRange={values.timeRange}
+                />
+            );
+        } else if (o.node.place.__typename === 'BikeRentalStation') {
+            place = (
+                <BicycleRentalStationRowContainer
+                    key={o.node.place.id}
+                    distance={o.node.distance}
+                    station={o.node.place}
+                    currentTime={values.currentTime}
+                />
+            );
+        }
+        return place;
+    });
+
+    return sortedList;
 };
 
 const PlaceAtDistanceList = ({
-  nearest: { places },
-  currentTime,
-  timeRange,
-}) => {
-  if (places && places.edges) {
-    return (
-      <DeparturesTable
-        headers={[
-          {
-            id: 'to-stop',
-            defaultMessage: 'To Stop',
-          },
-          {
-            id: 'route',
-            defaultMessage: 'Route',
-          },
-          {
-            id: 'destination',
-            defaultMessage: 'Destination',
-          },
-          {
-            id: 'leaves',
-            defaultMessage: 'Leaves',
-          },
-          {
-            id: 'next',
-            defaultMessage: 'Next',
-          },
-        ]}
-        content={constructPlacesList({ places, currentTime, timeRange })}
-      />
-    );
-  }
-  return null;
+                                 nearest: {places},
+                                 currentTime,
+                                 timeRange,
+                             }) => {
+    if (places && places.edges) {
+        return (
+            <DeparturesTable
+                headers={[
+                    {
+                        id: 'to-stop',
+                        defaultMessage: 'To Stop',
+                    },
+                    {
+                        id: 'route',
+                        defaultMessage: 'Route',
+                    },
+                    {
+                        id: 'destination',
+                        defaultMessage: 'Destination',
+                    },
+                    {
+                        id: 'leaves',
+                        defaultMessage: 'Leaves',
+                    },
+                    {
+                        id: 'next',
+                        defaultMessage: 'Next',
+                    },
+                ]}
+                content={constructPlacesList({places, currentTime, timeRange})}
+            />
+        );
+    }
+    return null;
 };
 
 PlaceAtDistanceList.propTypes = {
-  nearest: PropTypes.shape({
-    places: PropTypes.shape({
-      edges: PropTypes.array.isRequired,
+    nearest: PropTypes.shape({
+        places: PropTypes.shape({
+            edges: PropTypes.array.isRequired,
+        }).isRequired,
     }).isRequired,
-  }).isRequired,
-  currentTime: PropTypes.number.isRequired,
-  timeRange: PropTypes.number.isRequired,
+    currentTime: PropTypes.number.isRequired,
+    timeRange: PropTypes.number.isRequired,
 };
 
 export default Relay.createContainer(PlaceAtDistanceList, {
-  fragments: {
-    nearest: variables => Relay.QL`
+    fragments: {
+        nearest: variables => Relay.QL`
       fragment on QueryType {
         places: nearest(
           lat: $lat,
@@ -129,12 +140,12 @@ export default Relay.createContainer(PlaceAtDistanceList, {
                   }
                 }
                 ${DepartureRowContainer.getFragment('departure', {
-                  currentTime: variables.currentTime,
-                  timeRange: variables.timeRange,
-                })}
+            currentTime: variables.currentTime,
+            timeRange: variables.timeRange,
+        })}
                 ${BicycleRentalStationRowContainer.getFragment('station', {
-                  currentTime: variables.currentTime,
-                })}
+            currentTime: variables.currentTime,
+        })}
               }
               distance
             }
@@ -142,16 +153,16 @@ export default Relay.createContainer(PlaceAtDistanceList, {
         }
       }
     `,
-  },
+    },
 
-  initialVariables: {
-    lat: null,
-    lon: null,
-    maxDistance: 0,
-    maxResults: 50,
-    modes: [],
-    placeTypes: [],
-    currentTime: 0,
-    timeRange: 0,
-  },
+    initialVariables: {
+        lat: null,
+        lon: null,
+        maxDistance: 0,
+        maxResults: 50,
+        modes: [],
+        placeTypes: [],
+        currentTime: 0,
+        timeRange: 0,
+    },
 });
