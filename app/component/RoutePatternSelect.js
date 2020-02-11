@@ -49,10 +49,9 @@ class RoutePatternSelect extends Component {
   };
 
   getOptions = () => {
-
     const { activeTab, gtfsId, params, route } = this.props;
     const { router } = this.context;
-    console.log(route);
+
     const patterns =
       activeTab === 'aikataulu'
         ? route.patterns

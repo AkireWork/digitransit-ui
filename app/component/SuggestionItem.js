@@ -13,14 +13,11 @@ import {
   isStop,
   isTerminal,
   getGTFSId,
-    getCompetentAuthority,
 } from '../util/suggestionUtils';
 import ComponentUsageExample from './ComponentUsageExample';
 
 const SuggestionItem = pure(
   ({ item, useTransportIcons, doNotShowLinkToStop, loading }) => {
-      console.log("item");
-      console.log(item);
     let icon;
     if (item.properties.mode && useTransportIcons) {
       icon = (
