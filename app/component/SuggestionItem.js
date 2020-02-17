@@ -13,6 +13,7 @@ import {
   isStop,
   isTerminal,
   getGTFSId,
+  getCompetentAuthority,
 } from '../util/suggestionUtils';
 import ComponentUsageExample from './ComponentUsageExample';
 
@@ -36,6 +37,7 @@ const SuggestionItem = pure(
     }
 
     const [name, label] = getNameLabel(item.properties, false);
+    const competentAuthority = item.properties.competentAuthority;
 
     const ri = (
       <div
@@ -46,7 +48,7 @@ const SuggestionItem = pure(
       >
         <span className="autosuggestIcon">{icon}</span>
         <div>
-          <p className="suggestion-name">{name}</p>
+          <p className="suggestion-name">{name} ({competentAuthority})</p>
           <p className="suggestion-label">{label}</p>
         </div>
       </div>

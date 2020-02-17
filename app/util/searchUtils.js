@@ -439,6 +439,7 @@ function getRoutes(input, config) {
           shortName
           mode
           longName
+          competentAuthority
           patterns { 
             code
           }

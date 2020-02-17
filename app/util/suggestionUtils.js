@@ -43,6 +43,10 @@ export const getGTFSId = ({ id, gtfsId }) => {
   return undefined;
 };
 
+export const getCompetentAuthority = (suggestion) => {
+
+};
+
 export const isStop = ({ layer }) =>
   layer === 'stop' || layer === 'favouriteStop';
 
