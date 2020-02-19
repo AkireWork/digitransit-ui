@@ -43,10 +43,6 @@ export const getGTFSId = ({ id, gtfsId }) => {
   return undefined;
 };
 
-export const getCompetentAuthority = (suggestion) => {
-
-};
-
 export const isStop = ({ layer }) =>
   layer === 'stop' || layer === 'favouriteStop';
 
@@ -95,7 +91,7 @@ export const getNameLabel = memoize(
                 <span className="suggestion-type">
                   &nbsp;-&nbsp;
                   <FormattedMessage id="route" defaultMessage="Route" />
-                  &nbsp;({suggestion.region})
+                  &nbsp;({suggestion.region || suggestion.competentAuthority})
                 </span>
               </span>,
               suggestion.longName,

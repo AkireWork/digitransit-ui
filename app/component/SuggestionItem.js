@@ -13,7 +13,6 @@ import {
   isStop,
   isTerminal,
   getGTFSId,
-  getCompetentAuthority,
 } from '../util/suggestionUtils';
 import ComponentUsageExample from './ComponentUsageExample';
 
@@ -48,7 +47,7 @@ const SuggestionItem = pure(
       >
         <span className="autosuggestIcon">{icon}</span>
         <div>
-          <p className="suggestion-name">{name} ({competentAuthority})</p>
+          <p className="suggestion-name">{name}</p>
           <p className="suggestion-label">{label}</p>
         </div>
       </div>
