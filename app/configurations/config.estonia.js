@@ -26,7 +26,6 @@ export default {
     },
     STOP_MAP: `${MAP_URL}/map/v1/estonia-stop-map/`,
     CITYBIKE_MAP: `${MAP_URL}/map/v1/hsl-citybike-map/`,
-    PARK_AND_RIDE_MAP: `${MAP_URL}/map/v1/estonia-parkandride-bikestop-map/`,
     ALERTS: process.env.ALERTS_URL || `${API_URL}/realtime/service-alerts/v1`,
     FONT:
       'https://fonts.googleapis.com/css?family=Lato:300,400,900%7CPT+Sans+Narrow:400,700',
@@ -63,11 +62,6 @@ export default {
   defaultMapCenter: {
     lat: 59.43724,
     lon: 24.74546,
-  },
-
-  parkAndRide: {
-    showParkAndRide: true,
-    parkAndRideMinZoom: 14,
   },
 
   realTime: {

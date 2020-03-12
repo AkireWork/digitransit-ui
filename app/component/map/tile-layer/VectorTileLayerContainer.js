@@ -4,7 +4,6 @@ import React from 'react';
 import TileLayerContainer from './TileLayerContainer';
 import CityBikes from './CityBikes';
 import Stops from './Stops';
-import ParkAndRide from './ParkAndRide';
 import TicketSales from './TicketSales';
 
 export default function VectorTileLayerContainer(props, { config }) {
@@ -15,10 +14,6 @@ export default function VectorTileLayerContainer(props, { config }) {
 
     if (config.cityBike && config.cityBike.showCityBikes) {
       layers.push(CityBikes);
-    }
-
-    if (config.parkAndRide && config.parkAndRide.showParkAndRide) {
-      layers.push(ParkAndRide);
     }
 
     if (config.ticketSales && config.ticketSales.showTicketSales) {
