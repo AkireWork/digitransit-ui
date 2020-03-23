@@ -198,7 +198,7 @@ export function getIcon(layer) {
     ['route-BUS', 'icon-icon_bus-withoutBox'],
     ['route-TRAM', 'icon-icon_tram-withoutBox'],
     ['route-RAIL', 'icon-icon_rail-withoutBox'],
-    ['route-SUBWAY', 'icon-icon_trolleybus-withoutBox'],
+    ['route-SUBWAY', 'icon-icon_subway-withoutBox'],
     ['route-FERRY', 'icon-icon_ferry-withoutBox'],
     ['route-AIRPLANE', 'icon-icon_airplane-withoutBox'],
   ]);
