@@ -253,6 +253,9 @@ const mapLayersConfigShape = PropTypes.shape({
       }),
     ),
   }),
+  parkAndRide: PropTypes.shape({
+    showParkAndRide: PropTypes.bool,
+  }),
   ticketSales: PropTypes.shape({
     showTicketSales: PropTypes.bool,
   }),
