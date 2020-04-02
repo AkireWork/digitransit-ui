@@ -4,7 +4,6 @@ import React from 'react';
 import TileLayerContainer from './TileLayerContainer';
 import CityBikes from './CityBikes';
 import Stops from './Stops';
-import ParkAndRide from './ParkAndRide';
 import TicketSales from './TicketSales';
 import ParkAndRide from './ParkAndRide';
 
