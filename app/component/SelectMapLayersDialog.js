@@ -103,14 +103,15 @@ class SelectMapLayersDialog extends React.Component {
                   this.updateStopSetting({ bus: e.target.checked })
                 }
               />
-              <Checkbox
-                checked={terminal.bus}
-                defaultMessage="Bus terminal"
-                labelId="map-layer-terminal-bus"
-                onChange={e =>
-                  this.updateTerminalSetting({ bus: e.target.checked })
-                }
-              />
+              {/*disable bus terminal layer selection*/}
+              {/*<Checkbox*/}
+              {/*  checked={terminal.bus}*/}
+              {/*  defaultMessage="Bus terminal"*/}
+              {/*  labelId="map-layer-terminal-bus"*/}
+              {/*  onChange={e =>*/}
+              {/*    this.updateTerminalSetting({ bus: e.target.checked })*/}
+              {/*  }*/}
+              {/*/>*/}
             </React.Fragment>
           )}
           {isTransportModeEnabled(transportModes.tram) && (
