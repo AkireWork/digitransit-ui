@@ -53,17 +53,35 @@ export function extractStopFromName(suggestion) {
   return suggestion.name.replace(/ [\d-]+$/, '');
 }
 
+export function extractStopCodeFromName(suggestion) {
+  return suggestion.name.match(/[\d-]+$/, '')[0];
+}
+
 export function getAddressLabel(suggestion) {
   let label = '';
   if (suggestion) {
     label = [
-      suggestion.name === suggestion.street ? null : suggestion.name,
       suggestion.neighbourhood,
       suggestion.locality,
       suggestion.region,
     ]
       .filter(x => !!x)
-      .join(',');
+      .join(', ');
+  }
+  return label.replace(/,\s*$/, '').replace(/^, /, '');
+}
+
+export function getStopLabel(suggestion) {
+  let label = '';
+  if (suggestion) {
+    label = [
+      extractStopCodeFromName(),
+      suggestion.neighbourhood,
+      suggestion.locality,
+      suggestion.region,
+    ]
+      .filter(x => !!x)
+      .join(', ');
   }
   return label.replace(/,\s*$/, '').replace(/^, /, '');
 }
@@ -120,7 +138,7 @@ export const getNameLabel = memoize(
             ]
           : [
               extractStopFromName(suggestion),
-              <span key={suggestion.id}>{getAddressLabel(suggestion)}</span>,
+              <span key={suggestion.id}>{getStopLabel(suggestion)}</span>,
             ];
       case 'station':
       default:
