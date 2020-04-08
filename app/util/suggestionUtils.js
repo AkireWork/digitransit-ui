@@ -3,10 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import uniqWith from 'lodash/uniqWith';
 import isEqual from 'lodash/isEqual';
 import memoize from 'lodash/memoize';
-import escapeRegExp from 'lodash/escapeRegExp';
 import cloneDeep from 'lodash/cloneDeep';
-
-import StopCode from '../component/StopCode';
 
 const getLocality = suggestion =>
   suggestion.localadmin || suggestion.locality || '';
@@ -54,7 +51,7 @@ export function extractStopFromName(suggestion) {
 }
 
 export function extractStopCodeFromName(suggestion) {
-  return suggestion.name.replace(/^[A-Za-z]+ $/, '');
+  return suggestion.name.replace(/^[A-Za-z]+\s/, '');
 }
 
 export function getAddressLabel(suggestion) {
