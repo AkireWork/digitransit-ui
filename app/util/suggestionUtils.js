@@ -72,7 +72,7 @@ export function getStopLabel(suggestion) {
   let label = '';
   if (suggestion) {
     label = [
-      extractStopCodeFromName(),
+      extractStopCodeFromName(suggestion),
       suggestion.neighbourhood,
       suggestion.locality,
       suggestion.region,
