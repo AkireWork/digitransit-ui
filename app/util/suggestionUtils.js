@@ -51,7 +51,7 @@ export function extractStopFromName(suggestion) {
 }
 
 export function extractStopCodeFromName(suggestion) {
-  return suggestion.name.replace(/^[A-Za-z]+\s/, '');
+  return suggestion.name.match(/\s[\d-]+$/)[0].trim();
 }
 
 export function getAddressLabel(suggestion) {
