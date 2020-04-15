@@ -16,8 +16,8 @@ export default class ParkAndRide {
     this.tile = tile;
     this.config = config;
     const scaleratio = (isBrowser && window.devicePixelRatio) || 1;
-    this.width = 13 * scaleratio;
-    this.height = 13 * scaleratio;
+    this.width = 16 * scaleratio;
+    this.height = 16 * scaleratio;
     this.promise = this.getPromise();
   }
 
