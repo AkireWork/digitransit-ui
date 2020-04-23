@@ -58,14 +58,14 @@ export function getAddressLabel(suggestion) {
   let label = '';
   if (suggestion) {
     label = [
-      suggestion.neighbourhood,
-      suggestion.locality,
-      suggestion.region,
+      suggestion.localadmin,
+      suggestion.county,
     ]
       .filter(x => !!x)
       .join(', ');
   }
-  return label.replace(/,\s*$/, '').replace(/^, /, '');
+  return label.replace(/,\s*$/, '')
+    .replace(/^, /, '');
 }
 
 export function getStopLabel(suggestion) {
