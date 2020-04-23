@@ -90,7 +90,7 @@ export default {
  * by default search endpoints from all but gtfs sources, correct gtfs source
  * figured based on feedIds config variable
  */
-  searchSources: ['oa', 'osm'],
+  searchSources: ['oa'],
 
   search: {
     suggestions: {
