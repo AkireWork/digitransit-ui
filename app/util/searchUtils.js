@@ -290,10 +290,7 @@ export function getGeocodingResult(
   sources,
   config,
 ) {
-  //       added .replace(/ (\d)$/, "$1") temporary solution to remove space before street number,
-  //       cause pelias gave error on Street%20Number:
-  //                         "error": "Cannot read property 'localadmin' of undefined"
-  const text = _text ? _text.trim().replace(/ (\d)$/, "$1") : null;
+  const text = _text ? _text.trim() : null;
   if (
     text === undefined ||
     text === null ||
