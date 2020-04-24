@@ -437,7 +437,7 @@ const IndexPageWithPosition = connectToStores(
       locationState.isLocationingInProgress !== true &&
       locationState.hasLocation === false &&
       (newProps.origin.gps === true || newProps.destination.gps === true)
-    ) {
+    ){
       checkPositioningPermission().then(status => {
         if (
           // check logic for starting geolocation

@@ -11,7 +11,7 @@
     "predev": "npm run static",
     "predev-win-hsl": "npm run win-static",
     "predev-win-national": "npm run win-static",
-    "dev": "PID=$$; trap 'pkill -QUIT -P $PID > /dev/null' EXIT; NODE_ENV=development nodemon -e js,css,scss,html --watch ./server/ --watch ./app/ server/server.js & NODE_ENV=development webpack-dev-server",
+    "dev": "NODE_ENV=development MAP_URL='http://api.dev.peatus.ee' OTP_URL='https://api.dev.peatus.ee/routing/v1/routers/estonia/' GEOCODING_BASE_URL='https://api.dev.peatus.ee/geocoding/v1' CONFIG='estonia' PORT='8888' nodemon -e js,css,scss,html --watch ./server/ --watch ./app/ server/server.js & NODE_ENV=development webpack-dev-server",
     "dev-win-hsl": "cd win-launch-scripts&& hsl-win-launch-script.bat",
     "dev-win-national": "cd win-launch-scripts&& set CONFIG=&& national-win-launch-script.bat",
     "dev-nowatch": "NODE_ENV=development node server/server.js & NODE_ENV=development webpack-dev-server",

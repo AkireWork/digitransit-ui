@@ -44,7 +44,7 @@ LangSelect.description = () => (
     <p>Language selection component, language selection comes from config.</p>
     <ComponentUsageExample description="">
       <div style={{ width: '200px', background: 'rgb(51, 51, 51)' }}>
-        <LangSelect currentLanguage="en" />
+        <LangSelect currentLanguage="et" />
       </div>
     </ComponentUsageExample>
   </div>

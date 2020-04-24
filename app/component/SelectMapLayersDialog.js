@@ -65,7 +65,6 @@ class SelectMapLayersDialog extends React.Component {
 
   renderContents = (
     {
-      citybike,
       parkAndRide,
       stop,
       terminal,
@@ -104,14 +103,15 @@ class SelectMapLayersDialog extends React.Component {
                   this.updateStopSetting({ bus: e.target.checked })
                 }
               />
-              <Checkbox
-                checked={terminal.bus}
-                defaultMessage="Bus terminal"
-                labelId="map-layer-terminal-bus"
-                onChange={e =>
-                  this.updateTerminalSetting({ bus: e.target.checked })
-                }
-              />
+              {/*disable bus terminal layer selection*/}
+              {/*<Checkbox*/}
+              {/*  checked={terminal.bus}*/}
+              {/*  defaultMessage="Bus terminal"*/}
+              {/*  labelId="map-layer-terminal-bus"*/}
+              {/*  onChange={e =>*/}
+              {/*    this.updateTerminalSetting({ bus: e.target.checked })*/}
+              {/*  }*/}
+              {/*/>*/}
             </React.Fragment>
           )}
           {isTransportModeEnabled(transportModes.tram) && (
@@ -152,17 +152,6 @@ class SelectMapLayersDialog extends React.Component {
               }
             />
           )}
-          {config.cityBike &&
-            config.cityBike.showCityBikes && (
-              <Checkbox
-                checked={citybike}
-                defaultMessage="Citybike station"
-                labelId="map-layer-citybike"
-                onChange={e =>
-                  this.updateSetting({ citybike: e.target.checked })
-                }
-              />
-            )}
           {config.parkAndRide &&
             config.parkAndRide.showParkAndRide && (
               <Checkbox
@@ -253,9 +242,6 @@ const transportModeConfigShape = PropTypes.shape({
 });
 
 const mapLayersConfigShape = PropTypes.shape({
-  cityBike: PropTypes.shape({
-    showCityBikes: PropTypes.bool,
-  }),
   geoJson: PropTypes.shape({
     layers: PropTypes.arrayOf(
       PropTypes.shape({
@@ -276,7 +262,6 @@ const mapLayersConfigShape = PropTypes.shape({
   }),
   transportModes: PropTypes.shape({
     bus: transportModeConfigShape,
-    citybike: transportModeConfigShape,
     ferry: transportModeConfigShape,
     rail: transportModeConfigShape,
     subway: transportModeConfigShape,

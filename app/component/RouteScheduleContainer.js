@@ -4,7 +4,6 @@ import Relay from 'react-relay/classic';
 import moment from 'moment';
 import connectToStores from 'fluxible-addons-react/connectToStores';
 import { intlShape, FormattedMessage } from 'react-intl';
-import keyBy from 'lodash/keyBy';
 import sortBy from 'lodash/sortBy';
 
 import RouteScheduleHeader from './RouteScheduleHeader';
@@ -19,8 +18,8 @@ const DATE_FORMAT = 'YYYYMMDD';
 
 const isTripCanceled = trip =>
   trip.stoptimes &&
-  Object.keys(trip.stoptimes)
-    .map(key => trip.stoptimes[key])
+  Array.from(trip.stoptimes.entries())
+    .map(x => x[1])
     .every(st => st.realtimeState === RealtimeStateType.Canceled);
 
 class RouteScheduleContainer extends Component {
@@ -41,12 +40,15 @@ class RouteScheduleContainer extends Component {
     }
     let transformedTrips = trips.map(trip => {
       const newTrip = { ...trip };
-      newTrip.stoptimes = keyBy(trip.stoptimes, 'stop.id');
+      newTrip.stoptimes = new Map();
+      trip.stoptimes.forEach((stopTime, index) => {
+        newTrip.stoptimes.set(`${stopTime.stop.id}-${index}`, stopTime);
+      });
       return newTrip;
     });
     transformedTrips = sortBy(
       transformedTrips,
-      trip => trip.stoptimes[stops[0].id].scheduledDeparture,
+      trip => trip.stoptimes.get(`${stops[0].id}-0`).scheduledDeparture,
     );
     return transformedTrips;
   }
@@ -101,8 +103,8 @@ class RouteScheduleContainer extends Component {
       );
     }
     return trips.map(trip => {
-      const fromSt = trip.stoptimes[stops[from].id];
-      const toSt = trip.stoptimes[stops[to].id];
+      const fromSt = trip.stoptimes.get(`${stops[from].id}-${from}`);
+      const toSt = trip.stoptimes.get(`${stops[to].id}-${to}`);
       const departureTime = this.formatTime(
         fromSt.serviceDay + fromSt.scheduledDeparture,
       );

@@ -5,6 +5,7 @@
 Digitransit-ui is a mobile friendly User interface built to work with Digitransit platform
 
 ## Licensing
+
 The source code of the platform is dual-licensed under the EUPL v1.2 and AGPLv3 licenses.
 
 ## Issues
@@ -40,3 +41,5 @@ More information about [testing](docs/Tests.md).
 * [Themes](docs/Themes.md)
 * [GeoJSON](docs/GeoJson.md)
 * [Eesti paigaldus](docs/Estonia.md)
+
+Test

@@ -3,10 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import uniqWith from 'lodash/uniqWith';
 import isEqual from 'lodash/isEqual';
 import memoize from 'lodash/memoize';
-import escapeRegExp from 'lodash/escapeRegExp';
 import cloneDeep from 'lodash/cloneDeep';
-
-import StopCode from '../component/StopCode';
 
 const getLocality = suggestion =>
   suggestion.localadmin || suggestion.locality || '';
@@ -53,17 +50,35 @@ export function extractStopFromName(suggestion) {
   return suggestion.name.replace(/ [\d-]+$/, '');
 }
 
+export function extractStopCodeFromName(suggestion) {
+  return suggestion.name.match(/\s[\d-]+$/)[0].trim();
+}
+
 export function getAddressLabel(suggestion) {
   let label = '';
   if (suggestion) {
     label = [
-      suggestion.name === suggestion.street ? null : suggestion.name,
+      suggestion.localadmin,
+      suggestion.county,
+    ]
+      .filter(x => !!x)
+      .join(', ');
+  }
+  return label.replace(/,\s*$/, '')
+    .replace(/^, /, '');
+}
+
+export function getStopLabel(suggestion) {
+  let label = '';
+  if (suggestion) {
+    label = [
+      extractStopCodeFromName(suggestion),
       suggestion.neighbourhood,
       suggestion.locality,
       suggestion.region,
     ]
       .filter(x => !!x)
-      .join(',');
+      .join(', ');
   }
   return label.replace(/,\s*$/, '').replace(/^, /, '');
 }
@@ -91,7 +106,7 @@ export const getNameLabel = memoize(
                 <span className="suggestion-type">
                   &nbsp;-&nbsp;
                   <FormattedMessage id="route" defaultMessage="Route" />
-                  &nbsp;({suggestion.region})
+                  &nbsp;({suggestion.region || suggestion.competentAuthority})
                 </span>
               </span>,
               suggestion.longName,
@@ -120,7 +135,7 @@ export const getNameLabel = memoize(
             ]
           : [
               extractStopFromName(suggestion),
-              <span key={suggestion.id}>{getAddressLabel(suggestion)}</span>,
+              <span key={suggestion.id}>{getStopLabel(suggestion)}</span>,
             ];
       case 'station':
       default:
@@ -198,7 +213,7 @@ export function getIcon(layer) {
     ['route-BUS', 'icon-icon_bus-withoutBox'],
     ['route-TRAM', 'icon-icon_tram-withoutBox'],
     ['route-RAIL', 'icon-icon_rail-withoutBox'],
-    ['route-SUBWAY', 'icon-icon_trolleybus-withoutBox'],
+    ['route-SUBWAY', 'icon-icon_subway-withoutBox'],
     ['route-FERRY', 'icon-icon_ferry-withoutBox'],
     ['route-AIRPLANE', 'icon-icon_airplane-withoutBox'],
   ]);
