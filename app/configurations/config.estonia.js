@@ -3,7 +3,7 @@ const API_URL = process.env.API_URL || 'https://dev-api.digitransit.fi';
 const GEOCODING_BASE_URL = process.env.GEOCODING_BASE_URL || `${API_URL}/geocoding/v1`;
 const MAP_URL = process.env.MAP_URL || 'https://digitransit-dev-cdn-origin.azureedge.net';
 const APP_PATH = process.env.APP_CONTEXT || '';
-const {SENTRY_DSN} = process.env;
+const { SENTRY_DSN } = process.env;
 const PORT = process.env.PORT || 8080;
 const APP_DESCRIPTION = 'Digitransit journey planning UI';
 const OTP_TIMEOUT = process.env.OTP_TIMEOUT || 10000; // 10k is the current server default
@@ -58,7 +58,7 @@ export default {
   shortName: 'Digitransit',
 
   searchParams: {},
-  feedIds: ['estonia'],
+  feedIds: ['estonia', 'elron'],
 
   defaultMapCenter: {
     lat: 59.43724,
@@ -73,6 +73,15 @@ export default {
   realTime: {
     /* sources per feed Id */
     estonia: {
+      active: true,
+      mqtt: `${VEHICLES_URL}`,
+      agency: 'Tallinna TA',
+      routeSelector: function selectRoute(routePageProps) {
+        const route = routePageProps.route.gtfsId.split(':');
+        return route[1];
+      },
+    },
+    elron: {
       active: true,
       mqtt: `${VEHICLES_URL}`,
       agency: 'Tallinna TA',
