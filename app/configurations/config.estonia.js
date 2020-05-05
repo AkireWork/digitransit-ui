@@ -8,7 +8,6 @@ const PORT = process.env.PORT || 8080;
 const APP_DESCRIPTION = 'Digitransit journey planning UI';
 const OTP_TIMEOUT = process.env.OTP_TIMEOUT || 10000; // 10k is the current server default
 const YEAR = 1900 + new Date().getYear();
-const VEHICLES_URL = process.env.VEHICLES_URL || 'wss://mqtt.dev.peatus.ee:443';
 
 export default {
   SENTRY_DSN,
@@ -68,28 +67,6 @@ export default {
   parkAndRide: {
     showParkAndRide: true,
     parkAndRideMinZoom: 14,
-  },
-
-  realTime: {
-    /* sources per feed Id */
-    estonia: {
-      active: true,
-      mqtt: `${VEHICLES_URL}`,
-      agency: 'Tallinna TA',
-      routeSelector: function selectRoute(routePageProps) {
-        const route = routePageProps.route.gtfsId.split(':');
-        return route[1];
-      },
-    },
-    elron: {
-      active: true,
-      mqtt: `${VEHICLES_URL}`,
-      agency: 'Tallinna TA',
-      routeSelector: function selectRoute(routePageProps) {
-        const route = routePageProps.route.gtfsId.split(':');
-        return route[1];
-      },
-    },
   },
 
   // Google Tag Manager id
