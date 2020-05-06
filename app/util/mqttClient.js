@@ -120,11 +120,9 @@ export function startMqttClient(settings, actionContext) {
         },
       );
     }
-    console.log(topics);
     const client = mqtt.default.connect(settings.mqtt);
     client.on('connect', () => client.subscribe(topics));
     client.on('message', (topic, message) => {
-      console.log(topic, message);
       actionContext.dispatch(
         'RealTimeClientMessage',
         parseMessage(topic, message, settings.agency),
