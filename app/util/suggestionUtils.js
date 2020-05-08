@@ -151,8 +151,10 @@ export const getNameLabel = memoize(
 export function uniqByLabel(features) {
   return uniqWith(features, (feat1, feat2) => {
     return (
-      isEqual(getNameLabel(feat1.properties), getNameLabel(feat2.properties)) &&
-      feat1.properties.layer === feat2.properties.layer
+      isEqual(
+        getNameLabel(feat1.properties)[0],
+        getNameLabel(feat2.properties)[0],
+      ) && feat1.properties.layer === feat2.properties.layer
     );
   });
 }
