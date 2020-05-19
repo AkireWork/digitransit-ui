@@ -154,6 +154,10 @@ export function uniqByLabel(features) {
       isEqual(
         getNameLabel(feat1.properties)[0],
         getNameLabel(feat2.properties)[0],
+      ) &&
+      isEqual(
+        getNameLabel(feat1.properties)[1],
+        getNameLabel(feat2.properties)[1],
       ) && feat1.properties.layer === feat2.properties.layer
     );
   });
