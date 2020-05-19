@@ -312,6 +312,36 @@ export function getGeocodingResult(
   );
 }
 
+export function getStructuredVenueGeocodingResult(
+  _text,
+  searchParams,
+  lang,
+  focusPoint,
+  sources,
+  config,
+) {
+  const venue = _text ? _text.trim() : null;
+  if (
+    venue === undefined ||
+    venue === null ||
+    venue.length < 1 ||
+    (config.search &&
+      config.search.minimalRegexp &&
+      !config.search.minimalRegexp.test(venue))
+  ) {
+    return Promise.resolve([]);
+  }
+
+  let opts = { venue, ...searchParams, ...focusPoint, lang };
+  if (sources) {
+    opts = { ...opts, sources };
+  }
+
+  return getJson(config.URL.PELIAS + '/structured', opts).then(response =>
+    mapPeliasModality(response.features, config),
+  );
+}
+
 function getFavouriteRoutes(favourites, input) {
   const query = Relay.createQuery(
     Relay.QL`
@@ -672,6 +702,14 @@ export function executeSearchImmediate(
       const sources = get(config, 'searchSources', '').join(',');
 
       searchComponents.push(
+        getStructuredVenueGeocodingResult(
+          input,
+          config.searchParams,
+          language,
+          focusPoint,
+          sources,
+          config,
+        ),
         getGeocodingResult(
           input,
           config.searchParams,
