@@ -60,9 +60,12 @@ export function extractStopCodeFromName(suggestion) {
 export function getAddressLabel(suggestion) {
   let label = '';
   if (suggestion) {
-    label = [suggestion.localadmin, suggestion.county]
+    label = [suggestion.locality, suggestion.county, suggestion.region]
       .filter(x => !!x)
       .join(', ');
+    if (suggestion.localadmin && suggestion.localadmin !== suggestion.name) {
+      label = suggestion.localadmin + ', ' + label;
+    }
   }
   return label.replace(/,\s*$/, '').replace(/^, /, '');
 }
