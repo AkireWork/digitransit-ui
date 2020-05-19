@@ -122,12 +122,12 @@ export function startMqttClient(settings, actionContext) {
     }
     const client = mqtt.default.connect(settings.mqtt);
     client.on('connect', () => client.subscribe(topics));
-    client.on('message', (topic, message) =>
+    client.on('message', (topic, message) => {
       actionContext.dispatch(
         'RealTimeClientMessage',
         parseMessage(topic, message, settings.agency),
-      ),
-    );
+      );
+    });
     return { client, topics };
   });
 }

@@ -7,7 +7,12 @@ import { FormattedMessage } from 'react-intl';
 import get from 'lodash/get';
 
 import Icon from './Icon';
-import { getIcon, getNameLabel, isStop, isTerminal } from '../util/suggestionUtils';
+import {
+  getIcon,
+  getNameLabel,
+  isStop,
+  isTerminal,
+} from '../util/suggestionUtils';
 import ComponentUsageExample from './ComponentUsageExample';
 
 const SuggestionItem = pure(
@@ -46,11 +51,11 @@ const SuggestionItem = pure(
         </div>
       </div>
     );
-    /*&& gtfs id missing, but show timetable as long as its a stop
-      getGTFSId(item.properties) !== undefined*/
+    /* && gtfs id missing, but show timetable as long as its a stop
+      getGTFSId(item.properties) !== undefined */
     if (
       doNotShowLinkToStop === false &&
-      (isStop(item.properties) || isTerminal(item.properties))  &&
+      (isStop(item.properties) || isTerminal(item.properties)) &&
       (get(item, 'properties.id') || get(item, 'properties.code')) !== undefined
     ) {
       /* eslint no-param-reassign: ["error", { "props": false }] */

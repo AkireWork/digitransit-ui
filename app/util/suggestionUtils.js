@@ -47,25 +47,24 @@ export const isTerminal = ({ layer }) =>
   layer === 'station' || layer === 'favouriteStation';
 
 export function extractStopFromName(suggestion) {
-  return suggestion.name.replace(/ [\d-]+$/, '');
+  return suggestion.name && suggestion.name.replace(/ [\d-]+$/, '');
 }
 
 export function extractStopCodeFromName(suggestion) {
-  return suggestion.name.match(/\s[\d-]+$/)[0].trim();
+  return (
+    suggestion.name.match(/\s[\d-]+$/) &&
+    suggestion.name.match(/\s[\d-]+$/)[0].trim()
+  );
 }
 
 export function getAddressLabel(suggestion) {
   let label = '';
   if (suggestion) {
-    label = [
-      suggestion.localadmin,
-      suggestion.county,
-    ]
+    label = [suggestion.localadmin, suggestion.county]
       .filter(x => !!x)
       .join(', ');
   }
-  return label.replace(/,\s*$/, '')
-    .replace(/^, /, '');
+  return label.replace(/,\s*$/, '').replace(/^, /, '');
 }
 
 export function getStopLabel(suggestion) {
@@ -150,12 +149,14 @@ export const getNameLabel = memoize(
 );
 
 export function uniqByLabel(features) {
-  return uniqWith(
-    features,
-    (feat1, feat2) =>
-      isEqual(getNameLabel(feat1.properties), getNameLabel(feat2.properties)) &&
-      feat1.properties.layer === feat2.properties.layer,
-  );
+  return uniqWith(features, (feat1, feat2) => {
+    return (
+      isEqual(
+        getNameLabel(feat1.properties)[0],
+        getNameLabel(feat2.properties)[0],
+      ) && feat1.properties.layer === feat2.properties.layer
+    );
+  });
 }
 
 export function getLabel(properties) {
