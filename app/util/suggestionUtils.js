@@ -34,7 +34,7 @@ export const getGTFSId = ({ id, gtfsId }) => {
     if (id.indexOf('#') === -1) {
       return id.substring(5);
     }
-    return id.substring(5, id.indexOf('#'));
+    return id.substring(id.indexOf('GTFS:') +5, id.indexOf('#'));
   }
 
   return undefined;

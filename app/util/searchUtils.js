@@ -282,6 +282,15 @@ function getFavouriteLocations(favourites, input) {
   );
 }
 
+function isValidSearchParam(text, config) {
+  return text === undefined ||
+    text === null ||
+    text.length < 1 ||
+    (config.search &&
+      config.search.minimalRegexp &&
+      !config.search.minimalRegexp.test(text));
+}
+
 export function getGeocodingResult(
   _text,
   searchParams,
@@ -291,14 +300,7 @@ export function getGeocodingResult(
   config,
 ) {
   const text = _text ? _text.trim() : null;
-  if (
-    text === undefined ||
-    text === null ||
-    text.length < 1 ||
-    (config.search &&
-      config.search.minimalRegexp &&
-      !config.search.minimalRegexp.test(text))
-  ) {
+  if (isValidSearchParam(text, config)) {
     return Promise.resolve([]);
   }
 
@@ -321,14 +323,7 @@ export function getStructuredVenueGeocodingResult(
   config,
 ) {
   const venue = _text ? _text.trim() : null;
-  if (
-    venue === undefined ||
-    venue === null ||
-    venue.length < 1 ||
-    (config.search &&
-      config.search.minimalRegexp &&
-      !config.search.minimalRegexp.test(venue))
-  ) {
+  if (isValidSearchParam(venue, config)) {
     return Promise.resolve([]);
   }
 

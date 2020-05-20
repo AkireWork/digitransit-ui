@@ -8,6 +8,7 @@ import get from 'lodash/get';
 
 import Icon from './Icon';
 import {
+  getGTFSId,
   getIcon,
   getNameLabel,
   isStop,
@@ -51,11 +52,10 @@ const SuggestionItem = pure(
         </div>
       </div>
     );
-    /* && gtfs id missing, but show timetable as long as its a stop
-      getGTFSId(item.properties) !== undefined */
     if (
       doNotShowLinkToStop === false &&
       (isStop(item.properties) || isTerminal(item.properties)) &&
+      getGTFSId(item.properties) !== undefined &&
       (get(item, 'properties.id') || get(item, 'properties.code')) !== undefined
     ) {
       /* eslint no-param-reassign: ["error", { "props": false }] */
