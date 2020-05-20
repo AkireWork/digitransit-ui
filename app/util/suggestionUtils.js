@@ -30,7 +30,7 @@ export const getGTFSId = ({ id, gtfsId }) => {
     return gtfsId;
   }
 
-  if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
+  if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') !== -1) {
     if (id.indexOf('#') === -1) {
       return id.substring(5);
     }
