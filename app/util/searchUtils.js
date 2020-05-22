@@ -604,7 +604,7 @@ export const sortSearchResults = (config, results, term = '') => {
           : 0,
 
       result => {
-        const { confidence, layer, source } = result.properties;
+        const { confidence, layer, source, name  } = result.properties;
         if (normalizedTerm.length === 0) {
           // Doing search with empty string.
           // No confidence to match, so use ranked old searches and favourites
@@ -625,6 +625,10 @@ export const sortSearchResults = (config, results, term = '') => {
         switch (layer) {
           case LayerType.Station: {
             const boost = source.indexOf('gtfs') === 0 ? 0.05 : 0.01;
+            return Math.min(confidence + boost, 1);
+          }
+          case LayerType.Venue: {
+            const boost = source.indexOf('openaddresses') === 0 && name.indexOf('linn') > -1 ? 0.05 : 0.01;
             return Math.min(confidence + boost, 1);
           }
           default:
