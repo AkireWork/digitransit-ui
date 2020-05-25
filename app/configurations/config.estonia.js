@@ -30,6 +30,7 @@ export default {
     FONT:
       'https://fonts.googleapis.com/css?family=Lato:300,400,900%7CPT+Sans+Narrow:400,700',
     PELIAS: `${process.env.GEOCODING_BASE_URL || GEOCODING_BASE_URL}/search`,
+    PELIAS_AUTOCOMPLETE: `${process.env.GEOCODING_BASE_URL || GEOCODING_BASE_URL}/autocomplete`,
     PELIAS_REVERSE_GEOCODER: `${process.env.GEOCODING_BASE_URL ||
       GEOCODING_BASE_URL}/reverse`,
     ROUTE_TIMETABLES: {

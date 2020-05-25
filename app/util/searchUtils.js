@@ -309,7 +309,7 @@ export function getGeocodingResult(
     opts = { ...opts, sources };
   }
 
-  return getJson(config.URL.PELIAS, opts).then(response =>
+  return getJson(config.URL.PELIAS_AUTOCOMPLETE, opts).then(response =>
     mapPeliasModality(response.features, config),
   );
 }
