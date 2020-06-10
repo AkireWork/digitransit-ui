@@ -612,7 +612,52 @@ export default {
     ],
   },
 
-  staticMessages: [],
+  staticMessages: [
+
+    {
+      id: '2',
+      priority: -1,
+      shouldTrigger: true,
+      content: {
+        et: [
+          {
+            type: 'text',
+            content:
+              'Sellel veebilehel kasutatakse küpsiseid. Kasutamist jätkates nõustute küpsiste ja veebilehe üldtingimustega. Loe täpsemalt: ',
+          },
+          {
+            type: 'a',
+            content: 'Eraelulise teabe kaitse',
+            href: 'https://www.mnt.ee/et/ametist/eraelulise-teabe-kaitse',
+          },
+        ],
+        en: [
+          {
+            type: 'text',
+            content:
+              'We use cookies to improve our services. By using this site, you agree to its use of cookies. Read more: ',
+          },
+          {
+            type: 'a',
+            content: 'Terms of use',
+            href: 'https://www.mnt.ee/et/ametist/eraelulise-teabe-kaitse',
+          },
+        ],
+        fi: [
+          {
+            type: 'text',
+            content:
+              'Käytämme evästeitä palveluidemme kehitykseen. Käyttämällä sivustoa hyväksyt evästeiden käytön. Lue lisää: ',
+          },
+          {
+            type: 'a',
+            content: 'Käyttöehdot',
+            href: 'https://www.mnt.ee/et/ametist/eraelulise-teabe-kaitse',
+          },
+        ],
+      },
+    },
+  ],
 
   themeMap: {
     estonia: 'estonia',
