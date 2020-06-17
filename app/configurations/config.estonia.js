@@ -71,7 +71,7 @@ export default {
   },
 
   // Google Tag Manager id
-  GTMid: 'GTM-PZV2S2V',
+  GTMid: 'GTM-MTJDVMG',
 
   /*
  * by default search endpoints from all but gtfs sources, correct gtfs source
