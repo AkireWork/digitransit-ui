@@ -118,6 +118,7 @@ class RouteScheduleContainer extends Component {
           departureTime={departureTime}
           arrivalTime={arrivalTime}
           isCanceled={isTripCanceled(trip)}
+          wheelchairAccessible={trip.wheelchairAccessible}
         />
       );
     });
@@ -254,6 +255,7 @@ const connectedComponent = connectToStores(
           }
           tripsForDate(serviceDay: $serviceDay) {
             id
+            wheelchairAccessible
             stoptimes: stoptimesForDate(serviceDay: $serviceDay) {
               realtimeState
               scheduledArrival

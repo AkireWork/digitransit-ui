@@ -10,6 +10,8 @@ function RouteScheduleTripRow(props) {
         <div
           className={cx('trip-from', 'trip-label', {
             canceled: props.isCanceled,
+            'trip-wheelchairAccessible': props.wheelchairAccessible === 'POSSIBLE',
+            'trip-not-wheelchairAccessible': props.wheelchairAccessible !== 'POSSIBLE'
           })}
         >
           {props.departureTime}
@@ -18,6 +20,8 @@ function RouteScheduleTripRow(props) {
         <div
           className={cx('trip-to', 'trip-label', {
             canceled: props.isCanceled,
+            'trip-wheelchairAccessible': props.wheelchairAccessible === 'POSSIBLE',
+            'trip-not-wheelchairAccessible': props.wheelchairAccessible !== 'POSSIBLE'
           })}
         >
           {props.arrivalTime}
@@ -30,6 +34,7 @@ RouteScheduleTripRow.propTypes = {
   departureTime: PropTypes.string.isRequired,
   arrivalTime: PropTypes.string.isRequired,
   isCanceled: PropTypes.bool,
+  wheelchairAccessible: PropTypes.string.isRequired,
 };
 
 RouteScheduleTripRow.defaultProps = {

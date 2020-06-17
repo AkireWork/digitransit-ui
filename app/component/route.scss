@@ -503,6 +503,14 @@ $route-schedule-date-height: 36px;
   }
 }
 
+.trip-wheelchairAccessible {
+  border-bottom: 2px solid $primary-color;
+}
+
+.trip-not-wheelchairAccessible {
+  margin-bottom: 2px;
+}
+
 .trip-separator {
   width: 297px;
   border-top: 2px dotted $black;
