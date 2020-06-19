@@ -1,31 +1,45 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import connectToStores from 'fluxible-addons-react/connectToStores';
 import ComponentUsageExample from './ComponentUsageExample';
 import FooterItem from './FooterItem';
 
-const PageFooter = ({ content }) => (
-  <div id="page-footer">
-    {content.map(
-      (link, i) =>
-        Object.keys(link).length === 0 ? (
-          // eslint-disable-next-line react/no-array-index-key
-          <span className="footer-separator" key={i} />
-        ) : (
-          <FooterItem key={link.label || link.name} {...link} />
-        ),
-    )}
-  </div>
-);
+const PageFooter = ({ currentLanguage }, { config }) => {
+  const footerContent = config.footer[currentLanguage];
 
-PageFooter.propTypes = {
-  content: PropTypes.arrayOf(PropTypes.shape(FooterItem.propTypes)),
+  return (
+    <div id="page-footer">
+      {footerContent &&
+        footerContent.map(
+          (link, i) =>
+            Object.keys(link).length === 0 ? (
+              // eslint-disable-next-line react/no-array-index-key
+              <span className="footer-separator" key={i} />
+            ) : (
+              <FooterItem key={link.label || link.name} {...link} />
+            ),
+        )}
+    </div>
+  );
 };
 
-PageFooter.defaultProps = {
-  content: [],
+PageFooter.propTypes = {
+  currentLanguage: PropTypes.string.isRequired,
+};
+
+PageFooter.contextTypes = {
+  config: PropTypes.object.isRequired,
 };
 
 PageFooter.displayName = 'PageFooter';
+
+const connectedComponent = connectToStores(
+  PageFooter,
+  ['PreferencesStore'],
+  context => ({
+    currentLanguage: context.getStore('PreferencesStore').getLanguage(),
+  }),
+);
 
 PageFooter.description = () => (
   <div>
@@ -44,4 +58,4 @@ PageFooter.description = () => (
   </div>
 );
 
-export default PageFooter;
+export { connectedComponent as default, PageFooter as Component };

@@ -248,9 +248,7 @@ class IndexPage extends React.Component {
         {(this.props.showSpinner && <OverlayWithSpinner />) || null}
         {!footerOptions.hidden && (
           <div id="page-footer-container">
-            <PageFooter
-              content={(config.footer && config.footer.content) || []}
-            />
+            <PageFooter />
           </div>
         )}
       </div>
@@ -437,7 +435,7 @@ const IndexPageWithPosition = connectToStores(
       locationState.isLocationingInProgress !== true &&
       locationState.hasLocation === false &&
       (newProps.origin.gps === true || newProps.destination.gps === true)
-    ){
+    ) {
       checkPositioningPermission().then(status => {
         if (
           // check logic for starting geolocation

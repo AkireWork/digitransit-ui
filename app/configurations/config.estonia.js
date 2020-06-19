@@ -1,7 +1,9 @@
 const CONFIG = 'estonia';
 const API_URL = process.env.API_URL || 'https://dev-api.digitransit.fi';
-const GEOCODING_BASE_URL = process.env.GEOCODING_BASE_URL || `${API_URL}/geocoding/v1`;
-const MAP_URL = process.env.MAP_URL || 'https://digitransit-dev-cdn-origin.azureedge.net';
+const GEOCODING_BASE_URL =
+  process.env.GEOCODING_BASE_URL || `${API_URL}/geocoding/v1`;
+const MAP_URL =
+  process.env.MAP_URL || 'https://digitransit-dev-cdn-origin.azureedge.net';
 const APP_PATH = process.env.APP_CONTEXT || '';
 const { SENTRY_DSN } = process.env;
 const PORT = process.env.PORT || 8080;
@@ -30,7 +32,8 @@ export default {
     FONT:
       'https://fonts.googleapis.com/css?family=Lato:300,400,900%7CPT+Sans+Narrow:400,700',
     PELIAS: `${process.env.GEOCODING_BASE_URL || GEOCODING_BASE_URL}/search`,
-    PELIAS_AUTOCOMPLETE: `${process.env.GEOCODING_BASE_URL || GEOCODING_BASE_URL}/autocomplete`,
+    PELIAS_AUTOCOMPLETE: `${process.env.GEOCODING_BASE_URL ||
+      GEOCODING_BASE_URL}/autocomplete`,
     PELIAS_REVERSE_GEOCODER: `${process.env.GEOCODING_BASE_URL ||
       GEOCODING_BASE_URL}/reverse`,
     ROUTE_TIMETABLES: {
@@ -57,7 +60,7 @@ export default {
   name: 'Digitransit beta',
   shortName: 'Digitransit',
 
-  searchParams: {'size': 20},
+  searchParams: { size: 20 },
   feedIds: ['estonia', 'elron'],
 
   defaultMapCenter: {
@@ -481,13 +484,65 @@ export default {
   modePolygons: {},
 
   footer: {
-    content: [
+    et: [
       { label: `© Maanteeamet ${YEAR}` },
       {},
       {
         name: 'footer-feedback',
         nameEn: 'Submit feedback',
-        href: 'https://github.com/HSLdevcom/digitransit-ui/issues',
+        href:
+          'https://app.recommy.com/SI/SI.aspx?id=&td=Mi1bkew0I9w=&tg=TkxWhz5XDF4=&TL=5U3QQE93T/0=&si=1&st=1',
+        icon: 'icon-icon_speech-bubble',
+      },
+      {
+        name: 'about-this-service',
+        nameEn: 'About this service',
+        route: '/tietoja-palvelusta',
+        icon: 'icon-icon_info',
+      },
+    ],
+    en: [
+      { label: `© Maanteeamet ${YEAR}` },
+      {},
+      {
+        name: 'footer-feedback',
+        nameEn: 'Submit feedback',
+        href:
+          'https://app.recommy.com/SI/SI.aspx?id=&td=7op6SqiaLzk=&tg=TkxWhz5XDF4=&TL=tsyn3gyGHcQ=&si=1&st=1',
+        icon: 'icon-icon_speech-bubble',
+      },
+      {
+        name: 'about-this-service',
+        nameEn: 'About this service',
+        route: '/tietoja-palvelusta',
+        icon: 'icon-icon_info',
+      },
+    ],
+    fi: [
+      { label: `© Maanteeamet ${YEAR}` },
+      {},
+      {
+        name: 'footer-feedback',
+        nameEn: 'Submit feedback',
+        href:
+          'https://app.recommy.com/SI/SI.aspx?id=&td=N7BXNUTBGHQ=&tg=TkxWhz5XDF4=&TL=OWN9c1aiwPM=&si=1&st=1',
+        icon: 'icon-icon_speech-bubble',
+      },
+      {
+        name: 'about-this-service',
+        nameEn: 'About this service',
+        route: '/tietoja-palvelusta',
+        icon: 'icon-icon_info',
+      },
+    ],
+    ru: [
+      { label: `© Maanteeamet ${YEAR}` },
+      {},
+      {
+        name: 'footer-feedback',
+        nameEn: 'Submit feedback',
+        href:
+          'https://app.recommy.com/SI/SI.aspx?id=&td=hVgAtJmFpGk=&tg=TkxWhz5XDF4=&TL=vF8qXhonlDQ=&si=1&st=1',
         icon: 'icon-icon_speech-bubble',
       },
       {
@@ -613,7 +668,6 @@ export default {
   },
 
   staticMessages: [
-
     {
       id: '2',
       priority: -1,
