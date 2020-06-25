@@ -669,9 +669,10 @@ export default {
 
   staticMessages: [
     {
-      id: '2',
-      priority: -1,
+      id: '1',
+      priority: 1,
       shouldTrigger: true,
+      persistence: 'repeat',
       content: {
         et: [
           {
@@ -707,6 +708,34 @@ export default {
             type: 'a',
             content: 'Käyttöehdot',
             href: 'https://www.mnt.ee/et/ametist/eraelulise-teabe-kaitse',
+          },
+        ],
+      },
+    },
+    {
+      id: '2',
+      shouldTrigger: true,
+      persistence: 'repeat',
+      content: {
+        et: [
+          {
+            type: 'text',
+            content:
+              'Tere! See on uus reisiplaneerija. Kui soovite kasutada vana peatus.ee lehte, siis see asub ',
+          },
+          {
+            type: 'a',
+            content: 'siin.',
+            href: 'https://vana.peatus.ee',
+          },
+          {
+            type: 'text',
+            content: 'Uuele portaalile saad tagasisidet anda ',
+          },
+          {
+            type: 'a',
+            content: 'siin.',
+            href: 'https://www.mnt.ee/et/tagasiside-uuele-reisiplaneerijale',
           },
         ],
       },
