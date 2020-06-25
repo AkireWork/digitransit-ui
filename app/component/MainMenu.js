@@ -7,9 +7,11 @@ import DisruptionInfoButtonContainer from './DisruptionInfoButtonContainer';
 import Icon from './Icon';
 import LangSelect from './LangSelect';
 import MainMenuLinks from './MainMenuLinks';
+import connectToStores from 'fluxible-addons-react/connectToStores';
 
 function MainMenu(props, { config, intl }) {
   /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
+  const footerLinks = config.footer[props.currentLanguage];
   return (
     <div aria-hidden={!props.visible} className="main-menu no-select">
       <button
@@ -38,7 +40,7 @@ function MainMenu(props, { config, intl }) {
         )}
       <MainMenuLinks
         content={(
-          [config.appBarLink].concat(config.footer && config.footer.content) ||
+          [config.appBarLink].concat(footerLinks) ||
           []
         ).filter(item => item.href || item.route)}
       />
@@ -51,6 +53,7 @@ MainMenu.propTypes = {
   toggleVisibility: PropTypes.func.isRequired,
   visible: PropTypes.bool,
   homeUrl: PropTypes.string.isRequired,
+  currentLanguage: PropTypes.string.isRequired,
 };
 
 MainMenu.defaultProps = {
@@ -63,4 +66,12 @@ MainMenu.contextTypes = {
   intl: intlShape.isRequired,
 };
 
-export default MainMenu;
+const connectedComponent = connectToStores(
+  MainMenu,
+  ['PreferencesStore'],
+  context => ({
+    currentLanguage: context.getStore('PreferencesStore').getLanguage(),
+  }),
+);
+
+export { connectedComponent as default, MainMenu as Component };
