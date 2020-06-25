@@ -362,12 +362,12 @@ export default function(req, res, next) {
         const content =
           relayData != null
             ? getContent(
-            context,
-            relayData.props,
-            locale,
-            req.headers['user-agent'],
-            req,
-            )
+                context,
+                relayData.props,
+                locale,
+                req.headers['user-agent'],
+                req,
+              )
             : undefined;
 
         const head = Helmet.rewind();

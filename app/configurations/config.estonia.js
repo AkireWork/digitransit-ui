@@ -714,6 +714,7 @@ export default {
     },
     {
       id: '2',
+      priority: 2,
       shouldTrigger: true,
       persistence: 'repeat',
       content: {
