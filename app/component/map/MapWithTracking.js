@@ -19,7 +19,7 @@ import {
   changeRealTimeClientTopics,
 } from '../../action/realTimeClientAction';
 
-const DEFAULT_ZOOM = 12;
+const DEFAULT_ZOOM = 7;
 const FOCUS_ZOOM = 16;
 
 const onlyUpdateCoordChanges = onlyUpdateForKeys([
