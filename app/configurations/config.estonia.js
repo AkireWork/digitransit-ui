@@ -727,7 +727,7 @@ export default {
           {
             type: 'a',
             content: 'siin.',
-            href: 'https://vana.peatus.ee',
+            href: 'http://vana.peatus.ee',
           },
           {
             type: 'text',
