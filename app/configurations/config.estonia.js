@@ -621,6 +621,7 @@ export default {
         paragraphs: [
           'Kaardid, tänavad, hooned jne on antud © OpenStreetMap kasutajate poolt. Aadressandmed saadakse Maa-ameti andmestikust. Ühistranspordiliinide ja peatuste andmed pärinevad Maanteeameti Ühistranspordiregistrist.',
         ],
+        img: 'el_struktuuri-_ja_investeerimisfondid_horisontaalne.jpg',
       },
     ],
     fi: [

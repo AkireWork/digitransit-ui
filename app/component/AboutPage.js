@@ -13,7 +13,8 @@ const AboutPage = ({ currentLanguage }, { config }) => {
         {about.map(
           (section, i) =>
             (section.paragraphs && section.paragraphs.length) ||
-            section.link ? (
+            section.link ||
+            section.img ? (
               <div key={`about-section-${i}`}>
                 <h1 className="about-header">{section.header}</h1>
                 {section.paragraphs &&
@@ -27,6 +28,13 @@ const AboutPage = ({ currentLanguage }, { config }) => {
                       defaultMessage="More information"
                     />
                   </a>
+                )}
+                {section.img && (
+                  <img
+                    // eslint-disable-next-line global-require
+                    src={require(`../configurations/images/${config.CONFIG}/${section.img}`)}
+                    alt="logo"
+                  />
                 )}
               </div>
             ) : (
