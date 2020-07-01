@@ -740,6 +740,18 @@ export default {
             href: 'https://www.mnt.ee/et/tagasiside-uuele-reisiplaneerijale',
           },
         ],
+        en: [
+          {
+            type: 'text',
+            content:
+              'Hi! This is our new journey planner. If you wish to use the old peatus.ee webpage, please klick ',
+          },
+          {
+            type: 'a',
+            content: 'here.',
+            href: 'http://vana.peatus.ee',
+          },
+        ],
       },
     },
   ],
