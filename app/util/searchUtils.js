@@ -283,12 +283,14 @@ function getFavouriteLocations(favourites, input) {
 }
 
 function isValidSearchParam(text, config) {
-  return text === undefined ||
+  return (
+    text === undefined ||
     text === null ||
     text.length < 1 ||
     (config.search &&
       config.search.minimalRegexp &&
-      !config.search.minimalRegexp.test(text));
+      !config.search.minimalRegexp.test(text))
+  );
 }
 
 export function getGeocodingResult(
@@ -332,7 +334,7 @@ export function getStructuredVenueGeocodingResult(
     opts = { ...opts, sources };
   }
 
-  return getJson(config.URL.PELIAS + '/structured', opts).then(response =>
+  return getJson(`${config.URL.PELIAS}/structured`, opts).then(response =>
     mapPeliasModality(response.features, config),
   );
 }
@@ -560,7 +562,7 @@ export const getLayerRank = (layer, source) => {
       // venue, address, street, route-xxx
       return 0.4;
     case LayerType.Stop:
-      return 0.35;
+      return 0.75;
   }
 };
 
@@ -604,7 +606,7 @@ export const sortSearchResults = (config, results, term = '') => {
           : 0,
 
       result => {
-        const { confidence, layer, source, name  } = result.properties;
+        const { confidence, layer, source, name } = result.properties;
         if (normalizedTerm.length === 0) {
           // Doing search with empty string.
           // No confidence to match, so use ranked old searches and favourites
@@ -628,13 +630,16 @@ export const sortSearchResults = (config, results, term = '') => {
             return Math.min(confidence + boost, 1);
           }
           case LayerType.Venue: {
-            const boost = source.indexOf('openaddresses') === 0 && name.indexOf('linn') > -1 ? 0.05 : 0.01;
+            const boost =
+              source.indexOf('openaddresses') === 0 && name.indexOf('linn') > -1
+                ? 0.05
+                : 0.01;
             return Math.min(confidence + boost, 1);
           }
           default:
             return confidence;
           case LayerType.Stop:
-            return confidence - 0.1;
+            return Math.min(confidence + 0.1, 1);
         }
       },
     ],

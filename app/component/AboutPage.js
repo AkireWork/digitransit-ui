@@ -32,6 +32,7 @@ const AboutPage = ({ currentLanguage }, { config }) => {
                 {section.img && (
                   <img
                     // eslint-disable-next-line global-require
+                    width="50%"
                     src={require(`../configurations/images/${config.CONFIG}/${section.img}`)}
                     alt="logo"
                   />

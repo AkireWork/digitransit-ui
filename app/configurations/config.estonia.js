@@ -488,6 +488,12 @@ export default {
       { label: `© Maanteeamet ${YEAR}` },
       {},
       {
+        name: 'footer-faq',
+        nameEn: 'FAQ',
+        href:
+          'https://www.mnt.ee/et/uudised/kkk-kuidas-toimib-uus-reisiplaneerija',
+      },
+      {
         name: 'footer-feedback',
         nameEn: 'Submit feedback',
         href:
@@ -504,6 +510,12 @@ export default {
     en: [
       { label: `© Maanteeamet ${YEAR}` },
       {},
+      {
+        name: 'footer-faq',
+        nameEn: 'FAQ',
+        href:
+          'https://www.mnt.ee/et/uudised/kkk-kuidas-toimib-uus-reisiplaneerija',
+      },
       {
         name: 'footer-feedback',
         nameEn: 'Submit feedback',
@@ -522,6 +534,12 @@ export default {
       { label: `© Maanteeamet ${YEAR}` },
       {},
       {
+        name: 'footer-faq',
+        nameEn: 'FAQ',
+        href:
+          'https://www.mnt.ee/et/uudised/kkk-kuidas-toimib-uus-reisiplaneerija',
+      },
+      {
         name: 'footer-feedback',
         nameEn: 'Submit feedback',
         href:
@@ -538,6 +556,12 @@ export default {
     ru: [
       { label: `© Maanteeamet ${YEAR}` },
       {},
+      {
+        name: 'footer-faq',
+        nameEn: 'FAQ',
+        href:
+          'https://www.mnt.ee/et/uudised/kkk-kuidas-toimib-uus-reisiplaneerija',
+      },
       {
         name: 'footer-feedback',
         nameEn: 'Submit feedback',

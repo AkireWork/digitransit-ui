@@ -1270,7 +1270,7 @@ const translations = {
     ferry: 'Паром',
     'ferry-with-route-number': 'Паром {routeNumber} {headSign}',
     'fetch-new-route': 'Составить новый маршрут',
-    'footer-faq': 'ЧАВО',
+    'footer-faq': 'ЧЗВ',
     'footer-feedback': 'Обратная связь',
     'footer-link-to-privacy-policy': 'Политика конфиденциальности',
     frontpage: 'Главная страница',
