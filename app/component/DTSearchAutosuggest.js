@@ -187,11 +187,6 @@ class DTAutosuggest extends React.Component {
             return suggestion;
           });
 
-          const customSortedList = [
-            ...suggestions.filter(x => x.properties.layer === 'venue'),
-            ...suggestions.filter(x => x.properties.layer !== 'venue'),
-          ];
-
           if (
             value === this.state.value ||
             value === this.state.pendingSelection
@@ -199,7 +194,7 @@ class DTAutosuggest extends React.Component {
             this.setState(
               {
                 valid: true,
-                suggestions: customSortedList,
+                suggestions,
               },
               () => this.checkPendingSelection(),
             );

@@ -545,7 +545,7 @@ export const match = (normalizedTerm, resultProperties) => {
 export const getLayerRank = (layer, source) => {
   switch (layer) {
     case LayerType.CurrentPosition:
-      return 1;
+      return 0.8;
     case LayerType.FavouriteStation:
       return 0.45;
     case LayerType.Station: {
@@ -562,7 +562,7 @@ export const getLayerRank = (layer, source) => {
       // venue, address, street, route-xxx
       return 0.4;
     case LayerType.Stop:
-      return 0.75;
+      return 1;
   }
 };
 
@@ -607,19 +607,25 @@ export const sortSearchResults = (config, results, term = '') => {
 
       result => {
         const { confidence, layer, source, name } = result.properties;
+        console.log(confidence, layer, source, name);
         if (normalizedTerm.length === 0) {
           // Doing search with empty string.
           // No confidence to match, so use ranked old searches and favourites
-          return getLayerRank(layer, source);
+          console.log(
+            'normalizedTerm.length === 0',
+            getLayerRank(layer, source),
+          );
+          return Math.min(getLayerRank(layer, source), 0.99);
         }
 
         // must handle a mixup of geocoder searches and items above
         // Normal confidence range from geocoder is about 0.3 .. 1
         if (!confidence) {
           // not from geocoder, estimate confidence ourselves
-          return (
+          return Math.min(
             getLayerRank(layer, source) +
-            match(normalizedTerm, result.properties)
+              match(normalizedTerm, result.properties),
+            0.99,
           );
         }
 
@@ -627,19 +633,19 @@ export const sortSearchResults = (config, results, term = '') => {
         switch (layer) {
           case LayerType.Station: {
             const boost = source.indexOf('gtfs') === 0 ? 0.05 : 0.01;
-            return Math.min(confidence + boost, 1);
+            return Math.min(confidence + boost, 0.99);
           }
           case LayerType.Venue: {
             const boost =
               source.indexOf('openaddresses') === 0 && name.indexOf('linn') > -1
                 ? 0.05
                 : 0.01;
-            return Math.min(confidence + boost, 1);
+            return Math.min(confidence + boost, 0.99);
           }
           default:
-            return confidence;
+            return Math.min(confidence, 0.99);
           case LayerType.Stop:
-            return Math.min(confidence + 0.1, 1);
+            return 1;
         }
       },
     ],
