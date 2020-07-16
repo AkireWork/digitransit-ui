@@ -588,27 +588,7 @@ export default {
   routeTimetableUrlResolver: {},
 
   aboutThisService: {
-    fi: [
-      {
-        header: 'Tietoja palvelusta',
-        paragraphs: [
-          'Palvelu kattaa joukkoliikenteen, kävelyn, pyöräilyn ja yksityisautoilun rajatuilta osin. Palvelu perustuu Digitransit-palvelualustaan.',
-        ],
-      },
-      {
-        header: 'Digitransit-palvelualusta',
-        paragraphs: [
-          'Digitransit-palvelualusta on HSL:n ja Traficomin kehittämä avoimen lähdekoodin reititystuote.',
-        ],
-      },
-      {
-        header: 'Tietolähteet',
-        paragraphs: [
-          'Kartat, tiedot kaduista, rakennuksista, pysäkkien sijainnista ynnä muusta tarjoaa © OpenStreetMap contributors. Osoitetiedot tuodaan Väestörekisterikeskuksen rakennustietorekisteristä. Joukkoliikenteen reitit ja aikataulut ladataan Traficomin valtakunnallisesta joukkoliikenteen tietokannasta.',
-        ],
-      },
-    ],
-
+    fi: {},
     sv: [
       {
         header: 'Om tjänsten',

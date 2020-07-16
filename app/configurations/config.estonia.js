@@ -779,6 +779,29 @@ export default {
             href: 'http://vana.peatus.ee',
           },
         ],
+        ru: [
+          {
+            type: 'text',
+            content:
+              'Добро пожаловать! Это новый планировщик поездок. Чтобы воспользоваться старой версией peatus.ee, перейдите ',
+          },
+          {
+            type: 'a',
+            content: 'сюда.',
+            href: 'http://vana.peatus.ee',
+          },
+          {
+            type: 'text',
+            content:
+              'Обратную связь о новом планировщике поездок можно оставить здесь.',
+          },
+          {
+            type: 'a',
+            content: 'здесь.',
+            href:
+              'https://app.recommy.com/SI/SI.aspx?id=&td=hVgAtJmFpGk=&tg=TkxWhz5XDF4=&TL=vF8qXhonlDQ=&si=1&st=1',
+          },
+        ],
       },
     },
   ],
