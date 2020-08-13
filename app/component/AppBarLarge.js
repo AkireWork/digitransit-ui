@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { intlShape } from 'react-intl';
-import { routerShape, locationShape } from 'react-router';
+import { FormattedMessage, intlShape } from 'react-intl';
+import { routerShape, locationShape, Link } from 'react-router';
 import ExternalLink from './ExternalLink';
 import DisruptionInfo from './DisruptionInfo';
 import Icon from './Icon';
@@ -46,6 +46,11 @@ const AppBarLarge = (
         <div className="empty-space flex-grow" />
         <div className="navi-languages right-border navi-margin">
           <LangSelect />
+        </div>
+        <div className="navi-icons navi-margin">
+          <Link to="/aikataulut">
+            <Icon img="icon-icon_schedule" />
+          </Link>
         </div>
         <div className="navi-icons navi-margin padding-horizontal-large">
           <a

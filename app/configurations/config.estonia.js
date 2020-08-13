@@ -842,5 +842,87 @@ export default {
     // },
   },
 
+  /**
+   Harjumaa ÜTK,    Harjumaa
+   Hiiu MV,         Hiiumaa
+   Ida-Viru MV,     Ida-Virumaa
+   Järvamaa ÜTK,    Järvamaa
+   Jõgeva ÜTK,      Jõgevamaa
+   Kohtla-Järve LV, Kohtla-Järve linn
+   Lääne MV,        Läänemaa
+   Lääne-Viru MV,   Lääne-Virumaa
+   Narva LV,        Narva linn
+   Pärnu LV,        Pärnu linn
+   Pärnu MV,        Pärnumaa
+   Põlva MV,        Põlvamaa
+   Rapla MV,        Raplamaa
+   Saare MV,        Saaremaa
+   Sillamäe LV,     Sillamäe linn
+   Tallinna TA,     Tallinna linn
+   Tartu LV,        Tartu linn
+   Tartu MV,        Tartumaa
+   Valga MV,        Valgamaa
+   Viljandi MV,     Viljandimaa
+   Võru MV,         Võrumaa
+   */
+  timetablesSelection: [
+    {
+      type: 'urban-lines',
+      icon_type: 'bus-withoutBox',
+      areas: [
+        { name: 'Tallinn', competent_authority: ['Tallinna linn'] },
+        { name: 'Tartu', competent_authority: ['Tartu linn'] },
+        { name: 'Pärnu', competent_authority: ['Pärnu linn'] },
+        { name: 'Narva', competent_authority: ['Narva linn'] },
+        { name: 'Kohtla-Järve', competent_authority: ['Kohtla-Järve linn'] },
+        { name: 'Viljandi', competent_authority: ['Viljandimaa'] },
+        { name: 'Rakvere', competent_authority: ['Lääne-Virumaa'] },
+        { name: 'Kuressaare', competent_authority: ['Saaremaa'] },
+        { name: 'Sillamäe', competent_authority: ['Sillamäe linn'] },
+      ],
+      route_colors: ['#de2c42', '#016e12', '#1ccc48', '#bd4819'],
+    },
+    {
+      type: 'county-lines',
+      icon_type: 'bus-withoutBox',
+      areas: [
+        { name: 'Harjumaa', competent_authority: ['Harjumaa'] },
+        { name: 'Hiiumaa', competent_authority: ['Hiiumaa'] },
+        { name: 'Ida-Virumaa', competent_authority: ['Ida-Virumaa'] },
+        { name: 'Järvamaa', competent_authority: ['Järvamaa'] },
+        { name: 'Jõgevamaa', competent_authority: ['Jõgevamaa'] },
+        { name: 'Läänemaa', competent_authority: ['Läänemaa'] },
+        { name: 'Lääne-Virumaa', competent_authority: ['Lääne-Virumaa'] },
+        { name: 'Pärnumaa', competent_authority: ['Pärnumaa'] },
+        { name: 'Põlvamaa', competent_authority: ['Põlvamaa'] },
+        { name: 'Raplamaa', competent_authority: ['Raplamaa'] },
+        { name: 'Saaremaa', competent_authority: ['Saaremaa'] },
+        { name: 'Tartumaa', competent_authority: ['Tartumaa'] },
+        { name: 'Valgamaa', competent_authority: ['Valgamaa'] },
+        { name: 'Viljandimaa', competent_authority: ['Viljandimaa'] },
+        { name: 'Võrumaa', competent_authority: ['Võrumaa'] },
+      ],
+      route_colors: ['#3bb5db', '#094f82', '#660000'],
+    },
+    {
+      type: 'long-distance-lines',
+      icon_type: 'bus-withoutBox',
+      areas: [{ name: '', competent_authority: [''] }],
+      route_colors: ['#660000'],
+    },
+    {
+      type: 'train-lines',
+      icon_type: 'rail-withoutBox',
+      areas: [{ name: '', competent_authority: [''] }],
+      route_colors: ['#ff711d'],
+    },
+    {
+      type: 'ferry-lines',
+      icon_type: 'ferry-withoutBox',
+      areas: [{ name: '', competent_authority: [''] }],
+      route_colors: ['#8bb4c5'],
+    },
+  ],
+
   routeTimetables: {},
 };

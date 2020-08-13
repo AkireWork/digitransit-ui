@@ -149,6 +149,39 @@ export default config => {
           ]).then(([title, content]) => cb(null, { title, content }));
         }}
       />
+      <Route
+        path="/aikataulut"
+        getComponents={(location, cb) => {
+          Promise.all([
+            Promise.resolve(Title),
+            import(/* webpackChunkName: "about" */ './component/timetables-selection/TimetablesSelection').then(
+              getDefault,
+            ),
+          ]).then(([title, content]) => cb(null, { title, content }));
+        }}
+      />
+      <Route
+        path="/aikataulut/:urbanOrCounty"
+        getComponents={(location, cb) => {
+          Promise.all([
+            Promise.resolve(Title),
+            import(/* webpackChunkName: "about" */ './component/timetables-selection/TimetablesSelectionArea').then(
+              getDefault,
+            ),
+          ]).then(([title, content]) => cb(null, { title, content }));
+        }}
+      />
+      <Route
+        path="/aikataulut/:urbanOrCounty/:idx"
+        getComponents={(location, cb) => {
+          Promise.all([
+            Promise.resolve(Title),
+            import(/* webpackChunkName: "about" */ './component/timetables-selection/TimetablesContainer').then(
+              getDefault,
+            ),
+          ]).then(([title, content]) => cb(null, { title, content }));
+        }}
+      />
       {!config.URL.API_URL.includes('/api.') && (
         <Route
           path="/admin"
