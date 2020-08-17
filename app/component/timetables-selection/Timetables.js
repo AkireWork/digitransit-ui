@@ -31,7 +31,10 @@ const Timetables = ({ routes, currentLanguage, params }, { config }) => {
     return 0;
   };
   return (
-    <div className="fullscreen">
+    <div
+      className="fullscreen"
+      style={{ display: 'block', flexDirection: 'unset' }}
+    >
       <div className="desktop-title" style={{ background: 'inherit' }}>
         <h2>
           <Link
@@ -73,7 +76,7 @@ const Timetables = ({ routes, currentLanguage, params }, { config }) => {
             .map((routeItem, index) => (
               <div
                 style={{
-                  margin: '2px 10px',
+                  margin: '3px 10px',
                   fontSize: '1.5em',
                   background: 'inherit',
                 }}
