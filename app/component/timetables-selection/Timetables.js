@@ -59,7 +59,7 @@ const Timetables = ({ routes, currentLanguage, params }, { config }) => {
           </Link>
         </h2>
       </div>
-      <div className="fullscreen momentum-scroll">
+      <div className="momentum-scroll">
         {routes &&
           routes.routes &&
           routes.routes
