@@ -9,11 +9,8 @@ import Icon from '../Icon';
 const TimetablesSelectionArea = ({ params }, { config }) => {
   const timetablesSelections = config.timetablesSelection;
   return (
-    <div className="fullscreen about-page">
-      <div
-        className="fullscreen momentum-scroll"
-        style={{ width: '900px', maxWidth: '900px' }}
-      >
+    <div className="fullscreen">
+      <div className="fullscreen momentum-scroll">
         <div className="desktop-title" style={{ background: 'inherit' }}>
           <h2>
             <Link

@@ -31,41 +31,32 @@ const Timetables = ({ routes, currentLanguage, params }, { config }) => {
     return 0;
   };
   return (
-    <div className="about-page fullscreen">
-      <div
-        className="page-frame fullscreen momentum-scroll"
-        style={{ width: '900px', maxWidth: '900px' }}
-      >
-        <div className="desktop-title" style={{ background: 'inherit' }}>
-          <h2>
-            <Link
-              style={{ color: '#008bde', textDecoration: 'none' }}
-              to="/aikataulut"
-            >
-              <Icon img="icon-icon_schedule" className="home-icon" />
-            </Link>
-            <Icon
-              img="icon-icon_arrow-collapse--right"
-              className="arrow-icon"
-            />
-            <Link
-              style={{ color: '#008bde', textDecoration: 'none' }}
-              to={`/aikataulut/${params.urbanOrCounty}`}
-            >
-              <FormattedMessage id={params.urbanOrCounty} />
-            </Link>
-            <Icon
-              img="icon-icon_arrow-collapse--right"
-              className="arrow-icon"
-            />
-            <Link
-              style={{ color: '#008bde', textDecoration: 'none' }}
-              to={`/aikataulut/${params.urbanOrCounty}/${params.idx}`}
-            >
-              {timetablesSelection.areas[params.idx].name}
-            </Link>
-          </h2>
-        </div>
+    <div className="fullscreen">
+      <div className="desktop-title" style={{ background: 'inherit' }}>
+        <h2>
+          <Link
+            style={{ color: '#008bde', textDecoration: 'none' }}
+            to="/aikataulut"
+          >
+            <Icon img="icon-icon_schedule" className="home-icon" />
+          </Link>
+          <Icon img="icon-icon_arrow-collapse--right" className="arrow-icon" />
+          <Link
+            style={{ color: '#008bde', textDecoration: 'none' }}
+            to={`/aikataulut/${params.urbanOrCounty}`}
+          >
+            <FormattedMessage id={params.urbanOrCounty} />
+          </Link>
+          <Icon img="icon-icon_arrow-collapse--right" className="arrow-icon" />
+          <Link
+            style={{ color: '#008bde', textDecoration: 'none' }}
+            to={`/aikataulut/${params.urbanOrCounty}/${params.idx}`}
+          >
+            {timetablesSelection.areas[params.idx].name}
+          </Link>
+        </h2>
+      </div>
+      <div className="fullscreen momentum-scroll">
         {routes &&
           routes.routes &&
           routes.routes
@@ -76,7 +67,8 @@ const Timetables = ({ routes, currentLanguage, params }, { config }) => {
             )
             .sort(
               (a, b) =>
-                compare(a, b) || a.shortName.localeCompare(b.shortName, 'en', { numeric: true }),
+                compare(a, b) ||
+                a.shortName.localeCompare(b.shortName, 'en', { numeric: true }),
             )
             .map((routeItem, index) => (
               <div

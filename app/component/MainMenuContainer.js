@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { intlShape } from 'react-intl';
-import { routerShape } from 'react-router';
+import { Link, routerShape } from 'react-router';
 
 import ComponentUsageExample from './ComponentUsageExample';
 import Icon from './Icon';
@@ -93,6 +93,21 @@ class MainMenuContainer extends Component {
         </LazilyLoad>
         {this.context.config.mainMenu.show ? (
           <div className="icon-holder cursor-pointer main-menu-toggle">
+            <Link
+              to="/aikataulut"
+              aria-label={this.context.intl.formatMessage({
+                id: 'main-menu-label-open',
+                defaultMessage: 'Open the main menu',
+              })}
+              className="noborder cursor-pointer"
+              style={{
+                marginBottom: '0.3em',
+                marginRight: '1em',
+                textDecoration: 'none',
+              }}
+            >
+              <Icon img="icon-icon_schedule" className="icon" />
+            </Link>
             <button
               aria-label={this.context.intl.formatMessage({
                 id: 'main-menu-label-open',
