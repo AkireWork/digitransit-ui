@@ -406,7 +406,7 @@ export default {
     },
 
     car: {
-      availableForSelection: true,
+      availableForSelection: false,
       defaultValue: false,
       exclusive: true,
       icon: 'car-withoutBox',

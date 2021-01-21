@@ -67,6 +67,7 @@ class FilterTimeTableModal extends React.Component {
           o.stoptimes[0].pickupType !== 'NONE' && {
             code: o.pattern.code,
             headsign: o.pattern.headsign,
+            longName: o.pattern.route.longName,
             shortName: o.pattern.route.shortName,
             mode: o.pattern.route.mode,
             agency: o.pattern.route.agency.name,
@@ -104,7 +105,7 @@ class FilterTimeTableModal extends React.Component {
           >
             {o.shortName ? o.shortName : o.agency}
           </div>
-          <div className="route-headsign">{o.headsign}</div>
+          <div className="route-headsign">{o.longName}</div>
         </div>,
       ),
     );
