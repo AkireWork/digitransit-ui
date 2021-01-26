@@ -6,6 +6,7 @@ import sortBy from 'lodash/sortBy';
 import groupBy from 'lodash/groupBy';
 import padStart from 'lodash/padStart';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router';
 import Icon from './Icon';
 import StopPageActionBar from './StopPageActionBar';
 import FilterTimeTableModal from './FilterTimeTableModal';
@@ -13,6 +14,8 @@ import TimeTableOptionsPanel from './TimeTableOptionsPanel';
 import TimetableRow from './TimetableRow';
 import ComponentUsageExample from './ComponentUsageExample';
 import { RealtimeStateType } from '../constants';
+import TimetableListHeader from './TimetableListHeader';
+import { PREFIX_ROUTES } from '../util/path';
 
 class Timetable extends React.Component {
   static propTypes = {
@@ -113,11 +116,15 @@ class Timetable extends React.Component {
         stoptime.stoptimes.filter(st => st.pickupType !== 'NONE').map(st => ({
           id: stoptime.pattern.code,
           name: stoptime.pattern.route.shortName || stoptime.pattern.headsign,
+          shortName: stoptime.pattern.route.shortName,
+          mode: stoptime.pattern.route.mode,
+          color: stoptime.pattern.route.color,
           scheduledDeparture: st.scheduledDeparture,
           serviceDay: st.serviceDay,
           headsign: stoptime.pattern.headsign,
           longName: stoptime.pattern.route.longName,
           isCanceled: st.realtimeState === RealtimeStateType.Canceled,
+          gtfsId: stoptime.pattern.route.gtfsId,
         })),
       )
       .reduce((acc, val) => acc.concat(val), []);
@@ -165,18 +172,20 @@ class Timetable extends React.Component {
     return filteredRoutes;
   };
 
-  createTimeTableRows = timetableMap =>
-    Object.keys(timetableMap)
-      .sort((a, b) => a - b)
-      .map(hour => (
+  createTimeTableRows = routesWithDetails =>
+    routesWithDetails.map(route => (
+      <Link
+        to={`/${PREFIX_ROUTES}/${route.gtfsId}/pysakit/${route.id}`}
+        key={`${route.name}:${route.serviceDay}-${route.scheduledDeparture}`}
+      >
         <TimetableRow
-          key={hour}
-          title={padStart(hour % 24, 2, '0')}
-          stoptimes={timetableMap[hour]}
+          key={`${route.name}:${route.serviceDay}-${route.scheduledDeparture}`}
+          title={route.name}
+          route={route}
           showRoutes={this.state.showRoutes}
-          timerows={this.formTimeRow(timetableMap, hour)}
         />
-      ));
+      </Link>
+    ));
 
   render() {
     // Leave out all the routes without a shortname to avoid flooding of
@@ -222,16 +231,21 @@ class Timetable extends React.Component {
 
     const routesWithDetails = this.mapStopTimes(
       this.props.stop.stoptimesForServiceDate,
-    ).map(o => {
-      const obj = Object.assign(o);
-      const getDuplicate = variantsWithMarks.find(
-        o2 => o2.name === o.name && o2.headsign === o.headsign && o2.duplicate,
-      );
-      obj.duplicate = getDuplicate ? getDuplicate.duplicate : false;
-      return obj;
-    });
+    )
+      .map(o => {
+        const obj = Object.assign(o);
+        const getDuplicate = variantsWithMarks.find(
+          o2 =>
+            o2.name === o.name && o2.headsign === o.headsign && o2.duplicate,
+        );
+        obj.duplicate = getDuplicate ? getDuplicate.duplicate : false;
+        return obj;
+      })
+      .sort((a, b) => a.scheduledDeparture - b.scheduledDeparture);
 
     const timetableMap = this.groupArrayByHour(routesWithDetails);
+    // console.log(routesWithDetails);
+    // console.log(timetableMap);
 
     const stopIdSplitted = this.props.stop.gtfsId.split(':');
 
@@ -239,6 +253,7 @@ class Timetable extends React.Component {
       stopIdSplitted[0] === 'HSL' && this.props.stop.locationType !== 'STATION'
         ? `${this.context.config.URL.STOP_TIMETABLES}${stopIdSplitted[1]}.pdf`
         : null;
+    console.log(timetableMap);
 
     return (
       <div className="timetable">
@@ -269,19 +284,11 @@ class Timetable extends React.Component {
           </h1>
         </div>
         <div className="timetable-for-printing">{this.dateForPrinting()}</div>
-        <div className="momentum-scroll">
-          <div className="timetable-time-headers">
-            <div className="hour">
-              <FormattedMessage id="hour" defaultMessage="Hour" />
-            </div>
-            <div className="minutes-per-route">
-              <FormattedMessage
-                id="minutes-or-route"
-                defaultMessage="Min/Route"
-              />
-            </div>
+        <TimetableListHeader />
+        <div className="stop-scroll-container momentum-scroll">
+          <div className="stop-page momentum-scroll departure-list">
+            {this.createTimeTableRows(routesWithDetails)}
           </div>
-          {this.createTimeTableRows(timetableMap)}
           <div
             className="route-remarks"
             style={{
