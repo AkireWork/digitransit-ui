@@ -624,7 +624,7 @@ export default {
         paragraphs: [
           'The maps, streets, buildings, etc. are provided by © OpenStreetMap users. Address data is obtained from the database of the Estonian Land Board. The data relating to public transport routes and stops are obtained from the Public Transport Register of the Road Administration.',
         ],
-        img: 'el_struktuuri-_ja_investeerimisfondid_horisontaalne.jpg',
+        img: 'el_regionaalarengu_fond_horisontaalne.jpg',
       },
     ],
     et: [
@@ -646,7 +646,7 @@ export default {
         paragraphs: [
           'Kaardid, tänavad, hooned jne on antud © OpenStreetMap kasutajate poolt. Aadressandmed saadakse Maa-ameti andmestikust. Ühistranspordiliinide ja peatuste andmed pärinevad Maanteeameti Ühistranspordiregistrist.',
         ],
-        img: 'el_struktuuri-_ja_investeerimisfondid_horisontaalne.jpg',
+        img: 'el_regionaalarengu_fond_horisontaalne.jpg',
       },
     ],
     fi: [
@@ -668,7 +668,7 @@ export default {
         paragraphs: [
           'Kartat, kadut, rakennukset jne. on saatu © OpenStreetMap -käyttäjiltä. Osoitetiedot saadaan Viron tielaitoksen tiedostoista. Joukkoliikenteen ja pysäkkien tiedot ovat peräisin Viron tielaitoksen joukkoliikennerekisteristä.',
         ],
-        img: 'el_struktuuri-_ja_investeerimisfondid_horisontaalne.jpg',
+        img: 'el_regionaalarengu_fond_horisontaalne.jpg',
       },
     ],
     ru: [
@@ -690,7 +690,7 @@ export default {
         paragraphs: [
           'Карты, улицы, здания и т. д. предоставлены пользователями © OpenStreetMap. Адресные данные поступают из базы данных Земельного департамента. Данные по линиям и остановкам общественного транспорта берутся из регистра общественного транспорта Департамента шоссейных дорог.',
         ],
-        img: 'el_struktuuri-_ja_investeerimisfondid_horisontaalne.jpg',
+        img: 'el_regionaalarengu_fond_horisontaalne.jpg',
       },
     ],
   },
