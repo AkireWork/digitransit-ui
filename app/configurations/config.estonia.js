@@ -291,7 +291,7 @@ export default {
     default: 18,
   },
 
-  appBarLink: { name: 'Maanteeamet', href: 'https://www.mnt.ee/' },
+  appBarLink: { nameCode: 'provider', href: 'https://transpordiamet.ee/' },
 
   colors: {
     primary: '#006EB5',

@@ -65,7 +65,14 @@ const AppBarLarge = (
           </a>
         </div>
         <div className="padding-horizontal-large navi-margin">
-          <ExternalLink className="external-top-bar" {...config.appBarLink} />
+          <ExternalLink
+            className="external-top-bar"
+            href={config.appBarLink.href}
+            name={intl.formatMessage({
+              id: config.appBarLink.nameCode,
+              defaultMessage: 'Disruptions',
+            })}
+          />
         </div>
       </div>
       <MessageBar />
