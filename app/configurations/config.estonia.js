@@ -485,7 +485,10 @@ export default {
 
   footer: {
     et: [
-      { label: `© Maanteeamet ${YEAR}` },
+      {
+        label: `© Transpordiamet ${YEAR}`,
+        href: 'https://transpordiamet.ee/',
+      },
       {},
       {
         name: 'footer-faq',
@@ -508,7 +511,10 @@ export default {
       },
     ],
     en: [
-      { label: `© Maanteeamet ${YEAR}` },
+      {
+        label: `© Transpordiamet ${YEAR}`,
+        href: 'https://transpordiamet.ee/',
+      },
       {},
       {
         name: 'footer-faq',
@@ -531,7 +537,10 @@ export default {
       },
     ],
     fi: [
-      { label: `© Maanteeamet ${YEAR}` },
+      {
+        label: `© Transpordiamet ${YEAR}`,
+        href: 'https://transpordiamet.ee/',
+      },
       {},
       {
         name: 'footer-faq',
@@ -554,7 +563,10 @@ export default {
       },
     ],
     ru: [
-      { label: `© Maanteeamet ${YEAR}` },
+      {
+        label: `© Transpordiamet ${YEAR}`,
+        href: 'https://transpordiamet.ee/',
+      },
       {},
       {
         name: 'footer-faq',
