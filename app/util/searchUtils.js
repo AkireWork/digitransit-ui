@@ -138,6 +138,16 @@ export function isDuplicate(item1, item2) {
   if (props2.gtfsId && props1.gid && props1.gid.includes(props2.gtfsId)) {
     return true;
   }
+  // additional check for stops that have the same name but different stop code - we want to treat them as duplicates in terms of search results
+  if ((props1.layer && props2.layer) === 'stop') {
+    if (
+      props1.name.substr(0, props1.name.search(/\s[0-9]+-[0-9]/)) ===
+        props2.name.substr(0, props2.name.search(/\s[0-9]+-[0-9]/)) &&
+      props1.locality === props2.locality
+    ) {
+      return true;
+    }
+  }
 
   const p1 = item1.geometry.coordinates;
   const p2 = item2.geometry.coordinates;
@@ -293,7 +303,7 @@ function isValidSearchParam(text, config) {
   );
 }
 
-export function getGeocodingResult(
+export function getGeocodingAutocompleteResult(
   _text,
   searchParams,
   lang,
@@ -312,6 +322,29 @@ export function getGeocodingResult(
   }
 
   return getJson(config.URL.PELIAS_AUTOCOMPLETE, opts).then(response =>
+    mapPeliasModality(response.features, config),
+  );
+}
+
+export function getGeocodingSearchResult(
+  _text,
+  searchParams,
+  lang,
+  focusPoint,
+  sources,
+  config,
+) {
+  const text = _text ? _text.trim() : null;
+  if (isValidSearchParam(text, config)) {
+    return Promise.resolve([]);
+  }
+
+  let opts = { text, ...searchParams, ...focusPoint, lang };
+  if (sources) {
+    opts = { ...opts, sources };
+  }
+
+  return getJson(config.URL.PELIAS, opts).then(response =>
     mapPeliasModality(response.features, config),
   );
 }
@@ -720,7 +753,7 @@ export function executeSearchImmediate(
           sources,
           config,
         ),
-        getGeocodingResult(
+        getGeocodingAutocompleteResult(
           input,
           config.searchParams,
           language,
@@ -746,9 +779,9 @@ export function executeSearchImmediate(
 
       if (sources) {
         searchComponents.push(
-          getGeocodingResult(
+          getGeocodingSearchResult(
             input,
-            undefined,
+            config.searchParams,
             language,
             focusPoint,
             sources,
