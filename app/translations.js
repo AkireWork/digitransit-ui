@@ -88,6 +88,7 @@ const translations = {
     'destination-placeholder': 'Enter destination, route or stop',
     'dialog-return-to-map': 'Return to map',
     'digitransit-platform': 'Digitransit service platform',
+    direction: 'Direction',
     disclaimer:
       'Please note that the results are based on estimated travel times. The suggested transport connections cannot be guaranteed.',
     disruption: 'Disruption',
@@ -487,6 +488,7 @@ const translations = {
     'destination-placeholder': 'Sisestage sihtpunkt, liin või peatus',
     'dialog-return-to-map': 'Mine tagasi kaardile',
     'digitransit-platform': 'Digitaalne reisiplaneerija',
+    direction: 'Suund',
     disclaimer:
       'Pane tähele, et tulemused põhinevad hinnangulistel sõiduaegadel. Soovitavaid transpordiühendusi ei saa garanteerida.',
     disruption: 'Katkestus',
@@ -886,6 +888,7 @@ const translations = {
     'destination-placeholder': 'Kirjoita määränpää, linja tai pysäkki',
     'dialog-return-to-map': 'Takaisin karttaan',
     'digitransit-platform': 'Digitransit-palvelualusta',
+    direction: 'Suunta',
     disclaimer:
       'Tulokset perustuvat arvioituihin ajoaikoihin. Ehdotetun yhteyden toteutumista ei voida taata.',
     disruption: 'Häiriö',
@@ -1285,6 +1288,7 @@ const translations = {
       'Введите пункт назначения, маршрут или остановку',
     'dialog-return-to-map': 'Вернуться к карте',
     'digitransit-platform': 'Платформа услуги дигитального транзита',
+    direction: 'Направление',
     disclaimer:
       'Обрати внимание, что результаты основаны на приблизительном времени поездки. Предлагаемые транспортные соединения не могут быть гарантированы.',
     disruption: 'Прерывание',

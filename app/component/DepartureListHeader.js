@@ -14,7 +14,7 @@ const DepartureListHeader = props => (
       <FormattedMessage id="route" defaultMessage="Route" />
     </span>
     <span className="route-destination-header">
-      <FormattedMessage id="destination" defaultMessage="Destination" />
+      <FormattedMessage id="direction" defaultMessage="Destination" />
     </span>
   </div>
 );
