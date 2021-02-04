@@ -139,15 +139,15 @@ export function isDuplicate(item1, item2) {
     return true;
   }
   // additional check for stops that have the same name but different stop code - we want to treat them as duplicates in terms of search results
-  if ((props1.layer && props2.layer) === 'stop') {
-    if (
-      props1.name.substr(0, props1.name.search(/\s[0-9]+-[0-9]/)) ===
-        props2.name.substr(0, props2.name.search(/\s[0-9]+-[0-9]/)) &&
-      props1.locality === props2.locality
-    ) {
-      return true;
-    }
-  }
+  // if ((props1.layer && props2.layer) === 'stop') {
+  //   if (
+  //     props1.name.substr(0, props1.name.search(/\s[0-9]+-[0-9]/)) ===
+  //       props2.name.substr(0, props2.name.search(/\s[0-9]+-[0-9]/)) &&
+  //     props1.locality === props2.locality
+  //   ) {
+  //     return true;
+  //   }
+  // }
 
   const p1 = item1.geometry.coordinates;
   const p2 = item2.geometry.coordinates;
@@ -781,7 +781,7 @@ export function executeSearchImmediate(
         searchComponents.push(
           getGeocodingSearchResult(
             input,
-            config.searchParams,
+            undefined,
             language,
             focusPoint,
             sources,
