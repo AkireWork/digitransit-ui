@@ -111,6 +111,7 @@ class RouteMapContainer extends React.PureComponent {
         bounds={(filteredPoints || pattern.stops).map(p => [p.lat, p.lon])}
         zoom={dispLat && dispLon ? 15 : undefined}
         showScaleBar={showScale}
+        showStops
       >
         {breakpoint !== 'large' &&
           !fullscreen && (

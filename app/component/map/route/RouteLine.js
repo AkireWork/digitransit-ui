@@ -51,6 +51,7 @@ function RouteLine(props) {
               props.pattern.stops.length - 1 && '-last'}${Math.random()}`}
             mode={modeClass + (props.thin ? ' thin' : '')}
             thin={props.thin}
+            selected
           />
         ))
     : false;
