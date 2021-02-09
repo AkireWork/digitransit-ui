@@ -289,6 +289,7 @@ export default {
     small: 8,
     selected: 28,
     default: 18,
+    bigger: 22,
   },
 
   appBarLink: { nameCode: 'provider', href: 'https://transpordiamet.ee/' },
