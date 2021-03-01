@@ -6,6 +6,7 @@ import connectToStores from 'fluxible-addons-react/connectToStores';
 import { intlShape, FormattedMessage } from 'react-intl';
 import sortBy from 'lodash/sortBy';
 
+import { locationShape, routerShape } from 'react-router';
 import RouteScheduleHeader from './RouteScheduleHeader';
 import RouteScheduleTripRow from './RouteScheduleTripRow';
 import DateSelect from './DateSelect';
@@ -13,8 +14,11 @@ import SecondaryButton from './SecondaryButton';
 import Loading from './Loading';
 import Icon from './Icon';
 import { RealtimeStateType } from '../constants';
+import TimetableWeekViewContainer from './TimetableWeekViewContainer';
 
 const DATE_FORMAT = 'YYYYMMDD';
+
+const routesWithWeekView = ['de2c42', '016e12', '1ccc48', 'bd4819'];
 
 const isTripCanceled = trip =>
   trip.stoptimes &&
@@ -32,6 +36,8 @@ class RouteScheduleContainer extends Component {
   static contextTypes = {
     intl: intlShape.isRequired,
     config: PropTypes.object.isRequired,
+    location: locationShape.isRequired,
+    router: routerShape.isRequired,
   };
 
   static transformTrips(trips, stops) {
@@ -178,6 +184,8 @@ class RouteScheduleContainer extends Component {
   render() {
     const routeIdSplitted = this.props.pattern.route.gtfsId.split(':');
 
+    const tripId = this.props.pattern.tripsForDate[0].gtfsId;
+
     const routeTimetableHandler =
       this.context.config.routeTimetables &&
       this.context.config.routeTimetables[routeIdSplitted[0]];
@@ -190,6 +198,20 @@ class RouteScheduleContainer extends Component {
         this.props.pattern.route,
       );
 
+    const openWeekView = () => {
+      this.context.router.push({
+        ...this.context.location,
+        state: {
+          ...this.context.location.state,
+          weekViewOpen: true,
+        },
+      });
+    };
+
+    const showWeekView = () => {
+      return routesWithWeekView.indexOf(this.props.pattern.route.color) === -1;
+    };
+
     return (
       <div className="route-schedule-content-wrapper">
         <div className="route-page-action-bar">
@@ -199,6 +221,15 @@ class RouteScheduleContainer extends Component {
             dateFormat={DATE_FORMAT}
             onDateChange={this.changeDate}
           />
+          {showWeekView() && (
+            <button
+              style={{ height: 'fit-content', margin: '3px auto auto 10px' }}
+              className="cursor-pointer noborder"
+              onClick={openWeekView}
+            >
+              <span>nädala vaade</span>
+            </button>
+          )}
           {this.dateForPrinting()}
           <div className="print-button-container">
             {routeTimetableUrl && (
@@ -231,6 +262,12 @@ class RouteScheduleContainer extends Component {
             {this.getTrips(this.state.from, this.state.to)}
           </div>
         </div>
+        {showWeekView() && (
+          <TimetableWeekViewContainer
+            tripId={tripId}
+            modalToggle={openWeekView}
+          />
+        )}
       </div>
     );
   }
@@ -252,9 +289,11 @@ const connectedComponent = connectToStores(
             url
             gtfsId
             shortName
+            color
           }
           tripsForDate(serviceDay: $serviceDay) {
             id
+            gtfsId
             wheelchairAccessible
             stoptimes: stoptimesForDate(serviceDay: $serviceDay) {
               realtimeState

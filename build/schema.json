@@ -3178,6 +3178,43 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "stoptimesForWeek",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "omitNonPickups",
+                                "description": "If true, only those departures which allow boarding are returned",
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Boolean",
+                                    "ofType": null
+                                },
+                                "defaultValue": "false"
+                            },
+                            {
+                                "name": "omitCanceled",
+                                "description": "If false, returns also canceled trips",
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Boolean",
+                                    "ofType": null
+                                },
+                                "defaultValue": "false"
+                            }
+                        ],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "OBJECT",
+                                "name": "TripTimesByWeekdays",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "geometry",
                         "description": "List of coordinates of this trip's route",
                         "args": [],
@@ -5016,6 +5053,49 @@
                         "deprecationReason": null
                     }
                 ],
+                "possibleTypes": null
+            },
+            {
+                "kind": "OBJECT",
+                "name": "TripTimesByWeekdays",
+                "description": "Trips stoptimes for week grouped by weekdays",
+                "fields": [
+                    {
+                        "name": "weekdays",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "stoptimes",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "OBJECT",
+                                "name": "Stoptime",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "inputFields": null,
+                "interfaces": [],
+                "enumValues": null,
                 "possibleTypes": null
             },
             {
