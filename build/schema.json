@@ -3207,7 +3207,7 @@
                             "name": null,
                             "ofType": {
                                 "kind": "OBJECT",
-                                "name": "TripTimesByWeekdays",
+                                "name": "TripTimesByStopName",
                                 "ofType": null
                             }
                         },
@@ -5057,11 +5057,11 @@
             },
             {
                 "kind": "OBJECT",
-                "name": "TripTimesByWeekdays",
-                "description": "Trips stoptimes for week grouped by weekdays",
+                "name": "TripTimesByStopName",
+                "description": "TripTimes by stop names for week grouped by weekdays",
                 "fields": [
                     {
-                        "name": "weekdays",
+                        "name": "stopName",
                         "description": null,
                         "args": [],
                         "type": {
@@ -5077,7 +5077,50 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "stoptimes",
+                        "name": "tripTimesByDays",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "OBJECT",
+                                "name": "TripTimesByDay",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "inputFields": null,
+                "interfaces": [],
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "OBJECT",
+                "name": "TripTimesByDay",
+                "description": "Trips stoptimes by weekday",
+                "fields": [
+                    {
+                        "name": "dayName",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "tripTimeShortList",
                         "description": null,
                         "args": [],
                         "type": {

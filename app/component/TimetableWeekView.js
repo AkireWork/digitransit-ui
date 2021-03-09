@@ -7,7 +7,7 @@ import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import { DATE_FORMAT } from '../constants';
 
-const dayName = { 1: 'E', 2: 'T', 3: 'K', 4: 'N', 5: 'R', 6: 'L', 7: 'P' };
+// const dayName = { 1: 'E', 2: 'T', 3: 'K', 4: 'N', 5: 'R', 6: 'L', 7: 'P' };
 
 const dropoffTypeEnterOnly = 'NONE';
 const pickupTypeLeaveOnly = 'NONE';
@@ -39,6 +39,18 @@ function TimetableWeekView(props) {
   if (!trip || !trip.trip || trip.trip.length <= 0) {
     return null;
   }
+  const getDayNames = () => {
+    return _.union(
+      trip.trip.stoptimesForWeek.map(s =>
+        s.tripTimesByDays.map(t => t.dayName),
+      ),
+    );
+  };
+
+  const dayNames = trip.trip.stoptimesForWeek
+    .sort((a, b) => b.tripTimesByDays.length - a.tripTimesByDays.length)[0]
+    .tripTimesByDays.map(t => t.dayName);
+  const colWidth = 1 / (dayNames.length + 1) * 100;
 
   const group = groupBy(
     [...trip.trip.monday, ...trip.trip.tuesday],
@@ -143,34 +155,70 @@ function TimetableWeekView(props) {
         <div
           style={{
             display: 'flex',
+            flex: '100%',
             flexFlow: 'row wrap',
+            alignItems: 'center',
+            textAlign: 'center',
           }}
         >
-          <div className="null" style={{ flex: '50%' }} />
-          <div className="head" style={{ flex: '50%' }}>
-            {departureDayGroup(trip.trip.stoptimesForWeek[0].weekdays)}
-          </div>
+          <div className="null" style={{ flex: `${colWidth}%` }} />
+          {dayNames.map(dN => (
+            <div className="head" style={{ flex: `${colWidth}%` }}>
+              <span>{dN}</span>
+            </div>
+          ))}
+
           <div style={{ borderBottom: '1px solid black', flex: '100%' }} />
-          {uniqueStoptimes(trip.trip.stoptimesForWeek[0].stoptimes).map(
-            (t, i1) => (
-              <React.Fragment key={`line+${i1}`}>
-                <div style={{ flex: '50%' }} className="name">
-                  {t.stop.name}
-                  <span>
-                    {t.dropoffType === dropoffTypeEnterOnly
-                      ? '**'
-                      : t.pickupType === pickupTypeLeaveOnly
-                        ? '*'
-                        : ''}
-                  </span>
-                </div>
-                <div style={{ flex: '50%' }} className="bodyy">
-                  {formatTime(t.serviceDay + t.scheduledDeparture)}
-                </div>
-              </React.Fragment>
-            ),
-          )}
         </div>
+        {trip.trip.stoptimesForWeek.map((t, i1) => (
+          <div
+            style={{
+              display: 'flex',
+              flex: '100%',
+              flexFlow: 'row wrap',
+              alignItems: 'center',
+              textAlign: 'center',
+              borderBottom: '1px solid black',
+              borderWidth: 'thin',
+            }}
+            key={`line+${i1}`}
+          >
+            <div style={{ flex: `${colWidth}%` }} className="name">
+              {t.stopName}
+            </div>
+            {/* t.tripTimesByDays.map */}
+            {dayNames.map(dayName => (
+              <div
+                style={{ flex: `${colWidth}%`, overflowWrap: 'break-word' }}
+                className="bodyy"
+              >
+                {t.tripTimesByDays.find(t => t.dayName === dayName) &&
+                  t.tripTimesByDays
+                    .find(t => t.dayName === dayName)
+                    .tripTimeShortList.map((tripTime, i) => (
+                      <React.Fragment>
+                        {formatTime(
+                          tripTime.serviceDay + tripTime.scheduledDeparture,
+                        )}
+                        {tripTime.dropoffType === dropoffTypeEnterOnly ? (
+                          <span>**</span>
+                        ) : tripTime.pickupType === pickupTypeLeaveOnly ? (
+                          <span>*</span>
+                        ) : (
+                          ''
+                        )}
+                        {i !==
+                        t.tripTimesByDays.find(t => t.dayName === dayName)
+                          .tripTimeShortList.length -
+                          1
+                          ? ', '
+                          : ''}
+                      </React.Fragment>
+                    ))}
+              </div>
+            ))}
+          </div>
+        ))}
         <div style={{ flex: '100%', color: 'gray', marginTop: '40px' }}>
           <span>* ainult väljumiseks</span>
         </div>
@@ -212,17 +260,17 @@ export default Relay.createContainer(
           tripLongName
           activeDates
           stoptimesForWeek {
-            weekdays
-            stoptimes {
-              headsign
-              realtimeState
-              scheduledArrival
-              scheduledDeparture
-              serviceDay
-              pickupType
-              dropoffType
-              stop {
-                name
+            stopName
+            tripTimesByDays {
+              dayName
+              tripTimeShortList {
+                headsign
+                realtimeState
+                scheduledArrival
+                scheduledDeparture
+                serviceDay
+                pickupType
+                dropoffType
               }
             }
           }
