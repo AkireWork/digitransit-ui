@@ -176,7 +176,6 @@ function TimetableWeekView(props) {
               display: 'flex',
               flex: '100%',
               flexFlow: 'row wrap',
-              alignItems: 'center',
               textAlign: 'center',
               borderBottom: '1px solid black',
               borderWidth: 'thin',
@@ -189,6 +188,7 @@ function TimetableWeekView(props) {
             {/* t.tripTimesByDays.map */}
             {dayNames.map(dayName => (
               <div
+                key={dayName}
                 style={{ flex: `${colWidth}%`, overflowWrap: 'break-word' }}
                 className="bodyy"
               >
