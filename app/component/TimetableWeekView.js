@@ -4,10 +4,9 @@ import Relay from 'react-relay/classic';
 import { locationShape, routerShape } from 'react-router';
 import connectToStores from 'fluxible-addons-react/connectToStores';
 import moment from 'moment';
-import groupBy from 'lodash/groupBy';
 import { DATE_FORMAT } from '../constants';
 
-// const dayName = { 1: 'E', 2: 'T', 3: 'K', 4: 'N', 5: 'R', 6: 'L', 7: 'P' };
+const dayNames = ['E', 'T', 'K', 'N', 'R', 'L', 'P'];
 
 const dropoffTypeEnterOnly = 'NONE';
 const pickupTypeLeaveOnly = 'NONE';
@@ -39,91 +38,21 @@ function TimetableWeekView(props) {
   if (!trip || !trip.trip || trip.trip.length <= 0) {
     return null;
   }
-  const getDayNames = () => {
-    return _.union(
-      trip.trip.stoptimesForWeek.map(s =>
-        s.tripTimesByDays.map(t => t.dayName),
-      ),
-    );
+  const getDayNames = stoptimes => {
+    const uniqueDayNames = [];
+    stoptimes.forEach(stoptime => {
+      stoptime.tripTimesByDays.forEach(tripTimeByDay => {
+        if (!uniqueDayNames.includes(tripTimeByDay.dayName)) {
+          uniqueDayNames.push(tripTimeByDay.dayName);
+        }
+      });
+    });
+    return dayNames.filter(dayName => uniqueDayNames.includes(dayName));
   };
-
-  const dayNames = trip.trip.stoptimesForWeek
-    .sort((a, b) => b.tripTimesByDays.length - a.tripTimesByDays.length)[0]
-    .tripTimesByDays.map(t => t.dayName);
-  const colWidth = 1 / (dayNames.length + 1) * 100;
-
-  const group = groupBy(
-    [...trip.trip.monday, ...trip.trip.tuesday],
-    'scheduledDeparture',
-  );
-
-  const filterRouteStoptimes = stoptimes =>
-    stoptimes.filter(st => st.pattern.route.id === trip.trip.pattern.route.id);
-
-  const mapRouteStoptimes = stoptimesForPattern => {
-    return stoptimesForPattern
-      .map(pattern =>
-        pattern.stoptimes.map(stoptime => ({
-          ...stoptime,
-          serviceDay: dayName[new Date(stoptime.serviceDay * 1000).getDay()],
-          stopName: stoptime.stop.name,
-        })),
-      )
-      .flat();
-  };
+  const colWidth =
+    1 / (getDayNames(trip.trip.stoptimesForWeek).length + 1) * 100;
 
   const formatTime = timestamp => moment(timestamp * 1000).format('HH:mm');
-
-  const filteredStoptimes = () => {
-    const filtered = trip.trip.stops
-      .map(stop =>
-        filterRouteStoptimes(stop.monday)
-          .concat(filterRouteStoptimes(stop.tuesday))
-          .concat(filterRouteStoptimes(stop.wednesday))
-          .concat(filterRouteStoptimes(stop.thursday))
-          .concat(filterRouteStoptimes(stop.friday))
-          .concat(filterRouteStoptimes(stop.saturday))
-          .concat(filterRouteStoptimes(stop.sunday)),
-      )
-      .flat();
-    return mapRouteStoptimes(filtered);
-  };
-
-  const stoptimesByDeparture = stoptimes => {
-    return stoptimes.reduce(function(map, obj) {
-      map[obj.key] += obj.val;
-    });
-    return groupBy(stoptimes, 'scheduledDeparture');
-  };
-
-  const stoptimesByDaysAndDeparture = stoptimesMap => {
-    let map = {};
-    Object.keys(stoptimesMap).forEach(function(key) {
-      const value = stoptimesMap[key];
-      const dayGroup = departureDayGroup(
-        value.map(val => val.serviceDay).join(','),
-      );
-      map = { ...map, departureDayGroup: dayGroup, ...value };
-      // stoptimesMap[newKey] = value;
-      // delete stoptimesMap[key];
-    });
-    return groupBy(map, 'dayGroup');
-  };
-
-  const uniqueStoptimes = stoptimes => {
-    const uniq = [];
-    const flags = [];
-    const l = stoptimes.length;
-    let i;
-    for (i = 0; i < l; i++) {
-      if (flags[stoptimes[i].scheduledDeparture]) {
-        continue;
-      }
-      flags[stoptimes[i].scheduledDeparture] = true;
-      uniq.push(stoptimes[i]);
-    }
-    return uniq;
-  };
 
   return (
     <div className="momentum-scroll">
@@ -162,7 +91,7 @@ function TimetableWeekView(props) {
           }}
         >
           <div className="null" style={{ flex: `${colWidth}%` }} />
-          {dayNames.map(dN => (
+          {getDayNames(trip.trip.stoptimesForWeek).map(dN => (
             <div className="head" style={{ flex: `${colWidth}%` }}>
               <span>{dN}</span>
             </div>
@@ -170,7 +99,7 @@ function TimetableWeekView(props) {
 
           <div style={{ borderBottom: '1px solid black', flex: '100%' }} />
         </div>
-        {trip.trip.stoptimesForWeek.map((t, i1) => (
+        {trip.trip.stoptimesForWeek.map((stopTimesByStopName, i1) => (
           <div
             style={{
               display: 'flex',
@@ -183,18 +112,20 @@ function TimetableWeekView(props) {
             key={`line+${i1}`}
           >
             <div style={{ flex: `${colWidth}%` }} className="name">
-              {t.stopName}
+              {stopTimesByStopName.stopName}
             </div>
             {/* t.tripTimesByDays.map */}
-            {dayNames.map(dayName => (
+            {getDayNames(trip.trip.stoptimesForWeek).map(dN => (
               <div
-                key={dayName}
+                key={dN}
                 style={{ flex: `${colWidth}%`, overflowWrap: 'break-word' }}
                 className="bodyy"
               >
-                {t.tripTimesByDays.find(t => t.dayName === dayName) &&
-                  t.tripTimesByDays
-                    .find(t => t.dayName === dayName)
+                {stopTimesByStopName.tripTimesByDays.find(
+                  t => t.dayName === dN,
+                ) &&
+                  stopTimesByStopName.tripTimesByDays
+                    .find(t => t.dayName === dN)
                     .tripTimeShortList.map((tripTime, i) => (
                       <React.Fragment>
                         {formatTime(
@@ -208,8 +139,9 @@ function TimetableWeekView(props) {
                           ''
                         )}
                         {i !==
-                        t.tripTimesByDays.find(t => t.dayName === dayName)
-                          .tripTimeShortList.length -
+                        stopTimesByStopName.tripTimesByDays.find(
+                          t => t.dayName === dN,
+                        ).tripTimeShortList.length -
                           1
                           ? ', '
                           : ''}
