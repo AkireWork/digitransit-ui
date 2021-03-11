@@ -227,7 +227,14 @@ class RouteScheduleContainer extends Component {
               className="cursor-pointer noborder"
               onClick={openWeekView}
             >
-              <span>nädala vaade</span>
+              <span
+                style={{
+                  textDecoration: 'underline',
+                  color: 'blue',
+                }}
+              >
+                nädala vaade
+              </span>
             </button>
           )}
           {this.dateForPrinting()}

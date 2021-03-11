@@ -118,7 +118,11 @@ function TimetableWeekView(props) {
             {getDayNames(trip.trip.stoptimesForWeek).map(dN => (
               <div
                 key={dN}
-                style={{ flex: `${colWidth}%`, overflowWrap: 'break-word' }}
+                style={{
+                  flex: `${colWidth}%`,
+                  overflowWrap: 'break-word',
+                  borderLeft: '1px solid lightgray',
+                }}
                 className="bodyy"
               >
                 {stopTimesByStopName.tripTimesByDays.find(
