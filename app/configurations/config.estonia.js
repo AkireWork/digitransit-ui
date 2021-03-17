@@ -263,7 +263,7 @@ export default {
   cityBike: {
     // Config for map features. NOTE: availability for routing is controlled by
     // transportModes.citybike.availableForSelection
-    showCityBikes: false,
+    showCityBikes: true,
     showStationId: true,
 
     useUrl: {
@@ -381,6 +381,11 @@ export default {
     ferry: {
       availableForSelection: true,
       defaultValue: true,
+    },
+
+    citybike: {
+      availableForSelection: true, // TODO: Turn off in autumn
+      defaultValue: false, // always false
     },
   },
 
