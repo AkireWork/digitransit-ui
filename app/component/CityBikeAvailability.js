@@ -1,35 +1,65 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import mapProps from 'recompose/mapProps';
 import { FormattedMessage } from 'react-intl';
 
-import Availability from './Availability';
 import ComponentUsageExample from './ComponentUsageExample';
 
-const CityBikeAvailability = mapProps(
-  ({ bikesAvailable, totalSpaces, fewAvailableCount, type }) => {
-    const total = Number.isNaN(totalSpaces) ? 0 : totalSpaces;
-    const available = Number.isNaN(bikesAvailable) ? 0 : bikesAvailable;
+const CityBikeAvailability = ({
+  bikesAvailable,
+  totalSpaces,
+  freeDocks,
+  pedelecBikesAvailable,
+}) => {
+  const total = Number.isNaN(totalSpaces) ? 0 : totalSpaces;
+  const free = Number.isNaN(freeDocks) ? 0 : freeDocks;
+  const available = Number.isNaN(bikesAvailable) ? 0 : bikesAvailable;
+  const eAvailable = Number.isNaN(pedelecBikesAvailable)
+    ? 0
+    : pedelecBikesAvailable;
 
-    return {
-      available,
-      total,
-      fewAvailableCount,
-      text: (
-        <p className="sub-header-h4 availability-header">
-          <FormattedMessage
-            id={
-              type === 'scooter' ? 'scooter-availability' : 'bike-availability'
-            }
-            defaultMessage="Bikes available at the station right now"
+  return (
+    <div className="availability-container">
+      <p className="sub-header-h4 availability-header">
+        <div className="availability-row">
+          <img
+            src="/img/bike-availability/bikes_infowindow2.e7b121f225870c7bee9a.png"
+            alt="Bicycle"
           />
-          {'\u00a0'}
-          ({available}/{total})
-        </p>
-      ),
-    };
-  },
-)(Availability);
+          <div>
+            <strong>{available}</strong>
+            {'\u00a0'}
+            <FormattedMessage id="bike-available" defaultMessage="Bikes" />
+          </div>
+        </div>
+        <div className="availability-row">
+          <img
+            src="/img/bike-availability/pedelec_infowindow2.fc7a773be29bf91481f0.png"
+            alt="Electric Bicycle"
+          />
+          <div>
+            <strong>{eAvailable}</strong>
+            {'\u00a0'}
+            <FormattedMessage
+              id="ebike-available"
+              defaultMessage="Pedelec Bikes"
+            />
+          </div>
+        </div>
+        <div className="availability-row">
+          <img
+            src="/img/bike-availability/docks_infowindow2.d3b1ffcdd40394116102.png"
+            alt="Dock"
+          />
+          <div>
+            <strong>{free}</strong>
+            {'\u00a0'}
+            <FormattedMessage id="dock-available" defaultMessage="Docks" />
+          </div>
+        </div>
+      </p>
+    </div>
+  );
+};
 
 CityBikeAvailability.displayName = 'CityBikeAvailability';
 
@@ -50,8 +80,8 @@ CityBikeAvailability.description = () => (
 CityBikeAvailability.propTypes = {
   bikesAvailable: PropTypes.number.isRequired,
   totalSpaces: PropTypes.number.isRequired,
-  fewAvailableCount: PropTypes.number.isRequired,
-  type: PropTypes.string.isRequired,
+  freeDocks: PropTypes.string.isRequired,
+  pedelecBikesAvailable: PropTypes.string.isRequired,
 };
 
 export default CityBikeAvailability;
