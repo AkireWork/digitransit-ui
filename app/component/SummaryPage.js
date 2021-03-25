@@ -467,7 +467,6 @@ const containerComponent = Relay.createContainer(SummaryPageWithBreakpoint, {
           modeWeight: $modeWeight
           preferred: $preferred,
           unpreferred: $unpreferred,
-          allowedBikeRentalNetworks: $allowedBikeRentalNetworks,
           ),
         {
           ${SummaryPlanContainer.getFragment('plan')}
