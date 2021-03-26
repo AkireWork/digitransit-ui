@@ -11,6 +11,7 @@ import {
   getCityBikeNetworkId,
   getCityBikeNetworkName,
 } from '../util/citybikes';
+import { FormattedMessage } from 'react-intl';
 
 const CityBikeCard = (
   { station, children, className, language },
@@ -35,9 +36,26 @@ const CityBikeCard = (
   return (
     <Card className={className}>
       <CardHeader
-        description={description}
+        description={
+          <>
+            <FormattedMessage
+              id="bike-rent-station-id"
+              defaultMessage="Station ID"
+            />
+            {':\u00a0'}
+            {description}
+          </>
+        }
         icon={getCityBikeNetworkIcon(networkConfig)}
-        name={station.name}
+        name={
+          <a
+            href="https://ratas.tartu.ee"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {station.name}
+          </a>
+        }
         unlinked
       />
       {children}

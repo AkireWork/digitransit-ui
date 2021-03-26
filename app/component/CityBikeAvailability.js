@@ -26,9 +26,12 @@ const CityBikeAvailability = ({
             alt="Bicycle"
           />
           <div>
+            <FormattedMessage
+              id="bike-rent-bike-available"
+              defaultMessage="Bikes"
+            />
+            {':\u00a0'}
             <strong>{available}</strong>
-            {'\u00a0'}
-            <FormattedMessage id="bike-available" defaultMessage="Bikes" />
           </div>
         </div>
         <div className="availability-row">
@@ -37,12 +40,12 @@ const CityBikeAvailability = ({
             alt="Electric Bicycle"
           />
           <div>
-            <strong>{eAvailable}</strong>
-            {'\u00a0'}
             <FormattedMessage
-              id="ebike-available"
+              id="bike-rent-ebike-available"
               defaultMessage="Pedelec Bikes"
             />
+            {':\u00a0'}
+            <strong>{eAvailable}</strong>
           </div>
         </div>
         <div className="availability-row">
@@ -51,9 +54,12 @@ const CityBikeAvailability = ({
             alt="Dock"
           />
           <div>
+            <FormattedMessage
+              id="bike-rent-dock-available"
+              defaultMessage="Docks"
+            />
+            {':\u00a0'}
             <strong>{free}</strong>
-            {'\u00a0'}
-            <FormattedMessage id="dock-available" defaultMessage="Docks" />
           </div>
         </div>
       </p>
