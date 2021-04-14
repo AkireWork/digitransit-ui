@@ -61,6 +61,7 @@ class RouteScheduleContainer extends Component {
 
   constructor(props) {
     super(props);
+    debugger;
     this.initState(props, true);
     props.relay.setVariables({ serviceDay: props.serviceDay });
   }

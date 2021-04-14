@@ -4,7 +4,6 @@ import moment from 'moment';
 import uniqBy from 'lodash/uniqBy';
 import sortBy from 'lodash/sortBy';
 import groupBy from 'lodash/groupBy';
-import padStart from 'lodash/padStart';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
 import Icon from './Icon';
@@ -98,6 +97,10 @@ class Timetable extends React.Component {
     return routesWithDupes;
   };
 
+  gruup = ehh => {
+    return groupBy(ehh, 'shortName');
+  };
+
   setRouteVisibilityState = val => {
     this.setState({ showRoutes: val.showRoutes });
   };
@@ -129,11 +132,6 @@ class Timetable extends React.Component {
       )
       .reduce((acc, val) => acc.concat(val), []);
 
-  groupArrayByHour = stoptimesArray =>
-    groupBy(stoptimesArray, stoptime =>
-      Math.floor(stoptime.scheduledDeparture / (60 * 60)),
-    );
-
   dateForPrinting = () => {
     const selectedDate = moment(
       this.props.propsForStopPageActionBar.selectedDate,
@@ -153,23 +151,6 @@ class Timetable extends React.Component {
         </div>
       </div>
     );
-  };
-
-  formTimeRow = (timetableMap, hour) => {
-    const sortedArr = timetableMap[hour].sort(
-      (time1, time2) => time1.scheduledDeparture - time2.scheduledDeparture,
-    );
-
-    const filteredRoutes = sortedArr
-      .map(
-        time =>
-          this.state.showRoutes.filter(o => o === time.name || o === time.id)
-            .length > 0 &&
-          moment.unix(time.serviceDay + time.scheduledDeparture).format('HH'),
-      )
-      .filter(o => o === padStart(hour % 24, 2, '0'));
-
-    return filteredRoutes;
   };
 
   createTimeTableRows = routesWithDetails =>
@@ -243,17 +224,12 @@ class Timetable extends React.Component {
       })
       .sort((a, b) => a.scheduledDeparture - b.scheduledDeparture);
 
-    const timetableMap = this.groupArrayByHour(routesWithDetails);
-    // console.log(routesWithDetails);
-    // console.log(timetableMap);
-
     const stopIdSplitted = this.props.stop.gtfsId.split(':');
 
     const stopPDFURL =
       stopIdSplitted[0] === 'HSL' && this.props.stop.locationType !== 'STATION'
         ? `${this.context.config.URL.STOP_TIMETABLES}${stopIdSplitted[1]}.pdf`
         : null;
-    console.log(timetableMap);
 
     return (
       <div className="timetable">
