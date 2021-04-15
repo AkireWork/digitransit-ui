@@ -3207,7 +3207,7 @@
                             "name": null,
                             "ofType": {
                                 "kind": "OBJECT",
-                                "name": "TripTimesByStopName",
+                                "name": "TripTimesByWeekdays",
                                 "ofType": null
                             }
                         },
@@ -5057,11 +5057,11 @@
             },
             {
                 "kind": "OBJECT",
-                "name": "TripTimesByStopName",
+                "name": "TripTimesByWeekdays",
                 "description": "TripTimes by stop names for week grouped by weekdays",
                 "fields": [
                     {
-                        "name": "stopName",
+                        "name": "weekdays",
                         "description": null,
                         "args": [],
                         "type": {
@@ -5077,7 +5077,7 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "tripTimesByDays",
+                        "name": "tripTimesByStops",
                         "description": null,
                         "args": [],
                         "type": {
@@ -5085,7 +5085,7 @@
                             "name": null,
                             "ofType": {
                                 "kind": "OBJECT",
-                                "name": "TripTimesByDay",
+                                "name": "TripTimesByStop",
                                 "ofType": null
                             }
                         },
@@ -5100,11 +5100,11 @@
             },
             {
                 "kind": "OBJECT",
-                "name": "TripTimesByDay",
-                "description": "Trips stoptimes by weekday",
+                "name": "TripTimesByStop",
+                "description": "Trips stoptimes by stopName",
                 "fields": [
                     {
-                        "name": "dayName",
+                        "name": "stopName",
                         "description": null,
                         "args": [],
                         "type": {
