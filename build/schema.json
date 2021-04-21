@@ -2689,6 +2689,22 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "trip",
+                        "description": "First trip which runs on this pattern",
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "OBJECT",
+                                "name": "Trip",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "trips",
                         "description": "Trips which run on this pattern",
                         "args": [],
@@ -3208,6 +3224,43 @@
                             "ofType": {
                                 "kind": "OBJECT",
                                 "name": "TripTimesByWeekdays",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "tripTimesWeekdaysGroups",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "omitNonPickups",
+                                "description": "If true, only those departures which allow boarding are returned",
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Boolean",
+                                    "ofType": null
+                                },
+                                "defaultValue": "false"
+                            },
+                            {
+                                "name": "omitCanceled",
+                                "description": "If false, returns also canceled trips",
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Boolean",
+                                    "ofType": null
+                                },
+                                "defaultValue": "false"
+                            }
+                        ],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
                                 "ofType": null
                             }
                         },
@@ -5077,7 +5130,7 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "tripTimesByStops",
+                        "name": "tripTimeByStopNameList",
                         "description": null,
                         "args": [],
                         "type": {
@@ -5085,7 +5138,7 @@
                             "name": null,
                             "ofType": {
                                 "kind": "OBJECT",
-                                "name": "TripTimesByStop",
+                                "name": "TripTimeByStopName",
                                 "ofType": null
                             }
                         },
@@ -5100,7 +5153,7 @@
             },
             {
                 "kind": "OBJECT",
-                "name": "TripTimesByStop",
+                "name": "TripTimeByStopName",
                 "description": "Trips stoptimes by stopName",
                 "fields": [
                     {
@@ -5120,11 +5173,11 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "tripTimeShortList",
+                        "name": "tripTimeShort",
                         "description": null,
                         "args": [],
                         "type": {
-                            "kind": "LIST",
+                            "kind": "NON_NULL",
                             "name": null,
                             "ofType": {
                                 "kind": "OBJECT",
