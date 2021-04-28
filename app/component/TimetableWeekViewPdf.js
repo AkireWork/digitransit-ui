@@ -88,20 +88,19 @@ export default function TimetableWeekViewPdf({ patterns }) {
   const renderTime = tripTime => {
     if (tripTime.scheduledDeparture === tripTime.scheduledArrival) {
       return formatTime(tripTime.scheduledDeparture);
-    } else {
-      if (!hasDifferentArrivalDepartures) {
-        setHasDifferentArrivalDepartures(true);
-      }
-
-      return (
-        // eslint-disable-next-line prefer-template
-        formatTime(tripTime.scheduledArrival) +
-        's' +
-        '\u000A' +
-        formatTime(tripTime.scheduledDeparture) +
-        'v'
-      );
     }
+    if (!hasDifferentArrivalDepartures) {
+      setHasDifferentArrivalDepartures(true);
+    }
+
+    return (
+      // eslint-disable-next-line prefer-template
+      formatTime(tripTime.scheduledArrival) +
+      's' +
+      '\u000A' +
+      formatTime(tripTime.scheduledDeparture) +
+      'v'
+    );
   };
 
   return (
@@ -124,7 +123,10 @@ export default function TimetableWeekViewPdf({ patterns }) {
                   <Text>Vedaja: {trip.route.agency.name}</Text>
                   <Text>Korraldaja: {trip.route.competentAuthority}</Text>
                   <Text>Maakonnaliin (avalik)</Text>
-                  <Text>Sõiduplaan kehtib kuni: !!!TODO</Text>
+                  <Text>
+                    Sõiduplaan kehtib kuni:{' '}
+                    {moment(trip.tripTimesValidTill).format('DD.MM.YYYY')}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -167,6 +169,37 @@ export default function TimetableWeekViewPdf({ patterns }) {
                 </Table>
               );
             })}
+
+            {trip.stoptimesForWeek && (
+              <React.Fragment>
+                <View style={{ color: 'gray' }}>
+                  <Text>ERIJUHUD:</Text>
+                </View>
+                {trip.stoptimesForWeek.map(stoptimes =>
+                  stoptimes.calendarDatesByFirstStoptime.calendarDateExceptions.map(
+                    ex => (
+                      <View
+                        key={ex.__dataID__}
+                        style={{ color: 'gray' }}
+                        wrap={false}
+                      >
+                        <Text>
+                          {formatTime(
+                            stoptimes.calendarDatesByFirstStoptime.time,
+                          )}
+                          {ex.exceptionType === 1
+                            ? ' väljub ka '
+                            : ' ei välju '}
+                          {ex.dates
+                            .map(date => moment(date).format('DD.MM.YYYY'))
+                            .join(', ')}
+                        </Text>
+                      </View>
+                    ),
+                  ),
+                )}
+              </React.Fragment>
+            )}
 
             {hasDifferentArrivalDepartures && (
               <View style={{ color: 'gray' }} wrap={false}>
