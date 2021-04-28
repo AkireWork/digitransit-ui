@@ -298,6 +298,7 @@ const connectedComponent = connectToStores(
                     tripLongName
                     wheelchairAccessible
                     tripTimesWeekdaysGroups
+                    tripTimesValidTill
                     route {
                         shortName
                         longName
@@ -308,6 +309,13 @@ const connectedComponent = connectToStores(
                     }
                     stoptimesForWeek {
                         weekdays
+                        calendarDatesByFirstStoptime {
+                          time
+                          calendarDateExceptions {
+                            exceptionType
+                            dates
+                          }
+                        }
                         tripTimeByStopNameList {
                             stopName
                             tripTimeShort {
