@@ -72,7 +72,7 @@ function Table(props) {
   return <View style={styles.table} {...props} />;
 }
 function FirstColumn(props) {
-  return <View fixed style={styles.firstCol} {...props} />;
+  return <View style={styles.firstCol} {...props} />;
 }
 function Column(props) {
   return <View style={styles.col} {...props} />;
