@@ -43,10 +43,11 @@ const styles = StyleSheet.create({
   },
   firstCol: {
     width: 150,
+    borderRight: '1px solid gray',
   },
   col: {
-    width: 80,
-    borderLeft: '1px solid gray',
+    width: 50,
+    borderRight: '1px solid gray',
     textAlign: 'center',
   },
   headerCell: {
@@ -58,7 +59,11 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   cell: {
-    height: 25,
+    height: 15,
+    lineHeight: 1,
+  },
+  doubleCell: {
+    height: 30,
     lineHeight: 1,
   },
 });
@@ -113,20 +118,23 @@ export default function TimetableWeekViewPdf({ patterns }) {
           <Page size="A4" style={styles.page} key={__dataID__}>
             <View style={styles.header}>
               <View style={{ flexDirection: 'row', marginBottom: '20px' }}>
-                <Text style={{ margin: '20px', fontSize: '30px' }}>
+                <Text
+                  style={{
+                    margin: '20px',
+                    marginBottom: '25px',
+                    fontSize: '25px',
+                  }}
+                >
                   {trip.route.shortName}
                 </Text>
                 <View style={{ display: 'grid', fontSize: '11px' }}>
-                  <Text style={{ fontSize: '20px' }}>
+                  <Text style={{ fontSize: '15px' }}>
                     {trip.route.longName}
                   </Text>
                   <Text>Vedaja: {trip.route.agency.name}</Text>
                   <Text>Korraldaja: {trip.route.competentAuthority}</Text>
                   <Text>Maakonnaliin (avalik)</Text>
-                  <Text>
-                    Sõiduplaan kehtib kuni:{' '}
-                    {moment(trip.tripTimesValidTill).format('DD.MM.YYYY')}
-                  </Text>
+                  <Text>Sõiduplaan kehtib kuni: {trip.tripTimesValidTill}</Text>
                 </View>
               </View>
             </View>
@@ -190,9 +198,7 @@ export default function TimetableWeekViewPdf({ patterns }) {
                           {ex.exceptionType === 1
                             ? ' väljub ka '
                             : ' ei välju '}
-                          {ex.dates
-                            .map(date => moment(date).format('DD.MM.YYYY'))
-                            .join(', ')}
+                          {ex.dates}
                         </Text>
                       </View>
                     ),
@@ -208,7 +214,7 @@ export default function TimetableWeekViewPdf({ patterns }) {
               </View>
             )}
 
-            <View style={styles.footer} wrap={false}>
+            <View fixed style={styles.footer} wrap={false}>
               <Text>* ainult väljumiseks</Text>
               <Text>** ainult sisenemiseks</Text>
             </View>
