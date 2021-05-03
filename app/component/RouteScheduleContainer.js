@@ -308,27 +308,29 @@ const connectedComponent = connectToStores(
                         competentAuthority
                     }
                     stoptimesForWeek {
-                        weekdays
+                        parts
                         calendarDatesByFirstStoptime {
-                          time
-                          calendarDateExceptions {
-                            exceptionType
-                            dates
-                          }
-                        }
-                        tripTimeByStopNameList {
-                            stopName
-                            tripTimeShort {
-                                headsign
-                                realtimeState
-                                scheduledArrival
-                                scheduledDeparture
-                                serviceDay
-                                pickupType
-                                dropoffType
+                            time
+                            calendarDateExceptions {
+                                exceptionType
+                                dates
                             }
                         }
-
+                        tripTimesByWeekdaysList {
+                            weekdays
+                            tripTimeByStopNameList {
+                                stopName
+                                tripTimeShort {
+                                    headsign
+                                    realtimeState
+                                    scheduledArrival
+                                    scheduledDeparture
+                                    serviceDay
+                                    pickupType
+                                    dropoffType
+                                }
+                            }
+                        }
                     }
                 }
             }

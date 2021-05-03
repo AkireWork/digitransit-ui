@@ -3369,7 +3369,7 @@
                             "name": null,
                             "ofType": {
                                 "kind": "OBJECT",
-                                "name": "TripTimesByWeekdays",
+                                "name": "TripTimesByWeekdaysParts",
                                 "ofType": null
                             }
                         },
@@ -5280,11 +5280,11 @@
             },
             {
                 "kind": "OBJECT",
-                "name": "TripTimesByWeekdays",
-                "description": "TripTimes by stop names for week grouped by weekdays",
+                "name": "TripTimesByWeekdaysParts",
+                "description": "Chunks of TripTimes by stop names for week grouped by weekdays",
                 "fields": [
                     {
-                        "name": "weekdays",
+                        "name": "parts",
                         "description": null,
                         "args": [],
                         "type": {
@@ -5292,7 +5292,7 @@
                             "name": null,
                             "ofType": {
                                 "kind": "SCALAR",
-                                "name": "String",
+                                "name": "Int",
                                 "ofType": null
                             }
                         },
@@ -5312,7 +5312,7 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "tripTimeByStopNameList",
+                        "name": "tripTimesByWeekdaysList",
                         "description": null,
                         "args": [],
                         "type": {
@@ -5320,7 +5320,7 @@
                             "name": null,
                             "ofType": {
                                 "kind": "OBJECT",
-                                "name": "TripTimeByStopName",
+                                "name": "TripTimesByWeekdays",
                                 "ofType": null
                             }
                         },
@@ -5403,6 +5403,49 @@
                             "ofType": {
                                 "kind": "SCALAR",
                                 "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "inputFields": null,
+                "interfaces": [],
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "OBJECT",
+                "name": "TripTimesByWeekdays",
+                "description": "TripTimes by stop names for week grouped by weekdays",
+                "fields": [
+                    {
+                        "name": "weekdays",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "tripTimeByStopNameList",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "OBJECT",
+                                "name": "TripTimeByStopName",
                                 "ofType": null
                             }
                         },

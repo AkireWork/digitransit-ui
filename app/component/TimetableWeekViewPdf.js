@@ -140,43 +140,52 @@ export default function TimetableWeekViewPdf({ patterns }) {
             </View>
 
             <Text>{trip.tripLongName}</Text>
-            {stoptimesChunks.map((chunk, index) => {
-              return (
-                // eslint-disable-next-line react/no-array-index-key
-                <Table wrap={false} key={index}>
-                  <FirstColumn>
-                    <HeaderCell>&nbsp;</HeaderCell>
-
-                    <View style={{ marginTop: 5 }} />
-
-                    {chunk[0].tripTimeByStopNameList.map(ch => (
-                      <TextCell key={ch.__dataID__}>
-                        {ch.stopName}
-                        {ch.tripTimeShort.dropoffType ===
-                          DROPOFF_TYPE_ENTER_ONLY && '\u00A0**'}
-                        {ch.tripTimeShort.pickupType ===
-                          PICKUP_TYPE_LEAVE_ONLY && '\u00A0*'}
-                      </TextCell>
-                    ))}
-                  </FirstColumn>
-                  {chunk.map(ch => {
-                    return (
-                      <Column key={ch.__dataID__}>
-                        <Text style={styles.headerCell}>{ch.weekdays}</Text>
+            {trip.stoptimesForWeek[0].tripTimesByWeekdaysList.map(
+              (ttt, tttidx) =>
+                stoptimesChunks.map((chunk, index) => {
+                  return (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <Table wrap={false} key={index}>
+                      <FirstColumn>
+                        <HeaderCell>&nbsp;</HeaderCell>
 
                         <View style={{ marginTop: 5 }} />
 
-                        {ch.tripTimeByStopNameList.map(itm => (
-                          <TextCell key={itm.__dataID__}>
-                            {renderTime(itm.tripTimeShort)}
+                        {chunk[0].tripTimesByWeekdaysList[
+                          tttidx
+                        ].tripTimeByStopNameList.map(ch => (
+                          <TextCell key={ch.__dataID__}>
+                            {ch.stopName}
+                            {ch.tripTimeShort.dropoffType ===
+                              DROPOFF_TYPE_ENTER_ONLY && '\u00A0**'}
+                            {ch.tripTimeShort.pickupType ===
+                              PICKUP_TYPE_LEAVE_ONLY && '\u00A0*'}
                           </TextCell>
                         ))}
-                      </Column>
-                    );
-                  })}
-                </Table>
-              );
-            })}
+                      </FirstColumn>
+                      {chunk.map(ch => {
+                        return (
+                          <Column key={ch.__dataID__}>
+                            <Text style={styles.headerCell}>
+                              {ch.tripTimesByWeekdaysList[tttidx].weekdays}
+                            </Text>
+
+                            <View style={{ marginTop: 5 }} />
+
+                            {ch.tripTimesByWeekdaysList[
+                              tttidx
+                            ].tripTimeByStopNameList.map(itm => (
+                              <TextCell key={itm.__dataID__}>
+                                {renderTime(itm.tripTimeShort)}
+                              </TextCell>
+                            ))}
+                          </Column>
+                        );
+                      })}
+                    </Table>
+                  );
+                }),
+            )}
 
             {trip.stoptimesForWeek && (
               <React.Fragment>
@@ -198,7 +207,7 @@ export default function TimetableWeekViewPdf({ patterns }) {
                           {ex.exceptionType === 1
                             ? ' väljub ka '
                             : ' ei välju '}
-                          {ex.dates}
+                          {ex.dates.join(', ')}
                         </Text>
                       </View>
                     ),
