@@ -186,9 +186,9 @@ export default function TimetableWeekViewPdf({ patterns }) {
             )}
 
             <Text>{trip.tripLongName}</Text>
-            {trip.stoptimesForWeek[0].tripTimesByWeekdaysList.map(
-              (ttt, tttidx) =>
-                stoptimesChunks.map((chunk, index) => {
+            {stoptimesChunks.map((chunk, index) =>
+              trip.stoptimesForWeek[0].tripTimesByWeekdaysList.map(
+                (ttt, tttidx) => {
                   const idxs = getIdxs(chunk);
                   return (
                     // eslint-disable-next-line react/no-array-index-key
@@ -255,7 +255,8 @@ export default function TimetableWeekViewPdf({ patterns }) {
                       })}
                     </Table>
                   );
-                }),
+                },
+              ),
             )}
 
             {trip.stoptimesForWeek.find(
