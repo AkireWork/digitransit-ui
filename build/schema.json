@@ -5300,6 +5300,22 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "weekdays",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "calendarDatesByFirstStoptime",
                         "description": null,
                         "args": [],
@@ -5421,22 +5437,6 @@
                 "description": "TripTimes by stop names for week grouped by weekdays",
                 "fields": [
                     {
-                        "name": "weekdays",
-                        "description": null,
-                        "args": [],
-                        "type": {
-                            "kind": "NON_NULL",
-                            "name": null,
-                            "ofType": {
-                                "kind": "SCALAR",
-                                "name": "String",
-                                "ofType": null
-                            }
-                        },
-                        "isDeprecated": false,
-                        "deprecationReason": null
-                    },
-                    {
                         "name": "tripTimeByStopNameList",
                         "description": null,
                         "args": [],
@@ -5489,6 +5489,22 @@
                             "ofType": {
                                 "kind": "OBJECT",
                                 "name": "Stoptime",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "differentDeparture",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "Boolean",
                                 "ofType": null
                             }
                         },
