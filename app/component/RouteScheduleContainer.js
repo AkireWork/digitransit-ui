@@ -226,11 +226,19 @@ class RouteScheduleContainer extends Component {
                 />
               }
             >
-              <Icon img="icon-icon_print" />
-              <FormattedMessage
-                id="koondplaan-pdf"
-                defaultMessage="Koondplaan"
-              />
+              {({ blob, url, loading, error }) =>
+                loading ? (
+                  'Loading document...'
+                ) : (
+                  <>
+                    <Icon img="icon-icon_print" />
+                    <FormattedMessage
+                      id="koondplaan-pdf"
+                      defaultMessage="Koondplaan"
+                    />
+                  </>
+                )
+              }
             </PDFDownloadLink>
           )}
           {this.dateForPrinting()}
@@ -309,6 +317,7 @@ const connectedComponent = connectToStores(
                     }
                     stoptimesForWeek {
                         parts
+                        weekdays
                         calendarDatesByFirstStoptime {
                             time
                             calendarDateExceptions {
@@ -317,9 +326,9 @@ const connectedComponent = connectToStores(
                             }
                         }
                         tripTimesByWeekdaysList {
-                            weekdays
                             tripTimeByStopNameList {
                                 stopName
+                                differentDeparture
                                 tripTimeShort {
                                     headsign
                                     realtimeState

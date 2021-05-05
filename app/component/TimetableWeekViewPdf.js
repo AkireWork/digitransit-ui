@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: 20,
   },
+  subheader: {
+    lineHeight: 1.3,
+  },
   footer: {
     color: 'gray',
     position: 'absolute',
@@ -63,7 +66,7 @@ const styles = StyleSheet.create({
     lineHeight: 1,
   },
   doubleCell: {
-    height: 30,
+    height: 24,
     lineHeight: 1,
   },
 });
@@ -71,17 +74,31 @@ const styles = StyleSheet.create({
 function Table(props) {
   return <View style={styles.table} {...props} />;
 }
+
 function FirstColumn(props) {
   return <View style={styles.firstCol} {...props} />;
 }
+
 function Column(props) {
   return <View style={styles.col} {...props} />;
 }
+
 function HeaderCell(props) {
   return <Text style={styles.headerCell} {...props} />;
 }
+
 function TextCell(props) {
   return <Text style={styles.cell} {...props} />;
+}
+
+function TextDoubleCell(props) {
+  return (
+    <>
+      <View style={props.single ? { marginTop: 10 } : { marginTop: 5 }} />
+      <Text style={styles.doubleCell} {...props} />
+      <View style={!props.single ? { marginTop: 5 } : {}} />
+    </>
+  );
 }
 
 export default function TimetableWeekViewPdf({ patterns }) {
@@ -108,41 +125,71 @@ export default function TimetableWeekViewPdf({ patterns }) {
     );
   };
 
+  const getIdxs = chunk => {
+    const map = {};
+    chunk.forEach(ch => {
+      ch.tripTimesByWeekdaysList.forEach((tt, tti) => {
+        tt.tripTimeByStopNameList.forEach((ttsnl, ttsnli) => {
+          if (
+            ttsnl.tripTimeShort.scheduledArrival !==
+            ttsnl.tripTimeShort.scheduledDeparture
+          ) {
+            Array.isArray(map[tti])
+              ? map[tti].push(ttsnli)
+              : (map[tti] = [ttsnli]);
+          }
+        });
+      });
+    });
+    return map;
+  };
+
   return (
     <Document>
-      {patterns?.map(({ trip, __dataID__ }) => {
+      {patterns?.map(({ trip, __dataID__ }, i) => {
         const stoptimesChunks = chunkArray(trip.stoptimesForWeek, 5);
 
         return (
           // eslint-disable-next-line dot-notation
           <Page size="A4" style={styles.page} key={__dataID__}>
-            <View style={styles.header}>
-              <View style={{ flexDirection: 'row', marginBottom: '20px' }}>
-                <Text
-                  style={{
-                    margin: '20px',
-                    marginBottom: '25px',
-                    fontSize: '25px',
-                  }}
-                >
-                  {trip.route.shortName}
-                </Text>
-                <View style={{ display: 'grid', fontSize: '11px' }}>
-                  <Text style={{ fontSize: '15px' }}>
-                    {trip.route.longName}
+            {i === 0 ? (
+              <View style={styles.header}>
+                <View style={{ flexDirection: 'row', marginBottom: '20px' }}>
+                  <Text
+                    style={{
+                      margin: '20px',
+                      marginBottom: '25px',
+                      fontSize: '25px',
+                    }}
+                  >
+                    {trip.route.shortName}
                   </Text>
-                  <Text>Vedaja: {trip.route.agency.name}</Text>
-                  <Text>Korraldaja: {trip.route.competentAuthority}</Text>
-                  <Text>Maakonnaliin (avalik)</Text>
-                  <Text>Sõiduplaan kehtib kuni: {trip.tripTimesValidTill}</Text>
+                  <View style={{ display: 'grid', fontSize: '10px' }}>
+                    <Text style={{ fontSize: '15px' }}>
+                      {trip.route.longName}
+                    </Text>
+                    <Text style={styles.subheader}>
+                      Vedaja: {trip.route.agency.name}
+                    </Text>
+                    <Text style={styles.subheader}>
+                      Korraldaja: {trip.route.competentAuthority}
+                    </Text>
+                    <Text style={styles.subheader}>Maakonnaliin (avalik)</Text>
+                    <Text style={styles.subheader}>
+                      Sõiduplaan kehtib kuni: {trip.tripTimesValidTill}
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
+            ) : (
+              <View />
+            )}
 
             <Text>{trip.tripLongName}</Text>
             {trip.stoptimesForWeek[0].tripTimesByWeekdaysList.map(
               (ttt, tttidx) =>
                 stoptimesChunks.map((chunk, index) => {
+                  const idxs = getIdxs(chunk);
                   return (
                     // eslint-disable-next-line react/no-array-index-key
                     <Table wrap={false} key={index}>
@@ -153,32 +200,56 @@ export default function TimetableWeekViewPdf({ patterns }) {
 
                         {chunk[0].tripTimesByWeekdaysList[
                           tttidx
-                        ].tripTimeByStopNameList.map(ch => (
-                          <TextCell key={ch.__dataID__}>
-                            {ch.stopName}
-                            {ch.tripTimeShort.dropoffType ===
-                              DROPOFF_TYPE_ENTER_ONLY && '\u00A0**'}
-                            {ch.tripTimeShort.pickupType ===
-                              PICKUP_TYPE_LEAVE_ONLY && '\u00A0*'}
-                          </TextCell>
-                        ))}
+                        ].tripTimeByStopNameList.map((itm, itmi) =>
+                          // eslint-disable-next-line no-prototype-builtins
+                          idxs.hasOwnProperty(tttidx) &&
+                          idxs[tttidx].includes(itmi) ? (
+                            <TextDoubleCell single key={itm.__dataID__}>
+                              {itm.stopName}
+                              {itm.tripTimeShort.dropoffType ===
+                                DROPOFF_TYPE_ENTER_ONLY && '\u00A0**'}
+                              {itm.tripTimeShort.pickupType ===
+                                PICKUP_TYPE_LEAVE_ONLY && '\u00A0*'}
+                            </TextDoubleCell>
+                          ) : (
+                            <TextCell key={itm.__dataID__}>
+                              {itm.stopName}
+                              {itm.tripTimeShort.dropoffType ===
+                                DROPOFF_TYPE_ENTER_ONLY && '\u00A0**'}
+                              {itm.tripTimeShort.pickupType ===
+                                PICKUP_TYPE_LEAVE_ONLY && '\u00A0*'}
+                            </TextCell>
+                          ),
+                        )}
                       </FirstColumn>
                       {chunk.map(ch => {
                         return (
                           <Column key={ch.__dataID__}>
-                            <Text style={styles.headerCell}>
-                              {ch.tripTimesByWeekdaysList[tttidx].weekdays}
-                            </Text>
+                            <Text style={styles.headerCell}>{ch.weekdays}</Text>
 
                             <View style={{ marginTop: 5 }} />
 
                             {ch.tripTimesByWeekdaysList[
                               tttidx
-                            ].tripTimeByStopNameList.map(itm => (
-                              <TextCell key={itm.__dataID__}>
-                                {renderTime(itm.tripTimeShort)}
-                              </TextCell>
-                            ))}
+                            ].tripTimeByStopNameList.map((itm, itmi) =>
+                              // eslint-disable-next-line no-prototype-builtins
+                              idxs.hasOwnProperty(tttidx) &&
+                              idxs[tttidx].includes(itmi) ? (
+                                <TextDoubleCell
+                                  single={
+                                    itm.tripTimeShort.scheduledArrival ===
+                                    itm.tripTimeShort.scheduledDeparture
+                                  }
+                                  key={itm.__dataID__}
+                                >
+                                  {renderTime(itm.tripTimeShort)}
+                                </TextDoubleCell>
+                              ) : (
+                                <TextCell key={itm.__dataID__}>
+                                  {renderTime(itm.tripTimeShort)}
+                                </TextCell>
+                              ),
+                            )}
                           </Column>
                         );
                       })}
@@ -187,7 +258,11 @@ export default function TimetableWeekViewPdf({ patterns }) {
                 }),
             )}
 
-            {trip.stoptimesForWeek && (
+            {trip.stoptimesForWeek.find(
+              stoptimes =>
+                stoptimes.calendarDatesByFirstStoptime.calendarDateExceptions
+                  .length > 0,
+            ) && (
               <React.Fragment>
                 <View style={{ color: 'gray' }}>
                   <Text>ERIJUHUD:</Text>
