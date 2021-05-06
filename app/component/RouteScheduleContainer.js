@@ -6,6 +6,8 @@ import connectToStores from 'fluxible-addons-react/connectToStores';
 import { intlShape, FormattedMessage } from 'react-intl';
 import sortBy from 'lodash/sortBy';
 
+import { locationShape, routerShape } from 'react-router';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import RouteScheduleHeader from './RouteScheduleHeader';
 import RouteScheduleTripRow from './RouteScheduleTripRow';
 import DateSelect from './DateSelect';
@@ -13,8 +15,11 @@ import SecondaryButton from './SecondaryButton';
 import Loading from './Loading';
 import Icon from './Icon';
 import { RealtimeStateType } from '../constants';
+import TimetableWeekViewPdf from './TimetableWeekViewPdf';
 
 const DATE_FORMAT = 'YYYYMMDD';
+
+const routesWithWeekView = ['de2c42', '016e12', '1ccc48', 'bd4819'];
 
 const isTripCanceled = trip =>
   trip.stoptimes &&
@@ -32,6 +37,8 @@ class RouteScheduleContainer extends Component {
   static contextTypes = {
     intl: intlShape.isRequired,
     config: PropTypes.object.isRequired,
+    location: locationShape.isRequired,
+    router: routerShape.isRequired,
   };
 
   static transformTrips(trips, stops) {
@@ -190,6 +197,10 @@ class RouteScheduleContainer extends Component {
         this.props.pattern.route,
       );
 
+    const showWeekView = () => {
+      return routesWithWeekView.indexOf(this.props.pattern.route.color) === -1;
+    };
+
     return (
       <div className="route-schedule-content-wrapper">
         <div className="route-page-action-bar">
@@ -199,6 +210,37 @@ class RouteScheduleContainer extends Component {
             dateFormat={DATE_FORMAT}
             onDateChange={this.changeDate}
           />
+          {showWeekView() && (
+            <PDFDownloadLink
+              className="secondary-button small"
+              style={{
+                fontSize: '0.8125rem',
+                textDecoration: 'none',
+                marginBottom: '0.7em',
+                marginLeft: 'auto',
+                marginRight: '0.7em',
+              }}
+              document={
+                <TimetableWeekViewPdf
+                  patterns={this.props.pattern.route.patterns}
+                />
+              }
+            >
+              {({ blob, url, loading, error }) =>
+                loading ? (
+                  'Loading document...'
+                ) : (
+                  <>
+                    <Icon img="icon-icon_print" />
+                    <FormattedMessage
+                      id="koondplaan-pdf"
+                      defaultMessage="Koondplaan"
+                    />
+                  </>
+                )
+              }
+            </PDFDownloadLink>
+          )}
           {this.dateForPrinting()}
           <div className="print-button-container">
             {routeTimetableUrl && (
@@ -252,9 +294,59 @@ const connectedComponent = connectToStores(
             url
             gtfsId
             shortName
+            color
+            longName
+            patterns {
+                stops {
+                    name
+                }
+                trip {
+                    id
+                    gtfsId
+                    tripLongName
+                    wheelchairAccessible
+                    tripTimesWeekdaysGroups
+                    tripTimesValidTill
+                    route {
+                        shortName
+                        longName
+                        agency {
+                            name
+                        }
+                        competentAuthority
+                    }
+                    stoptimesForWeek {
+                        parts
+                        weekdays
+                        calendarDatesByFirstStoptime {
+                            time
+                            calendarDateExceptions {
+                                exceptionType
+                                dates
+                            }
+                        }
+                        tripTimesByWeekdaysList {
+                            tripTimeByStopNameList {
+                                stopName
+                                differentDeparture
+                                tripTimeShort {
+                                    headsign
+                                    realtimeState
+                                    scheduledArrival
+                                    scheduledDeparture
+                                    serviceDay
+                                    pickupType
+                                    dropoffType
+                                }
+                            }
+                        }
+                    }
+                }
+            }
           }
           tripsForDate(serviceDay: $serviceDay) {
             id
+            gtfsId
             wheelchairAccessible
             stoptimes: stoptimesForDate(serviceDay: $serviceDay) {
               realtimeState

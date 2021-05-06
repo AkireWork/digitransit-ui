@@ -1,15 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import ComponentUsageExample from './ComponentUsageExample';
 
-const DepartureListHeader = props => (
+const TimetableListHeader = () => (
   <div className="departure-list-header row padding-vertical-small">
-    {!props.staticDeparture && (
-      <span className="time-header">
-        <FormattedMessage id="leaves" defaultMessage="Leaves" />
-      </span>
-    )}
+    <span className="time-header">
+      <FormattedMessage id="leaves" defaultMessage="Leaves" />
+    </span>
     <span className="route-number-header">
       <FormattedMessage id="route" defaultMessage="Route" />
     </span>
@@ -19,22 +16,18 @@ const DepartureListHeader = props => (
   </div>
 );
 
-DepartureListHeader.displayName = 'DepartureListHeader';
+TimetableListHeader.displayName = 'TimetableListHeader';
 
-DepartureListHeader.propTypes = {
-  staticDeparture: PropTypes.bool,
-};
-
-DepartureListHeader.defaultProps = {
+TimetableListHeader.defaultProps = {
   staticDeparture: false,
 };
 
-DepartureListHeader.description = () => (
+TimetableListHeader.description = () => (
   <div>
     <ComponentUsageExample>
-      <DepartureListHeader />
+      <TimetableListHeader />
     </ComponentUsageExample>
   </div>
 );
 
-export default DepartureListHeader;
+export default TimetableListHeader;

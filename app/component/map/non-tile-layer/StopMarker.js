@@ -33,6 +33,7 @@ class StopMarker extends React.Component {
     renderName: PropTypes.bool,
     disableModeIcons: PropTypes.bool,
     selected: PropTypes.bool,
+    bigger: PropTypes.bool,
   };
 
   static contextTypes = {
@@ -48,6 +49,8 @@ class StopMarker extends React.Component {
       size = this.context.config.stopsIconSize.small;
     } else if (this.props.selected) {
       size = this.context.config.stopsIconSize.selected;
+    } else if (this.props.bigger) {
+      size = this.context.config.stopsIconSize.bigger;
     } else {
       size = this.context.config.stopsIconSize.default;
     }
@@ -57,15 +60,19 @@ class StopMarker extends React.Component {
       iconSize: [size, size],
       className: cx('cursor-pointer', this.props.mode, {
         small: size === this.context.config.stopsIconSize.small,
-        selected: this.props.selected,
+        selected: this.props.selected || this.props.bigger,
       }),
     });
   };
 
   getIcon = zoom => {
-    const scale = this.props.stop.transfer || this.props.selected ? 1.5 : 1;
+    const scale = this.props.bigger
+      ? 1.2
+      : this.props.stop.transfer || this.props.selected
+        ? 1.5
+        : 1;
     const calcZoom =
-      this.props.stop.transfer || this.props.selected
+      this.props.stop.transfer || this.props.selected || this.props.bigger
         ? Math.max(zoom, 15)
         : zoom;
 

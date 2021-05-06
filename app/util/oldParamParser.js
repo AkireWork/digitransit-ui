@@ -1,6 +1,6 @@
 // Parse from, to and time parameters from old reittiopas searches
 import moment from 'moment-timezone/moment-timezone';
-import { getGeocodingResult } from './searchUtils';
+import { getGeocodingAutocompleteResult } from './searchUtils';
 import { locationToOTP } from './otpStrings';
 import { kkj2ToWgs84 } from './geo-utils';
 import { PREFIX_ITINERARY_SUMMARY } from './path';
@@ -39,7 +39,7 @@ function parseLocation(location, input, config) {
       null,
       config,
     )
-      .then(parseGeocodingResults)
+      .then(getGeocodingAutocompleteResult)
       .catch(() => ' ');
   }
   if (input) {
@@ -52,7 +52,7 @@ function parseLocation(location, input, config) {
       null,
       config,
     )
-      .then(parseGeocodingResults)
+      .then(getGeocodingAutocompleteResult)
       .catch(() => ' ');
   }
   return Promise.resolve(' ');

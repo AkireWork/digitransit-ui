@@ -16,9 +16,11 @@ export default Relay.createContainer(Timetable, {
             code
             route {
               id
+              gtfsId
               shortName
               longName
               mode
+              color
               agency {
                 id
                 name

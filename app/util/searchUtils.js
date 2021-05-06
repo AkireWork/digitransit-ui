@@ -138,6 +138,16 @@ export function isDuplicate(item1, item2) {
   if (props2.gtfsId && props1.gid && props1.gid.includes(props2.gtfsId)) {
     return true;
   }
+  // additional check for stops that have the same name but different stop code - we want to treat them as duplicates in terms of search results
+  // if ((props1.layer && props2.layer) === 'stop') {
+  //   if (
+  //     props1.name.substr(0, props1.name.search(/\s[0-9]+-[0-9]/)) ===
+  //       props2.name.substr(0, props2.name.search(/\s[0-9]+-[0-9]/)) &&
+  //     props1.locality === props2.locality
+  //   ) {
+  //     return true;
+  //   }
+  // }
 
   const p1 = item1.geometry.coordinates;
   const p2 = item2.geometry.coordinates;
@@ -293,7 +303,7 @@ function isValidSearchParam(text, config) {
   );
 }
 
-export function getGeocodingResult(
+export function getGeocodingAutocompleteResult(
   _text,
   searchParams,
   lang,
@@ -312,6 +322,29 @@ export function getGeocodingResult(
   }
 
   return getJson(config.URL.PELIAS_AUTOCOMPLETE, opts).then(response =>
+    mapPeliasModality(response.features, config),
+  );
+}
+
+export function getGeocodingSearchResult(
+  _text,
+  searchParams,
+  lang,
+  focusPoint,
+  sources,
+  config,
+) {
+  const text = _text ? _text.trim() : null;
+  if (isValidSearchParam(text, config)) {
+    return Promise.resolve([]);
+  }
+
+  let opts = { text, ...searchParams, ...focusPoint, lang };
+  if (sources) {
+    opts = { ...opts, sources };
+  }
+
+  return getJson(config.URL.PELIAS, opts).then(response =>
     mapPeliasModality(response.features, config),
   );
 }
@@ -431,16 +464,15 @@ function getFavouriteStops(favourites, input, origin) {
         'properties.address',
       ]),
     )
-    .then(
-      stops =>
-        refLatLng
-          ? sortBy(stops, stop =>
-              distance(refLatLng, {
-                lat: stop.lat,
-                lon: stop.lon,
-              }),
-            )
-          : stops,
+    .then(stops =>
+      refLatLng
+        ? sortBy(stops, stop =>
+            distance(refLatLng, {
+              lat: stop.lat,
+              lon: stop.lon,
+            }),
+          )
+        : stops,
     );
 }
 
@@ -528,7 +560,7 @@ export const match = (normalizedTerm, resultProperties) => {
       // because of filtermatchingtoinput, we know that match occurred somewhere
       // don't run filtermatching again but estimate roughly:
       // the longer the matching string, the better confidence, max being 0.5
-      return 0.5 * normalizedTerm.length / (normalizedTerm.length + 1);
+      return (0.5 * normalizedTerm.length) / (normalizedTerm.length + 1);
     })
     .reduce(
       (previous, current) => (current > previous ? current : previous),
@@ -607,14 +639,9 @@ export const sortSearchResults = (config, results, term = '') => {
 
       result => {
         const { confidence, layer, source, name } = result.properties;
-        console.log(confidence, layer, source, name);
         if (normalizedTerm.length === 0) {
           // Doing search with empty string.
           // No confidence to match, so use ranked old searches and favourites
-          console.log(
-            'normalizedTerm.length === 0',
-            getLayerRank(layer, source),
-          );
           return Math.min(getLayerRank(layer, source), 0.99);
         }
 
@@ -720,7 +747,7 @@ export function executeSearchImmediate(
           sources,
           config,
         ),
-        getGeocodingResult(
+        getGeocodingAutocompleteResult(
           input,
           config.searchParams,
           language,
@@ -746,7 +773,7 @@ export function executeSearchImmediate(
 
       if (sources) {
         searchComponents.push(
-          getGeocodingResult(
+          getGeocodingSearchResult(
             input,
             undefined,
             language,

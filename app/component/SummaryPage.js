@@ -246,6 +246,7 @@ class SummaryPage extends React.Component {
         fitBounds
         bounds={bounds.length > 1 ? bounds : defaultBounds}
         showScaleBar
+        showStops
       />
     );
   }
@@ -466,7 +467,6 @@ const containerComponent = Relay.createContainer(SummaryPageWithBreakpoint, {
           modeWeight: $modeWeight
           preferred: $preferred,
           unpreferred: $unpreferred,
-          allowedBikeRentalNetworks: $allowedBikeRentalNetworks,
           ),
         {
           ${SummaryPlanContainer.getFragment('plan')}

@@ -263,14 +263,14 @@ export default {
   cityBike: {
     // Config for map features. NOTE: availability for routing is controlled by
     // transportModes.citybike.availableForSelection
-    showCityBikes: false,
+    showCityBikes: true,
     showStationId: true,
 
-    useUrl: {
-      fi: 'https://www.hsl.fi/kaupunkipyorat',
-      sv: 'https://www.hsl.fi/sv/stadscyklar',
-      en: 'https://www.hsl.fi/en/citybikes',
-    },
+    // useUrl: {
+    //   fi: 'https://www.hsl.fi/kaupunkipyorat',
+    //   sv: 'https://www.hsl.fi/sv/stadscyklar',
+    //   en: 'https://www.hsl.fi/en/citybikes',
+    // },
 
     cityBikeMinZoom: 14,
     cityBikeSmallIconZoom: 14,
@@ -289,6 +289,7 @@ export default {
     small: 8,
     selected: 28,
     default: 18,
+    bigger: 22,
   },
 
   appBarLink: { nameCode: 'provider', href: 'https://transpordiamet.ee/' },
@@ -381,6 +382,11 @@ export default {
       availableForSelection: true,
       defaultValue: true,
     },
+
+    citybike: {
+      availableForSelection: true, // TODO: Turn off in autumn
+      defaultValue: false, // always false
+    },
   },
 
   streetModes: {
@@ -406,7 +412,7 @@ export default {
     },
 
     car: {
-      availableForSelection: true,
+      availableForSelection: false,
       defaultValue: false,
       exclusive: true,
       icon: 'car-withoutBox',

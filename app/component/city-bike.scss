@@ -12,6 +12,13 @@ $citybike-not-available-color: $light-gray;
   .availability-header {
     margin-top: 5px !important;
     margin-bottom: 6px !important;
+
+    .availability-row {
+      display: flex; 
+      flex-direction: row; 
+      justify-content: space-between; 
+      align-items: center;
+    }
   }
 
   .separate {

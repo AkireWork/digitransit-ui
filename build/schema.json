@@ -132,11 +132,39 @@
                                 "defaultValue": null
                             },
                             {
+                                "name": "feeds",
+                                "description": "List of feeds from which stops are returned. Defaults to all feeds",
+                                "type": {
+                                    "kind": "LIST",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "NON_NULL",
+                                        "name": null,
+                                        "ofType": {
+                                            "kind": "SCALAR",
+                                            "name": "String",
+                                            "ofType": null
+                                        }
+                                    }
+                                },
+                                "defaultValue": null
+                            },
+                            {
                                 "name": "name",
                                 "description": "Query stops by this name",
                                 "type": {
                                     "kind": "SCALAR",
                                     "name": "String",
+                                    "ofType": null
+                                },
+                                "defaultValue": null
+                            },
+                            {
+                                "name": "maxResults",
+                                "description": "Number of results to return when using `name` argument. Defaults to 10",
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Int",
                                     "ofType": null
                                 },
                                 "defaultValue": null
@@ -617,11 +645,39 @@
                                 "defaultValue": null
                             },
                             {
+                                "name": "feeds",
+                                "description": "List of feeds from which stations are returned. Defaults to all feeds",
+                                "type": {
+                                    "kind": "LIST",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "NON_NULL",
+                                        "name": null,
+                                        "ofType": {
+                                            "kind": "SCALAR",
+                                            "name": "String",
+                                            "ofType": null
+                                        }
+                                    }
+                                },
+                                "defaultValue": null
+                            },
+                            {
                                 "name": "name",
                                 "description": "Query stations by name",
                                 "type": {
                                     "kind": "SCALAR",
                                     "name": "String",
+                                    "ofType": null
+                                },
+                                "defaultValue": null
+                            },
+                            {
+                                "name": "maxResults",
+                                "description": "Number of results to return when using `name` argument. Defaults to 10",
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Int",
                                     "ofType": null
                                 },
                                 "defaultValue": null
@@ -646,6 +702,20 @@
                             {
                                 "name": "ids",
                                 "description": "Only return routes with these ids",
+                                "type": {
+                                    "kind": "LIST",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "SCALAR",
+                                        "name": "String",
+                                        "ofType": null
+                                    }
+                                },
+                                "defaultValue": null
+                            },
+                            {
+                                "name": "feeds",
+                                "description": "Only return routes with these feedIds",
                                 "type": {
                                     "kind": "LIST",
                                     "name": null,
@@ -748,7 +818,22 @@
                     {
                         "name": "trips",
                         "description": "Get all trips",
-                        "args": [],
+                        "args": [
+                            {
+                                "name": "feeds",
+                                "description": "Only return trips with these feedIds",
+                                "type": {
+                                    "kind": "LIST",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "SCALAR",
+                                        "name": "String",
+                                        "ofType": null
+                                    }
+                                },
+                                "defaultValue": null
+                            }
+                        ],
                         "type": {
                             "kind": "LIST",
                             "name": null,
@@ -1147,6 +1232,42 @@
                                     }
                                 },
                                 "defaultValue": null
+                            },
+                            {
+                                "name": "route",
+                                "description": "Only return alerts affecting these routes",
+                                "type": {
+                                    "kind": "LIST",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "NON_NULL",
+                                        "name": null,
+                                        "ofType": {
+                                            "kind": "SCALAR",
+                                            "name": "String",
+                                            "ofType": null
+                                        }
+                                    }
+                                },
+                                "defaultValue": null
+                            },
+                            {
+                                "name": "stop",
+                                "description": "Only return alerts affecting these stops",
+                                "type": {
+                                    "kind": "LIST",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "NON_NULL",
+                                        "name": null,
+                                        "ofType": {
+                                            "kind": "SCALAR",
+                                            "name": "String",
+                                            "ofType": null
+                                        }
+                                    }
+                                },
+                                "defaultValue": null
                             }
                         ],
                         "type": {
@@ -1176,7 +1297,22 @@
                     {
                         "name": "bikeRentalStations",
                         "description": "Get all bike rental stations",
-                        "args": [],
+                        "args": [
+                            {
+                                "name": "ids",
+                                "description": "Return bike rental stations with these ids.  \n **Note:** if an id is invalid (or the bike rental station service is unavailable) the returned list will contain `null` values.",
+                                "type": {
+                                    "kind": "LIST",
+                                    "name": null,
+                                    "ofType": {
+                                        "kind": "SCALAR",
+                                        "name": "String",
+                                        "ofType": null
+                                    }
+                                },
+                                "defaultValue": null
+                            }
+                        ],
                         "type": {
                             "kind": "LIST",
                             "name": null,
@@ -1429,6 +1565,16 @@
                                 "type": {
                                     "kind": "SCALAR",
                                     "name": "Int",
+                                    "ofType": null
+                                },
+                                "defaultValue": null
+                            },
+                            {
+                                "name": "maxSlope",
+                                "description": "The maximum slope, up or downhill, that can be used in wheelchair accessible routing. Value is between 0 and 1, and calculated by dividing change of elevation by change of distance. Default value: 0.0833333333333",
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Float",
                                     "ofType": null
                                 },
                                 "defaultValue": null
@@ -2689,6 +2835,22 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "trip",
+                        "description": "First trip which runs on this pattern",
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "OBJECT",
+                                "name": "Trip",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "trips",
                         "description": "Trips which run on this pattern",
                         "args": [],
@@ -3173,6 +3335,92 @@
                                 "name": "Stoptime",
                                 "ofType": null
                             }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "stoptimesForWeek",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "omitNonPickups",
+                                "description": "If true, only those departures which allow boarding are returned",
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Boolean",
+                                    "ofType": null
+                                },
+                                "defaultValue": "false"
+                            },
+                            {
+                                "name": "omitCanceled",
+                                "description": "If false, returns also canceled trips",
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Boolean",
+                                    "ofType": null
+                                },
+                                "defaultValue": "false"
+                            }
+                        ],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "OBJECT",
+                                "name": "TripTimesByWeekdaysParts",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "tripTimesWeekdaysGroups",
+                        "description": null,
+                        "args": [
+                            {
+                                "name": "omitNonPickups",
+                                "description": "If true, only those departures which allow boarding are returned",
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Boolean",
+                                    "ofType": null
+                                },
+                                "defaultValue": "false"
+                            },
+                            {
+                                "name": "omitCanceled",
+                                "description": "If false, returns also canceled trips",
+                                "type": {
+                                    "kind": "SCALAR",
+                                    "name": "Boolean",
+                                    "ofType": null
+                                },
+                                "defaultValue": "false"
+                            }
+                        ],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "tripTimesValidTill",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
                         },
                         "isDeprecated": false,
                         "deprecationReason": null
@@ -4935,6 +5183,18 @@
                         },
                         "isDeprecated": false,
                         "deprecationReason": null
+                    },
+                    {
+                        "name": "stopSequence",
+                        "description": "The sequence number of the stop",
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "Int",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
                     }
                 ],
                 "inputFields": null,
@@ -5016,6 +5276,245 @@
                         "deprecationReason": null
                     }
                 ],
+                "possibleTypes": null
+            },
+            {
+                "kind": "OBJECT",
+                "name": "TripTimesByWeekdaysParts",
+                "description": "Chunks of TripTimes by stop names for week grouped by weekdays",
+                "fields": [
+                    {
+                        "name": "parts",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "Int",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "weekdays",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "calendarDatesByFirstStoptime",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "OBJECT",
+                            "name": "CalendarDatesByFirstStoptime",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "tripTimesByWeekdaysList",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "OBJECT",
+                                "name": "TripTimesByWeekdays",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "inputFields": null,
+                "interfaces": [],
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "OBJECT",
+                "name": "CalendarDatesByFirstStoptime",
+                "description": "Calendar dates and first stoptime for trip",
+                "fields": [
+                    {
+                        "name": "time",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "Int",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "calendarDateExceptions",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "OBJECT",
+                                "name": "CalendarDateException",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "inputFields": null,
+                "interfaces": [],
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "OBJECT",
+                "name": "CalendarDateException",
+                "description": "Trips stoptimes by stopName",
+                "fields": [
+                    {
+                        "name": "exceptionType",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "Int",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "dates",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "inputFields": null,
+                "interfaces": [],
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "OBJECT",
+                "name": "TripTimesByWeekdays",
+                "description": "TripTimes by stop names for week grouped by weekdays",
+                "fields": [
+                    {
+                        "name": "tripTimeByStopNameList",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "LIST",
+                            "name": null,
+                            "ofType": {
+                                "kind": "OBJECT",
+                                "name": "TripTimeByStopName",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "inputFields": null,
+                "interfaces": [],
+                "enumValues": null,
+                "possibleTypes": null
+            },
+            {
+                "kind": "OBJECT",
+                "name": "TripTimeByStopName",
+                "description": "Trips stoptimes by stopName",
+                "fields": [
+                    {
+                        "name": "stopName",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "tripTimeShort",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "OBJECT",
+                                "name": "Stoptime",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "differentDeparture",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "Boolean",
+                                "ofType": null
+                            }
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    }
+                ],
+                "inputFields": null,
+                "interfaces": [],
+                "enumValues": null,
                 "possibleTypes": null
             },
             {
@@ -5840,7 +6339,7 @@
                     },
                     {
                         "name": "bikesAvailable",
-                        "description": "Number of bikes currently available on the rental station. The total capacity of this bike rental station is the sum of fields `bikesAvailable` and `spacesAvailable`.",
+                        "description": "Number of bikes currently available on the rental station.",
                         "args": [],
                         "type": {
                             "kind": "SCALAR",
@@ -5852,7 +6351,19 @@
                     },
                     {
                         "name": "spacesAvailable",
-                        "description": "Number of free spaces currently available on the rental station. The total capacity of this bike rental station is the sum of fields `bikesAvailable` and `spacesAvailable`.  \n Note that this value being 0 does not necessarily indicate that bikes cannot be returned to this station, as it might be possible to leave the bike in the vicinity of the rental station, even if the bike racks don't have any spaces available (see field `allowDropoff`).",
+                        "description": "Number of free spaces currently available on the rental station.  \n Note that this value being 0 does not necessarily indicate that bikes cannot be returned to this station, as it might be possible to leave the bike in the vicinity of the rental station, even if the bike racks don't have any spaces available (see field `allowDropoff`).",
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "Int",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "capacity",
+                        "description": "Nominal capacity (number of racks) of the rental station.",
                         "args": [],
                         "type": {
                             "kind": "SCALAR",
@@ -5889,6 +6400,42 @@
                     {
                         "name": "allowDropoff",
                         "description": "If true, bikes can be returned to this station.",
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "Boolean",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "allowOverloading",
+                        "description": "If true, bikes can be returned even if spacesAvailable is zero or bikes > capacity.",
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "Boolean",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "isFloatingBike",
+                        "description": "If true, this is a free floating bike.",
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "Boolean",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "isCarStation",
+                        "description": "If true, this is a car rental system station.",
                         "args": [],
                         "type": {
                             "kind": "SCALAR",
@@ -6432,6 +6979,18 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "stopSequence",
+                        "description": "For transit stops, the sequence number of the stop.",
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "Int",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "bikeRentalStation",
                         "description": "The bike rental station related to the place",
                         "args": [],
@@ -6881,6 +7440,18 @@
                         "type": {
                             "kind": "SCALAR",
                             "name": "String",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "interlineWithPreviousLeg",
+                        "description": "Interlines with previous leg. This is true when the same vehicle is used for the previous leg as for this leg and passenger can stay inside the vehicle.",
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "Boolean",
                             "ofType": null
                         },
                         "isDeprecated": false,

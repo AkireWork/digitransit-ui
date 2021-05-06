@@ -90,6 +90,7 @@ class ItineraryLine extends React.Component {
                 key={`intermediate-${place.stop.gtfsId}`}
                 mode={modePlusClass}
                 thin
+                bigger
               />,
             ),
           );
@@ -158,6 +159,7 @@ class ItineraryLine extends React.Component {
                 }}
                 mode={mode.toLowerCase()}
                 renderText={leg.transitLeg && this.props.showTransferLabels}
+                bigger
               />,
             );
             objs.push(
@@ -173,6 +175,7 @@ class ItineraryLine extends React.Component {
                 }}
                 mode={mode.toLowerCase()}
                 renderText={leg.transitLeg && this.props.showTransferLabels}
+                bigger
               />,
             );
           }
