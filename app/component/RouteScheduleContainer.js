@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Relay from 'react-relay/classic';
 import moment from 'moment';
 import connectToStores from 'fluxible-addons-react/connectToStores';
-import { intlShape, FormattedMessage } from 'react-intl';
+import { FormattedMessage, intlShape } from 'react-intl';
 import sortBy from 'lodash/sortBy';
 
 import { locationShape, routerShape } from 'react-router';
@@ -64,6 +64,14 @@ class RouteScheduleContainer extends Component {
     super(props);
     this.initState(props, true);
     props.relay.setVariables({ serviceDay: props.serviceDay });
+  }
+
+  async componentDidMount() {
+    this.pdfThing().then(value => {
+      this.setState(prevState => {
+        return { ...prevState.state, pdfData: value };
+      });
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -169,6 +177,31 @@ class RouteScheduleContainer extends Component {
     window.print();
   };
 
+  pdfThing = async () => {
+    return new Promise(resolve =>
+      resolve(
+        <PDFDownloadLink
+          className="secondary-button small"
+          style={{
+            fontSize: '0.8125rem',
+            textDecoration: 'none',
+            marginBottom: '0.7em',
+            marginLeft: 'auto',
+            marginRight: '0.7em',
+          }}
+          document={
+            <TimetableWeekViewPdf
+              patterns={this.props.pattern.route.patterns}
+            />
+          }
+        >
+          <Icon img="icon-icon_print" />
+          <FormattedMessage id="koondplaan-pdf" defaultMessage="Koondplaan" />
+        </PDFDownloadLink>,
+      ),
+    );
+  };
+
   initState(props, isInitialState) {
     const state = {
       from: 0,
@@ -210,37 +243,8 @@ class RouteScheduleContainer extends Component {
             dateFormat={DATE_FORMAT}
             onDateChange={this.changeDate}
           />
-          {showWeekView() && (
-            <PDFDownloadLink
-              className="secondary-button small"
-              style={{
-                fontSize: '0.8125rem',
-                textDecoration: 'none',
-                marginBottom: '0.7em',
-                marginLeft: 'auto',
-                marginRight: '0.7em',
-              }}
-              document={
-                <TimetableWeekViewPdf
-                  patterns={this.props.pattern.route.patterns}
-                />
-              }
-            >
-              {({ blob, url, loading, error }) =>
-                loading ? (
-                  'Loading document...'
-                ) : (
-                  <>
-                    <Icon img="icon-icon_print" />
-                    <FormattedMessage
-                      id="koondplaan-pdf"
-                      defaultMessage="Koondplaan"
-                    />
-                  </>
-                )
-              }
-            </PDFDownloadLink>
-          )}
+          {(showWeekView() && this.state.pdfData) || <Loading />}
+
           {this.dateForPrinting()}
           <div className="print-button-container">
             {routeTimetableUrl && (
