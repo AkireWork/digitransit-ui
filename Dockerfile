@@ -30,10 +30,10 @@ WORKDIR ${WORK}
 ADD . ${WORK}
 
 RUN \
-  yarn install --silent && \
-  yarn add --force node-sass && \
-  yarn run build && \
+  npm install --silent && \
+  npm add --force node-sass && \
+  npm run build && \
   rm -rf static docs test /tmp/* && \
-  yarn cache clean
+  npm cache clean --force
 
-CMD yarn run start
+CMD npm run start
