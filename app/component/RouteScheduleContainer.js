@@ -7,7 +7,6 @@ import { FormattedMessage, intlShape } from 'react-intl';
 import sortBy from 'lodash/sortBy';
 
 import { locationShape, routerShape } from 'react-router';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import RouteScheduleHeader from './RouteScheduleHeader';
 import RouteScheduleTripRow from './RouteScheduleTripRow';
 import DateSelect from './DateSelect';
@@ -64,14 +63,6 @@ class RouteScheduleContainer extends Component {
     super(props);
     this.initState(props, true);
     props.relay.setVariables({ serviceDay: props.serviceDay });
-  }
-
-  async componentDidMount() {
-    this.pdfThing().then(value => {
-      this.setState(prevState => {
-        return { ...prevState.state, pdfData: value };
-      });
-    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -177,31 +168,6 @@ class RouteScheduleContainer extends Component {
     window.print();
   };
 
-  pdfThing = async () => {
-    return new Promise(resolve =>
-      resolve(
-        <PDFDownloadLink
-          className="secondary-button small"
-          style={{
-            fontSize: '0.8125rem',
-            textDecoration: 'none',
-            marginBottom: '0.7em',
-            marginLeft: 'auto',
-            marginRight: '0.7em',
-          }}
-          document={
-            <TimetableWeekViewPdf
-              patterns={this.props.pattern.route.patterns}
-            />
-          }
-        >
-          <Icon img="icon-icon_print" />
-          <FormattedMessage id="koondplaan-pdf" defaultMessage="Koondplaan" />
-        </PDFDownloadLink>,
-      ),
-    );
-  };
-
   initState(props, isInitialState) {
     const state = {
       from: 0,
@@ -231,7 +197,7 @@ class RouteScheduleContainer extends Component {
       );
 
     const showWeekView = () => {
-      return routesWithWeekView.indexOf(this.props.pattern.route.color) === -1;
+      return !routesWithWeekView.includes(this.props.pattern.route.color);
     };
 
     return (
@@ -243,7 +209,11 @@ class RouteScheduleContainer extends Component {
             dateFormat={DATE_FORMAT}
             onDateChange={this.changeDate}
           />
-          {(showWeekView() && this.state.pdfData) || <Loading />}
+          {showWeekView() && (
+            <TimetableWeekViewPdf
+              patterns={this.props.pattern.route.patterns}
+            />
+          )}
 
           {this.dateForPrinting()}
           <div className="print-button-container">
