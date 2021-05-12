@@ -1,8 +1,17 @@
 /* eslint-disable no-underscore-dangle */
 import PropTypes from 'prop-types';
-import React from 'react';
-import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
+import React, { useState } from 'react';
+import {
+  Document,
+  Page,
+  StyleSheet,
+  Text,
+  View,
+  pdf,
+} from '@react-pdf/renderer';
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
+import Icon from './Icon';
 
 function chunkArray(array, size) {
   const chunkedArr = [];
@@ -101,18 +110,15 @@ function TextDoubleCell(props) {
   );
 }
 
-export default function TimetableWeekViewPdf({ patterns }) {
-  const [
-    hasDifferentArrivalDepartures,
-    setHasDifferentArrivalDepartures,
-  ] = React.useState(false);
+function TimetableWeekViewPdf({ patterns }) {
+  let hasDifferentArrivalDepartures = false;
 
   const renderTime = tripTime => {
     if (tripTime.scheduledDeparture === tripTime.scheduledArrival) {
       return formatTime(tripTime.scheduledDeparture);
     }
     if (!hasDifferentArrivalDepartures) {
-      setHasDifferentArrivalDepartures(true);
+      hasDifferentArrivalDepartures = true;
     }
 
     return (
@@ -313,3 +319,62 @@ export default function TimetableWeekViewPdf({ patterns }) {
 TimetableWeekViewPdf.propTypes = {
   patterns: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
+
+export default function PDFButton(props) {
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const renderPDF = () => {
+    setIsGenerating(true);
+
+    setTimeout(() => {
+      const docBlob = pdf(TimetableWeekViewPdf(props)).toBlob();
+
+      docBlob
+        .then(blob => {
+          const link = document.createElement('a');
+          // create a blobURI pointing to our Blob
+          link.href = URL.createObjectURL(blob);
+          link.download = 'timetable.pdf';
+          // some browser needs the anchor to be in the doc
+          document.body.append(link);
+          link.click();
+          link.remove();
+          // in case the Blob uses a lot of memory
+          setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+        })
+        .catch(err => {
+          // TODO: show error result
+          console.error(err);
+          alert('couldnt generate your pdf, please try again later');
+        })
+        .finally(() => {
+          setIsGenerating(false);
+        });
+    }, 50);
+  };
+
+  return (
+    <button
+      className="secondary-button small"
+      style={{
+        fontSize: '0.8125rem',
+        textDecoration: 'none',
+        marginBottom: '0.7em',
+        marginLeft: 'auto',
+        marginRight: '0.7em',
+      }}
+      disabled={isGenerating}
+      onClick={renderPDF}
+    >
+      <Icon img="icon-icon_print" />
+      {isGenerating ? (
+        <FormattedMessage id="loading" defaultMessage="Loading..." />
+      ) : (
+        <FormattedMessage
+          id="print-timetable-plan"
+          defaultMessage="Koondplaan"
+        />
+      )}
+    </button>
+  );
+}

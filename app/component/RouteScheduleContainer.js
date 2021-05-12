@@ -3,11 +3,10 @@ import React, { Component } from 'react';
 import Relay from 'react-relay/classic';
 import moment from 'moment';
 import connectToStores from 'fluxible-addons-react/connectToStores';
-import { intlShape, FormattedMessage } from 'react-intl';
+import { FormattedMessage, intlShape } from 'react-intl';
 import sortBy from 'lodash/sortBy';
 
 import { locationShape, routerShape } from 'react-router';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import RouteScheduleHeader from './RouteScheduleHeader';
 import RouteScheduleTripRow from './RouteScheduleTripRow';
 import DateSelect from './DateSelect';
@@ -198,7 +197,7 @@ class RouteScheduleContainer extends Component {
       );
 
     const showWeekView = () => {
-      return routesWithWeekView.indexOf(this.props.pattern.route.color) === -1;
+      return !routesWithWeekView.includes(this.props.pattern.route.color);
     };
 
     return (
@@ -211,36 +210,11 @@ class RouteScheduleContainer extends Component {
             onDateChange={this.changeDate}
           />
           {showWeekView() && (
-            <PDFDownloadLink
-              className="secondary-button small"
-              style={{
-                fontSize: '0.8125rem',
-                textDecoration: 'none',
-                marginBottom: '0.7em',
-                marginLeft: 'auto',
-                marginRight: '0.7em',
-              }}
-              document={
-                <TimetableWeekViewPdf
-                  patterns={this.props.pattern.route.patterns}
-                />
-              }
-            >
-              {({ blob, url, loading, error }) =>
-                loading ? (
-                  'Loading document...'
-                ) : (
-                  <>
-                    <Icon img="icon-icon_print" />
-                    <FormattedMessage
-                      id="koondplaan-pdf"
-                      defaultMessage="Koondplaan"
-                    />
-                  </>
-                )
-              }
-            </PDFDownloadLink>
+            <TimetableWeekViewPdf
+              patterns={this.props.pattern.route.patterns}
+            />
           )}
+
           {this.dateForPrinting()}
           <div className="print-button-container">
             {routeTimetableUrl && (
