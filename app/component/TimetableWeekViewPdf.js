@@ -9,9 +9,9 @@ import {
   View,
   pdf,
 } from '@react-pdf/renderer';
-import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import Icon from './Icon';
+import LocalTime from './LocalTime';
 
 function chunkArray(array, size) {
   const chunkedArr = [];
@@ -25,7 +25,8 @@ function chunkArray(array, size) {
 
 const DROPOFF_TYPE_ENTER_ONLY = 'NONE';
 const PICKUP_TYPE_LEAVE_ONLY = 'NONE';
-const formatTime = timestamp => moment(timestamp * 1000).format('HH:mm');
+const startOfDay = new Date().setHours(0, 0, 0, 0) / 1000;
+const formatTime = timestamp => <LocalTime time={startOfDay + timestamp} />;
 
 // Create styles
 const styles = StyleSheet.create({
