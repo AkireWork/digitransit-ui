@@ -46,6 +46,27 @@ class RouteStopListContainer extends React.PureComponent {
     this.nearestStop = element;
   };
 
+  getSafeStop = (stop, roundtripStop) => {
+    const safe = Object.assign({}, stop);
+    roundtripStop[stop.code] = roundtripStop.hasOwnProperty(stop.code)
+      ? roundtripStop[stop.code] + 1
+      : 0;
+    safe.stopTimesForPattern = [
+      stop.stopTimesForPattern[roundtripStop[stop.code]],
+    ];
+    if (stop.stopTimesForPattern.length === 4) {
+      roundtripStop[stop.code] = roundtripStop[stop.code] + 1;
+      safe.stopTimesForPattern.push(stop.stopTimesForPattern[roundtripStop[stop.code]]);
+    }
+    return safe;
+  };
+
+  sliceStoptimes = stop => {
+    const slicedStop = Object.assign({}, stop);
+    slicedStop.stopTimesForPattern = stop.stopTimesForPattern.slice(0, 2);
+    return slicedStop;
+  };
+
   getStops() {
     const { position } = this.props;
     const { stops } = this.props.pattern;
@@ -74,13 +95,24 @@ class RouteStopListContainer extends React.PureComponent {
     );
 
     const rowClassName = `bp-${this.props.breakpoint}`;
+    const roundtripStop = {};
 
-    return stops.map((stop, i) => {
+    return stops.map((stop, i, array) => {
       const isNearest =
         (nearest &&
           nearest.distance <
             this.context.config.nearestStopDistance.maxShownDistance &&
           nearest.stop.gtfsId) === stop.gtfsId;
+      console.log(
+        stop.name,
+        stop.stopTimesForPattern.length > 1 &&
+          array.filter(item => item.code === stop.code).length > 1,
+      );
+      const safeStop =
+        stop.stopTimesForPattern.length > 1 &&
+        array.filter(item => item.code === stop.code).length > 1
+          ? this.getSafeStop(stop, roundtripStop)
+          : this.sliceStoptimes(stop);
 
       return (
         <RouteStop
@@ -90,7 +122,7 @@ class RouteStopListContainer extends React.PureComponent {
               : null
           }
           key={`${stop.gtfsId}-${this.props.pattern}-${Math.random()}`}
-          stop={stop}
+          stop={safeStop}
           mode={mode}
           vehicle={
             vehicleStops[stop.gtfsId] ? vehicleStops[stop.gtfsId][0] : null
@@ -142,7 +174,7 @@ export default Relay.createContainer(
           }
           stops {
             ${StopAlertsQuery}
-            stopTimesForPattern(id: $patternId, startTime: $currentTime) {
+            stopTimesForPattern(id: $patternId, startTime: $currentTime, numberOfDepartures: 4) {
               realtime
               realtimeState
               realtimeDeparture
