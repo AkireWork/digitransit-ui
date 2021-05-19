@@ -108,11 +108,6 @@ class RouteStopListContainer extends React.PureComponent {
           nearest.distance <
             this.context.config.nearestStopDistance.maxShownDistance &&
           nearest.stop.gtfsId) === stop.gtfsId;
-      console.log(
-        stop.name,
-        stop.stopTimesForPattern.length > 1 &&
-          array.filter(item => item.code === stop.code).length > 1,
-      );
       const safeStop =
         stop.stopTimesForPattern.length > 1 &&
         array.filter(item => item.code === stop.code).length > 1
