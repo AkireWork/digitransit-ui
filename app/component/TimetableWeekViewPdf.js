@@ -1,17 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import {
-  Document,
-  Page,
-  StyleSheet,
-  Text,
-  View,
-  pdf,
-} from '@react-pdf/renderer';
+import { Document, Page, pdf, StyleSheet, Text, View } from '@react-pdf/renderer';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
 import Icon from './Icon';
-import LocalTime from './LocalTime';
 
 function chunkArray(array, size) {
   const chunkedArr = [];
@@ -26,7 +19,12 @@ function chunkArray(array, size) {
 const DROPOFF_TYPE_ENTER_ONLY = 'NONE';
 const PICKUP_TYPE_LEAVE_ONLY = 'NONE';
 const startOfDay = new Date().setHours(0, 0, 0, 0) / 1000;
-const formatTime = timestamp => <LocalTime time={startOfDay + timestamp} />;
+const formatTime = timestamp =>
+  moment(
+    startOfDay + timestamp < 1e10
+      ? (startOfDay + timestamp) * 1000
+      : startOfDay + timestamp,
+  ).format('HH:mm');
 
 // Create styles
 const styles = StyleSheet.create({
@@ -63,6 +61,12 @@ const styles = StyleSheet.create({
     borderRight: '1px solid gray',
     textAlign: 'center',
   },
+  colBottom: {
+    width: 50,
+    borderRight: '1px solid gray',
+    borderBottom: '1px solid gray',
+    textAlign: 'center',
+  },
   headerCell: {
     borderTop: '1px solid black',
     borderBottom: '1px solid black',
@@ -90,7 +94,11 @@ function FirstColumn(props) {
 }
 
 function Column(props) {
-  return <View style={styles.col} {...props} />;
+  return props.last ? (
+    <View style={styles.colBottom} {...props} />
+  ) : (
+    <View style={styles.col} {...props} />
+  );
 }
 
 function HeaderCell(props) {
@@ -154,7 +162,7 @@ function TimetableWeekViewPdf({ patterns }) {
   return (
     <Document>
       {patterns?.map(({ trip, __dataID__ }, i) => {
-        const stoptimesChunks = chunkArray(trip.stoptimesForWeek, 5);
+        const stoptimesChunks = chunkArray(trip.stoptimesForWeek, 7);
 
         return (
           // eslint-disable-next-line dot-notation
@@ -195,7 +203,7 @@ function TimetableWeekViewPdf({ patterns }) {
             <Text>{trip.tripLongName}</Text>
             {stoptimesChunks.map((chunk, index) =>
               trip.stoptimesForWeek[0].tripTimesByWeekdaysList.map(
-                (ttt, tttidx) => {
+                (ttt, tttidx, list) => {
                   const idxs = getIdxs(chunk);
                   return (
                     // eslint-disable-next-line react/no-array-index-key
@@ -231,7 +239,10 @@ function TimetableWeekViewPdf({ patterns }) {
                       </FirstColumn>
                       {chunk.map(ch => {
                         return (
-                          <Column key={ch.__dataID__}>
+                          <Column
+                            last={tttidx === list.length - 1}
+                            key={ch.__dataID__}
+                          >
                             <Text style={styles.headerCell}>{ch.weekdays}</Text>
 
                             <View style={{ marginTop: 5 }} />
@@ -336,6 +347,7 @@ export default function PDFButton(props) {
           // create a blobURI pointing to our Blob
           link.href = URL.createObjectURL(blob);
           link.download = 'timetable.pdf';
+          link.target = '_blank';
           // some browser needs the anchor to be in the doc
           document.body.append(link);
           link.click();
@@ -363,6 +375,7 @@ export default function PDFButton(props) {
         marginBottom: '0.7em',
         marginLeft: 'auto',
         marginRight: '0.7em',
+        display: 'flex !important',
       }}
       disabled={isGenerating}
       onClick={renderPDF}
