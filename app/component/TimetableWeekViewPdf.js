@@ -343,17 +343,20 @@ export default function PDFButton(props) {
 
       docBlob
         .then(blob => {
-          const link = document.createElement('a');
+          const newWindow = window.open('', '_blank');
           // create a blobURI pointing to our Blob
-          link.href = URL.createObjectURL(blob);
-          link.download = 'timetable.pdf';
-          link.target = '_blank';
-          // some browser needs the anchor to be in the doc
-          document.body.append(link);
-          link.click();
-          link.remove();
+          newWindow.onload = () => {
+            newWindow.location = URL.createObjectURL(blob);
+          };
+          // link.href = URL.createObjectURL(blob);
+          // link.download = 'timetable.pdf';
+          // link.target = '_blank';
+          // // some browser needs the anchor to be in the doc
+          // document.body.append(link);
+          // link.click();
+          // link.remove();
           // in case the Blob uses a lot of memory
-          setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+          setTimeout(() => URL.revokeObjectURL(newWindow.location), 7000);
         })
         .catch(err => {
           // TODO: show error result
