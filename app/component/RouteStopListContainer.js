@@ -48,6 +48,9 @@ class RouteStopListContainer extends React.PureComponent {
 
   getSafeStop = (stop, roundtripStop) => {
     const safe = Object.assign({}, stop);
+    stop.stopTimesForPattern.sort(
+      (x, y) => x.scheduledDeparture - y.scheduledDeparture,
+    );
     roundtripStop[stop.code] = roundtripStop.hasOwnProperty(stop.code)
       ? roundtripStop[stop.code] + 1
       : 0;
@@ -56,7 +59,9 @@ class RouteStopListContainer extends React.PureComponent {
     ];
     if (stop.stopTimesForPattern.length === 4) {
       roundtripStop[stop.code] = roundtripStop[stop.code] + 1;
-      safe.stopTimesForPattern.push(stop.stopTimesForPattern[roundtripStop[stop.code]]);
+      safe.stopTimesForPattern.push(
+        stop.stopTimesForPattern[roundtripStop[stop.code]],
+      );
     }
     return safe;
   };
