@@ -1,7 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Document, Page, pdf, StyleSheet, Text, View } from '@react-pdf/renderer';
+import {
+  Document,
+  Page,
+  pdf,
+  StyleSheet,
+  Text,
+  View,
+} from '@react-pdf/renderer';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import Icon from './Icon';
@@ -343,20 +350,18 @@ export default function PDFButton(props) {
 
       docBlob
         .then(blob => {
-          const newWindow = window.open('', '_blank');
-          // create a blobURI pointing to our Blob
-          newWindow.onload = () => {
-            newWindow.location = URL.createObjectURL(blob);
-          };
+          const blobUrl = URL.createObjectURL(blob);
+          window.open(blobUrl);
+          // const link = document.createElement('a');
+          // // create a blobURI pointing to our Blob
           // link.href = URL.createObjectURL(blob);
           // link.download = 'timetable.pdf';
-          // link.target = '_blank';
           // // some browser needs the anchor to be in the doc
           // document.body.append(link);
           // link.click();
           // link.remove();
           // in case the Blob uses a lot of memory
-          setTimeout(() => URL.revokeObjectURL(newWindow.location), 7000);
+          setTimeout(() => URL.revokeObjectURL(link.href), 7000);
         })
         .catch(err => {
           // TODO: show error result
