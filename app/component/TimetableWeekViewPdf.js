@@ -362,8 +362,10 @@ export default function PDFButton(props) {
           // create a blobURI pointing to our Blob
           const blobUrl = URL.createObjectURL(blob);
           const link = document.createElement('a');
+          link.href = blobUrl;
           link.onclick = () => {
             window.open(blobUrl);
+            return false;
           };
           // some browser needs the anchor to be in the doc
           document.body.append(link);
