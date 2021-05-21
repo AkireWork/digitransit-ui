@@ -63,6 +63,11 @@ const styles = StyleSheet.create({
     width: 150,
     borderRight: '1px solid gray',
   },
+  firstColBottom: {
+    width: 150,
+    borderRight: '1px solid gray',
+    borderBottom: '1px solid gray',
+  },
   col: {
     width: 50,
     borderRight: '1px solid gray',
@@ -97,7 +102,11 @@ function Table(props) {
 }
 
 function FirstColumn(props) {
-  return <View style={styles.firstCol} {...props} />;
+  return props.last ? (
+    <View style={styles.firstColBottom} {...props} />
+  ) : (
+    <View style={styles.firstCol} {...props} />
+  );
 }
 
 function Column(props) {
@@ -215,7 +224,7 @@ function TimetableWeekViewPdf({ patterns }) {
                   return (
                     // eslint-disable-next-line react/no-array-index-key
                     <Table wrap={false} key={index}>
-                      <FirstColumn>
+                      <FirstColumn last={tttidx === list.length - 1}>
                         <HeaderCell>&nbsp;</HeaderCell>
 
                         <View style={{ marginTop: 5 }} />
@@ -291,7 +300,7 @@ function TimetableWeekViewPdf({ patterns }) {
             ) && (
               <React.Fragment>
                 <View style={{ color: 'gray' }}>
-                  <Text>ERIJUHUD:</Text>
+                  <Text>ERIJUHUD (Järgmised 30 päeva):</Text>
                 </View>
                 {trip.stoptimesForWeek.map(stoptimes =>
                   stoptimes.calendarDatesByFirstStoptime.calendarDateExceptions.map(
@@ -350,21 +359,18 @@ export default function PDFButton(props) {
 
       docBlob
         .then(blob => {
-          const blobUrl = URL.createObjectURL(blob);
-          // window.open(blobUrl);
-          const link = document.createElement('a');
           // create a blobURI pointing to our Blob
-          link.href = blobUrl;
-          link.download = 'timetable.pdf';
+          const blobUrl = URL.createObjectURL(blob);
+          const link = document.createElement('a');
           link.onclick = () => {
-            window.open(blobUrl);
+            window.open(blobUrl, 'timetable');
           };
           // some browser needs the anchor to be in the doc
           document.body.append(link);
           link.click();
           link.remove();
           // in case the Blob uses a lot of memory
-          setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+          // setTimeout(() => URL.revokeObjectURL(blobUrl), 7000);
         })
         .catch(err => {
           // TODO: show error result
