@@ -363,7 +363,7 @@ export default function PDFButton(props) {
           const blobUrl = URL.createObjectURL(blob);
           const link = document.createElement('a');
           link.onclick = () => {
-            window.open(blobUrl, 'timetable');
+            window.open(blobUrl);
           };
           // some browser needs the anchor to be in the doc
           document.body.append(link);
