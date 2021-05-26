@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
   headerCell: {
     borderTop: '1px solid black',
     borderBottom: '1px solid black',
+    textAlign: 'center',
     paddingTop: 2,
     paddingBottom: 1,
     paddingLeft: 10,

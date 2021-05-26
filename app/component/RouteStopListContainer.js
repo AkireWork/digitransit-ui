@@ -46,21 +46,58 @@ class RouteStopListContainer extends React.PureComponent {
     this.nearestStop = element;
   };
 
-  getSafeStop = (stop, roundtripStop) => {
+  findStopTimeBetween = (stop, previous, next) => {
+    let result;
+    if (previous !== undefined) {
+      stop.stopTimesForPattern.forEach(value => {
+        if (
+          result === undefined &&
+          value.scheduledDeparture - previous.scheduledDeparture >= 0
+        ) {
+          result = value;
+        } else if (
+          value.scheduledDeparture - previous.scheduledDeparture >= 0 &&
+          value.scheduledDeparture - previous.scheduledDeparture <
+            result.scheduledDeparture - previous.scheduledDeparture
+        ) {
+          result = value;
+        }
+      });
+    } else if (next !== undefined) {
+      stop.stopTimesForPattern.forEach(value => {
+        if (
+          result === undefined &&
+          next.scheduledDeparture - value.scheduledDeparture >= 0
+        ) {
+          result = value;
+        } else if (
+          next.scheduledDeparture - value.scheduledDeparture >= 0 &&
+          next.scheduledDeparture - value.scheduledDeparture <
+            next.scheduledDeparture - result.scheduledDeparture
+        ) {
+          result = value;
+        }
+      });
+    }
+    return result;
+  };
+
+  getSafeStop = (stop, previousStop, nextStop) => {
     const safe = Object.assign({}, stop);
-    stop.stopTimesForPattern.sort(
-      (x, y) => x.scheduledDeparture - y.scheduledDeparture,
-    );
-    roundtripStop[stop.code] = roundtripStop.hasOwnProperty(stop.code)
-      ? roundtripStop[stop.code] + 1
-      : 0;
     safe.stopTimesForPattern = [
-      stop.stopTimesForPattern[roundtripStop[stop.code]],
+      this.findStopTimeBetween(
+        stop,
+        previousStop ? previousStop.stopTimesForPattern[0] : undefined,
+        nextStop ? nextStop.stopTimesForPattern[0] : undefined,
+      ),
     ];
     if (stop.stopTimesForPattern.length === 4) {
-      roundtripStop[stop.code] = roundtripStop[stop.code] + 1;
       safe.stopTimesForPattern.push(
-        stop.stopTimesForPattern[roundtripStop[stop.code]],
+        this.findStopTimeBetween(
+          stop,
+          previousStop ? previousStop.stopTimesForPattern[1] : undefined,
+          nextStop ? nextStop.stopTimesForPattern[1] : undefined,
+        ),
       );
     }
     return safe;
@@ -100,7 +137,6 @@ class RouteStopListContainer extends React.PureComponent {
     );
 
     const rowClassName = `bp-${this.props.breakpoint}`;
-    const roundtripStop = {};
 
     return stops.map((stop, i, array) => {
       const isNearest =
@@ -111,7 +147,13 @@ class RouteStopListContainer extends React.PureComponent {
       const safeStop =
         stop.stopTimesForPattern.length > 1 &&
         array.filter(item => item.code === stop.code).length > 1
-          ? this.getSafeStop(stop, roundtripStop)
+          ? this.getSafeStop(
+              stop,
+              i > 0 ? this.sliceStoptimes(array[i - 1]) : undefined,
+              i < array.length - 1
+                ? this.sliceStoptimes(array[i + 1])
+                : undefined,
+            )
           : this.sliceStoptimes(stop);
 
       return (
