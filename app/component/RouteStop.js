@@ -132,7 +132,9 @@ class RouteStop extends React.PureComponent {
       vehicle,
     } = this.props;
     const patternExists =
-      stop.stopTimesForPattern && stop.stopTimesForPattern.length > 0;
+      stop.stopTimesForPattern &&
+      stop.stopTimesForPattern.length > 0 &&
+      !stop.stopTimesForPattern.includes(undefined);
 
     const vehicleTripLink = vehicle && (
       <Relay.RootContainer
