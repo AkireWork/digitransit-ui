@@ -763,70 +763,70 @@ export default {
         ],
       },
     },
-    {
-      id: '2',
-      priority: 2,
-      shouldTrigger: true,
-      persistence: 'repeat',
-      content: {
-        et: [
-          {
-            type: 'text',
-            content:
-              'Tere! See on uus reisiplaneerija. Kui soovite kasutada vana peatus.ee lehte, siis see asub ',
-          },
-          {
-            type: 'a',
-            content: 'siin.',
-            href: 'http://vana.peatus.ee',
-          },
-          {
-            type: 'text',
-            content: 'Uuele portaalile saad tagasisidet anda ',
-          },
-          {
-            type: 'a',
-            content: 'siin.',
-            href: 'https://www.mnt.ee/et/tagasiside-uuele-reisiplaneerijale',
-          },
-        ],
-        en: [
-          {
-            type: 'text',
-            content:
-              'Hi! This is our new journey planner. If you wish to use the old peatus.ee webpage, please klick ',
-          },
-          {
-            type: 'a',
-            content: 'here.',
-            href: 'http://vana.peatus.ee',
-          },
-        ],
-        ru: [
-          {
-            type: 'text',
-            content:
-              'Добро пожаловать! Это новый планировщик поездок. Чтобы воспользоваться старой версией peatus.ee, перейдите ',
-          },
-          {
-            type: 'a',
-            content: 'сюда.',
-            href: 'http://vana.peatus.ee',
-          },
-          {
-            type: 'text',
-            content:
-              'Обратную связь о новом планировщике поездок можно оставить здесь.',
-          },
-          {
-            type: 'a',
-            content: 'здесь.',
-            href:
-              'https://app.recommy.com/SI/SI.aspx?id=&td=hVgAtJmFpGk=&tg=TkxWhz5XDF4=&TL=vF8qXhonlDQ=&si=1&st=1',
-          },
-        ],
-      },
-    },
+    // {
+    //   id: '2',
+    //   priority: 2,
+    //   shouldTrigger: true,
+    //   persistence: 'repeat',
+    //   content: {
+    //     et: [
+    //       {
+    //         type: 'text',
+    //         content:
+    //           'Tere! See on uus reisiplaneerija. Kui soovite kasutada vana peatus.ee lehte, siis see asub ',
+    //       },
+    //       {
+    //         type: 'a',
+    //         content: 'siin.',
+    //         href: 'http://vana.peatus.ee',
+    //       },
+    //       {
+    //         type: 'text',
+    //         content: 'Uuele portaalile saad tagasisidet anda ',
+    //       },
+    //       {
+    //         type: 'a',
+    //         content: 'siin.',
+    //         href: 'https://www.mnt.ee/et/tagasiside-uuele-reisiplaneerijale',
+    //       },
+    //     ],
+    //     en: [
+    //       {
+    //         type: 'text',
+    //         content:
+    //           'Hi! This is our new journey planner. If you wish to use the old peatus.ee webpage, please klick ',
+    //       },
+    //       {
+    //         type: 'a',
+    //         content: 'here.',
+    //         href: 'http://vana.peatus.ee',
+    //       },
+    //     ],
+    //     ru: [
+    //       {
+    //         type: 'text',
+    //         content:
+    //           'Добро пожаловать! Это новый планировщик поездок. Чтобы воспользоваться старой версией peatus.ee, перейдите ',
+    //       },
+    //       {
+    //         type: 'a',
+    //         content: 'сюда.',
+    //         href: 'http://vana.peatus.ee',
+    //       },
+    //       {
+    //         type: 'text',
+    //         content:
+    //           'Обратную связь о новом планировщике поездок можно оставить здесь.',
+    //       },
+    //       {
+    //         type: 'a',
+    //         content: 'здесь.',
+    //         href:
+    //           'https://app.recommy.com/SI/SI.aspx?id=&td=hVgAtJmFpGk=&tg=TkxWhz5XDF4=&TL=vF8qXhonlDQ=&si=1&st=1',
+    //       },
+    //     ],
+    //   },
+    // },
   ],
 
   themeMap: {

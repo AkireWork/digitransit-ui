@@ -34,20 +34,20 @@ const CityBikeAvailability = ({
             <strong>{available}</strong>
           </div>
         </div>
-        <div className="availability-row">
-          <img
-            src="/img/bike-availability/pedelec_infowindow2.fc7a773be29bf91481f0.png"
-            alt="Electric Bicycle"
-          />
-          <div>
-            <FormattedMessage
-              id="bike-rent-ebike-available"
-              defaultMessage="Pedelec Bikes"
-            />
-            {':\u00a0'}
-            <strong>{eAvailable}</strong>
-          </div>
-        </div>
+        {/*<div className="availability-row">*/}
+        {/*  <img*/}
+        {/*    src="/img/bike-availability/pedelec_infowindow2.fc7a773be29bf91481f0.png"*/}
+        {/*    alt="Electric Bicycle"*/}
+        {/*  />*/}
+        {/*  <div>*/}
+        {/*    <FormattedMessage*/}
+        {/*      id="bike-rent-ebike-available"*/}
+        {/*      defaultMessage="Pedelec Bikes"*/}
+        {/*    />*/}
+        {/*    {':\u00a0'}*/}
+        {/*    <strong>{eAvailable}</strong>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
         <div className="availability-row">
           <img
             src="/img/bike-availability/docks_infowindow2.d3b1ffcdd40394116102.png"
