@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import {
   Document,
   Page,
+  pdf,
   StyleSheet,
   Text,
   View,
-  pdf,
 } from '@react-pdf/renderer';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
 import Icon from './Icon';
-import LocalTime from './LocalTime';
 
 function chunkArray(array, size) {
   const chunkedArr = [];
@@ -26,7 +26,12 @@ function chunkArray(array, size) {
 const DROPOFF_TYPE_ENTER_ONLY = 'NONE';
 const PICKUP_TYPE_LEAVE_ONLY = 'NONE';
 const startOfDay = new Date().setHours(0, 0, 0, 0) / 1000;
-const formatTime = timestamp => <LocalTime time={startOfDay + timestamp} />;
+const formatTime = timestamp =>
+  moment(
+    startOfDay + timestamp < 1e10
+      ? (startOfDay + timestamp) * 1000
+      : startOfDay + timestamp,
+  ).format('HH:mm');
 
 // Create styles
 const styles = StyleSheet.create({
@@ -58,14 +63,26 @@ const styles = StyleSheet.create({
     width: 150,
     borderRight: '1px solid gray',
   },
+  firstColBottom: {
+    width: 150,
+    borderRight: '1px solid gray',
+    borderBottom: '1px solid gray',
+  },
   col: {
     width: 50,
     borderRight: '1px solid gray',
     textAlign: 'center',
   },
+  colBottom: {
+    width: 50,
+    borderRight: '1px solid gray',
+    borderBottom: '1px solid gray',
+    textAlign: 'center',
+  },
   headerCell: {
     borderTop: '1px solid black',
     borderBottom: '1px solid black',
+    textAlign: 'center',
     paddingTop: 2,
     paddingBottom: 1,
     paddingLeft: 10,
@@ -86,11 +103,19 @@ function Table(props) {
 }
 
 function FirstColumn(props) {
-  return <View style={styles.firstCol} {...props} />;
+  return props.last ? (
+    <View style={styles.firstColBottom} {...props} />
+  ) : (
+    <View style={styles.firstCol} {...props} />
+  );
 }
 
 function Column(props) {
-  return <View style={styles.col} {...props} />;
+  return props.last ? (
+    <View style={styles.colBottom} {...props} />
+  ) : (
+    <View style={styles.col} {...props} />
+  );
 }
 
 function HeaderCell(props) {
@@ -154,7 +179,7 @@ function TimetableWeekViewPdf({ patterns }) {
   return (
     <Document>
       {patterns?.map(({ trip, __dataID__ }, i) => {
-        const stoptimesChunks = chunkArray(trip.stoptimesForWeek, 5);
+        const stoptimesChunks = chunkArray(trip.stoptimesForWeek, 7);
 
         return (
           // eslint-disable-next-line dot-notation
@@ -195,12 +220,12 @@ function TimetableWeekViewPdf({ patterns }) {
             <Text>{trip.tripLongName}</Text>
             {stoptimesChunks.map((chunk, index) =>
               trip.stoptimesForWeek[0].tripTimesByWeekdaysList.map(
-                (ttt, tttidx) => {
+                (ttt, tttidx, list) => {
                   const idxs = getIdxs(chunk);
                   return (
                     // eslint-disable-next-line react/no-array-index-key
                     <Table wrap={false} key={index}>
-                      <FirstColumn>
+                      <FirstColumn last={tttidx === list.length - 1}>
                         <HeaderCell>&nbsp;</HeaderCell>
 
                         <View style={{ marginTop: 5 }} />
@@ -231,7 +256,10 @@ function TimetableWeekViewPdf({ patterns }) {
                       </FirstColumn>
                       {chunk.map(ch => {
                         return (
-                          <Column key={ch.__dataID__}>
+                          <Column
+                            last={tttidx === list.length - 1}
+                            key={ch.__dataID__}
+                          >
                             <Text style={styles.headerCell}>{ch.weekdays}</Text>
 
                             <View style={{ marginTop: 5 }} />
@@ -273,7 +301,7 @@ function TimetableWeekViewPdf({ patterns }) {
             ) && (
               <React.Fragment>
                 <View style={{ color: 'gray' }}>
-                  <Text>ERIJUHUD:</Text>
+                  <Text>ERIJUHUD (Järgmised 30 päeva):</Text>
                 </View>
                 {trip.stoptimesForWeek.map(stoptimes =>
                   stoptimes.calendarDatesByFirstStoptime.calendarDateExceptions.map(
@@ -332,16 +360,20 @@ export default function PDFButton(props) {
 
       docBlob
         .then(blob => {
-          const link = document.createElement('a');
           // create a blobURI pointing to our Blob
-          link.href = URL.createObjectURL(blob);
-          link.download = 'timetable.pdf';
+          const blobUrl = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.onclick = () => {
+            window.open(blobUrl);
+            return false;
+          };
           // some browser needs the anchor to be in the doc
           document.body.append(link);
           link.click();
           link.remove();
           // in case the Blob uses a lot of memory
-          setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+          // setTimeout(() => URL.revokeObjectURL(blobUrl), 7000);
         })
         .catch(err => {
           // TODO: show error result
@@ -363,6 +395,7 @@ export default function PDFButton(props) {
         marginBottom: '0.7em',
         marginLeft: 'auto',
         marginRight: '0.7em',
+        display: 'flex !important',
       }}
       disabled={isGenerating}
       onClick={renderPDF}

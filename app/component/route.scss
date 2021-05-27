@@ -603,7 +603,11 @@ $route-schedule-date-height: 36px;
   }
 }
 
-.mobile .route-page-action-bar .secondary-button {
+.mobile .route-page-action-bar .print {
+  display: none;
+}
+
+.mobile .route-page-action-bar .print-timetable {
   display: none;
 }
 

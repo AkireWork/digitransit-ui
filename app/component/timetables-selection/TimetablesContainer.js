@@ -9,11 +9,6 @@ const TimetablesContainer = ({ currentLanguage, params }, { config }) => {
   const timetablesSelection = config.timetablesSelection.find(
     t => t.type === params.urbanOrCounty,
   );
-  console.log(
-    params,
-    timetablesSelection,
-    timetablesSelection.areas[params.idx].competent_authority,
-  );
   return (
     timetablesSelection && (
       <Relay.RootContainer
