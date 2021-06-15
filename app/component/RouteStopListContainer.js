@@ -48,46 +48,61 @@ class RouteStopListContainer extends React.PureComponent {
 
   findStopTimeBetween = (stop, previous, next) => {
     let result;
+    // let log = '';
+    // let path = '';
     if (previous !== undefined) {
+      // path += 'prev-';
       stop.stopTimesForPattern.forEach(value => {
+        // log += `${value.scheduledDeparture},`;
         if (
           result === undefined &&
           value.scheduledDeparture - previous.scheduledDeparture >= 0
         ) {
+          // path += `a-b(${value.scheduledDeparture -
+          //   previous.scheduledDeparture})=>${value.scheduledDeparture},`;
           result = value;
         } else if (
           value.scheduledDeparture - previous.scheduledDeparture >= 0 &&
           value.scheduledDeparture - previous.scheduledDeparture <
             result.scheduledDeparture - previous.scheduledDeparture
         ) {
+          // path += `a-b&&(${value.scheduledDeparture -
+          //   previous.scheduledDeparture})=>${value.scheduledDeparture},`;
           result = value;
         }
       });
     } else if (next !== undefined) {
+      // path += 'next-';
       stop.stopTimesForPattern.forEach(value => {
+        // log += `${value.scheduledDeparture},`;
         if (
           result === undefined &&
           next.scheduledDeparture - value.scheduledDeparture >= 0
         ) {
+          // path += `b-a(${next.scheduledDeparture -
+          //   value.scheduledDeparture})=>${value.scheduledDeparture},`;
           result = value;
         } else if (
           next.scheduledDeparture - value.scheduledDeparture >= 0 &&
           next.scheduledDeparture - value.scheduledDeparture <
             next.scheduledDeparture - result.scheduledDeparture
         ) {
+          // path += `b-a&&(${next.scheduledDeparture -
+          //   value.scheduledDeparture})=>${value.scheduledDeparture},`;
           result = value;
         }
       });
     }
+    // console.log(log, result && result.scheduledDeparture, path);
     return result;
   };
 
-  getSafeStop = (stop, previousStop, nextStop) => {
+  getSafeStop = (stop, previousStop, nextStop, lastSafeStop) => {
     const safe = Object.assign({}, stop);
     safe.stopTimesForPattern = [
       this.findStopTimeBetween(
         stop,
-        previousStop ? previousStop.stopTimesForPattern[0] : undefined,
+        lastSafeStop ? lastSafeStop.stopTimesForPattern[0] : undefined,
         nextStop ? nextStop.stopTimesForPattern[0] : undefined,
       ),
     ];
@@ -95,7 +110,7 @@ class RouteStopListContainer extends React.PureComponent {
       safe.stopTimesForPattern.push(
         this.findStopTimeBetween(
           stop,
-          previousStop ? previousStop.stopTimesForPattern[1] : undefined,
+          lastSafeStop ? lastSafeStop.stopTimesForPattern[1] : undefined,
           nextStop ? nextStop.stopTimesForPattern[1] : undefined,
         ),
       );
@@ -137,6 +152,7 @@ class RouteStopListContainer extends React.PureComponent {
     );
 
     const rowClassName = `bp-${this.props.breakpoint}`;
+    let lastStop;
 
     return stops.map((stop, i, array) => {
       const isNearest =
@@ -145,16 +161,17 @@ class RouteStopListContainer extends React.PureComponent {
             this.context.config.nearestStopDistance.maxShownDistance &&
           nearest.stop.gtfsId) === stop.gtfsId;
       const safeStop =
-        stop.stopTimesForPattern.length > 1 &&
-        array.filter(item => item.code === stop.code).length > 1
+        stop.stopTimesForPattern.length > 2
           ? this.getSafeStop(
               stop,
               i > 0 ? this.sliceStoptimes(array[i - 1]) : undefined,
               i < array.length - 1
                 ? this.sliceStoptimes(array[i + 1])
                 : undefined,
+              lastStop,
             )
           : this.sliceStoptimes(stop);
+      lastStop = safeStop;
 
       return (
         <RouteStop
