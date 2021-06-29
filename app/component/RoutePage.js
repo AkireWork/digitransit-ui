@@ -249,8 +249,8 @@ class RoutePage extends React.Component {
                   img={hasActiveAlert ? 'icon-icon_caution' : 'icon-icon_info'}
                 />
                 <FormattedMessage
-                  id="disruptions"
-                  defaultMessage="Disruptions"
+                  id="route-information"
+                  defaultMessage="Route information"
                 />
               </div>
             </a>
