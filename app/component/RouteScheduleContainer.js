@@ -26,6 +26,31 @@ const isTripCanceled = trip =>
     .map(x => x[1])
     .every(st => st.realtimeState === RealtimeStateType.Canceled);
 
+const RouteTypeLine = color => {
+  switch (color) {
+    case 'ff711d':
+      return 'route-type-train';
+    case 'de2c42':
+      return 'route-type-city-line-bus';
+    case '016e12':
+      return 'route-type-city-line-tram';
+    case '1ccc48':
+      return 'route-type-city-line-trolley';
+    case 'bd4819':
+      return 'route-type-city-line-commercial';
+    case '3bb5db':
+      return 'route-type-regional-line-pso';
+    case '094f82':
+      return 'route-type-regional-line-commercial';
+    case '660000':
+      return 'route-type-long-distance-bus-line';
+    case '8bb4c5':
+      return 'route-type-ferry';
+    default:
+      return '';
+  }
+}
+
 class RouteScheduleContainer extends Component {
   static propTypes = {
     pattern: PropTypes.object.isRequired,
@@ -158,6 +183,32 @@ class RouteScheduleContainer extends Component {
     );
   };
 
+  injectTranslationsForPdf = patterns => {
+    return patterns.map(pattern => {
+      // eslint-disable-next-line no-param-reassign
+      pattern.trip.serviceOperatorLabel = this.context.intl.formatMessage({
+        id: 'service-operator',
+        defaultMessage: 'Operator:',
+      });
+      // eslint-disable-next-line no-param-reassign
+      pattern.trip.serviceManagerLabel = this.context.intl.formatMessage({
+        id: 'service-manager',
+        defaultMessage: 'Manager:',
+      });
+      // eslint-disable-next-line no-param-reassign
+      pattern.trip.routeTypeLabel = this.context.intl.formatMessage({
+        id: RouteTypeLine(pattern.trip.route.color),
+        defaultMessage: 'Regional line (Commercial)',
+      });
+      // eslint-disable-next-line no-param-reassign
+      pattern.trip.routeValidTillLabel = this.context.intl.formatMessage({
+        id: 'timetable-valid-till',
+        defaultMessage: 'The timetable is valid until:',
+      });
+      return pattern;
+    });
+  };
+
   openRoutePDF = (e, routePDFUrl) => {
     e.stopPropagation();
     window.open(routePDFUrl);
@@ -211,7 +262,10 @@ class RouteScheduleContainer extends Component {
           />
           {showWeekView() && (
             <TimetableWeekViewPdf
-              patterns={this.props.pattern.route.patterns}
+              {...this.props}
+              patterns={this.injectTranslationsForPdf(
+                this.props.pattern.route.patterns,
+              )}
             />
           )}
 
@@ -282,6 +336,7 @@ const connectedComponent = connectToStores(
                     tripTimesWeekdaysGroups
                     tripTimesValidTill
                     route {
+                        color
                         shortName
                         longName
                         agency {
