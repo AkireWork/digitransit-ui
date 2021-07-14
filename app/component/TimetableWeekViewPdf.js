@@ -206,7 +206,7 @@ function TimetableWeekViewPdf({ patterns }) {
                     <Text style={styles.subheader}>
                       Korraldaja: {trip.route.competentAuthority}
                     </Text>
-                    <Text style={styles.subheader}>Maakonnaliin (avalik)</Text>
+                    <Text style={styles.subheader}>{trip.routeTypeLabel}</Text>
                     <Text style={styles.subheader}>
                       Sõiduplaan kehtib kuni: {trip.tripTimesValidTill}
                     </Text>

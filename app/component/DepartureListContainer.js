@@ -301,6 +301,7 @@ const containerComponent = Relay.createContainer(DepartureListContainer, {
             gtfsId
             directionId
             tripHeadsign
+            tripLongName
             stops {
               id
             }
