@@ -201,14 +201,14 @@ function TimetableWeekViewPdf({ patterns }) {
                       {trip.route.longName}
                     </Text>
                     <Text style={styles.subheader}>
-                      Vedaja: {trip.route.agency.name}
+                      {trip.serviceOperatorLabel} {trip.route.agency.name}
                     </Text>
                     <Text style={styles.subheader}>
-                      Korraldaja: {trip.route.competentAuthority}
+                      {trip.serviceManagerLabel} {trip.route.competentAuthority}
                     </Text>
                     <Text style={styles.subheader}>{trip.routeTypeLabel}</Text>
                     <Text style={styles.subheader}>
-                      Sõiduplaan kehtib kuni: {trip.tripTimesValidTill}
+                      {trip.routeValidTillLabel} {trip.tripTimesValidTill}
                     </Text>
                   </View>
                 </View>
