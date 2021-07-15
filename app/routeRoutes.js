@@ -145,7 +145,7 @@ export default (
           path=":patternId"
           disableMapOnMobile
           getComponents={getComponents(() =>
-            import(/* webpackChunkName: "route" */ './component/RouteAlertsContainer').then(
+            import(/* webpackChunkName: "route" */ './component/RouteDescriptionContainer').then(
               getDefault,
             ),
           )}
