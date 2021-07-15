@@ -8,10 +8,17 @@ import {
   StyleSheet,
   Text,
   View,
+  Font,
 } from '@react-pdf/renderer';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import Icon from './Icon';
+
+Font.register({
+  family: 'Lato',
+  src:
+    'https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/fonts/lato-normal/lato-normal.woff',
+});
 
 function chunkArray(array, size) {
   const chunkedArr = [];
@@ -38,6 +45,7 @@ const styles = StyleSheet.create({
   page: {
     padding: 40,
     fontSize: 10,
+    fontFamily: 'Lato',
   },
   header: {
     marginBottom: 20,
