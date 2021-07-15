@@ -448,65 +448,61 @@ class DTAutosuggestPanel extends React.Component {
             </div>
           ))}
         </div>
-        {((this.props.destination && this.props.destination.set) ||
-          origin.ready ||
-          isItinerary) && (
-          <div className="destination-input-container">
-            <DTEndpointAutosuggest
-              icon="mapMarker-to"
-              id="destination"
-              autoFocus={
-                // Disable autofocus if using IE11
-                isIe ? false : breakpoint === 'large'
-              }
-              refPoint={origin}
-              searchType={this.props.searchType}
-              placeholder={this.props.destinationPlaceHolder}
-              className={this.class(this.props.destination)}
-              isFocused={this.isFocused}
-              value={this.value(this.props.destination)}
-              onLocationSelected={location => {
-                let updatedOrigin = origin;
-                let destination = { ...location, ready: true };
-                if (location.type === 'CurrentLocation') {
-                  destination = {
-                    ...location,
-                    gps: true,
-                    ready: !!location.lat,
-                  };
-                  if (origin.gps === true) {
-                    updatedOrigin = { set: false };
-                  }
+        <div className="destination-input-container">
+          <DTEndpointAutosuggest
+            icon="mapMarker-to"
+            id="destination"
+            autoFocus={
+              // Disable autofocus if using IE11
+              isIe ? false : breakpoint === 'large'
+            }
+            refPoint={origin}
+            searchType={this.props.searchType}
+            placeholder={this.props.destinationPlaceHolder}
+            className={this.class(this.props.destination)}
+            isFocused={this.isFocused}
+            value={this.value(this.props.destination)}
+            onLocationSelected={location => {
+              let updatedOrigin = origin;
+              let destination = { ...location, ready: true };
+              if (location.type === 'CurrentLocation') {
+                destination = {
+                  ...location,
+                  gps: true,
+                  ready: !!location.lat,
+                };
+                if (origin.gps === true) {
+                  updatedOrigin = { set: false };
                 }
-
-                navigateTo({
-                  base: this.context.location,
-                  origin: updatedOrigin,
-                  destination,
-                  context: isItinerary ? PREFIX_ITINERARY_SUMMARY : '',
-                  router: this.context.router,
-                  tab: this.props.tab,
-                  resetIndex: true,
-                });
-              }}
-            />
-            <ItinerarySearchControl
-              className={cx('add-via-point', 'more', {
-                collapsed: viaPoints.length > 4,
-              })}
-              enabled={isItinerary}
-              onClick={() => this.handleAddViaPointClick()}
-              onKeyPress={e =>
-                isKeyboardSelectionEvent(e) && this.handleAddViaPointClick()
               }
-              aria-label={this.context.intl.formatMessage({
-                id: 'add-via-button-label',
-              })}
-            >
-              <Icon img="icon-icon_plus" />
-            </ItinerarySearchControl>
-          </div>
-        )}
+
+              navigateTo({
+                base: this.context.location,
+                origin: updatedOrigin,
+                destination,
+                context: isItinerary ? PREFIX_ITINERARY_SUMMARY : '',
+                router: this.context.router,
+                tab: this.props.tab,
+                resetIndex: true,
+              });
+            }}
+          />
+          <ItinerarySearchControl
+            className={cx('add-via-point', 'more', {
+              collapsed: viaPoints.length > 4,
+            })}
+            enabled={isItinerary}
+            onClick={() => this.handleAddViaPointClick()}
+            onKeyPress={e =>
+              isKeyboardSelectionEvent(e) && this.handleAddViaPointClick()
+            }
+            aria-label={this.context.intl.formatMessage({
+              id: 'add-via-button-label',
+            })}
+          >
+            <Icon img="icon-icon_plus" />
+          </ItinerarySearchControl>
+        </div>
       </div>
     );
   };
