@@ -8,10 +8,17 @@ import {
   StyleSheet,
   Text,
   View,
+  Font,
 } from '@react-pdf/renderer';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import Icon from './Icon';
+
+Font.register({
+  family: 'Lato',
+  src:
+    'https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/fonts/lato-normal/lato-normal.woff',
+});
 
 function chunkArray(array, size) {
   const chunkedArr = [];
@@ -38,6 +45,7 @@ const styles = StyleSheet.create({
   page: {
     padding: 40,
     fontSize: 10,
+    fontFamily: 'Lato',
   },
   header: {
     marginBottom: 20,
@@ -201,14 +209,14 @@ function TimetableWeekViewPdf({ patterns }) {
                       {trip.route.longName}
                     </Text>
                     <Text style={styles.subheader}>
-                      Vedaja: {trip.route.agency.name}
+                      {trip.serviceOperatorLabel} {trip.route.agency.name}
                     </Text>
                     <Text style={styles.subheader}>
-                      Korraldaja: {trip.route.competentAuthority}
+                      {trip.serviceManagerLabel} {trip.route.competentAuthority}
                     </Text>
-                    <Text style={styles.subheader}>Maakonnaliin (avalik)</Text>
+                    <Text style={styles.subheader}>{trip.routeTypeLabel}</Text>
                     <Text style={styles.subheader}>
-                      Sõiduplaan kehtib kuni: {trip.tripTimesValidTill}
+                      {trip.routeValidTillLabel} {trip.tripTimesValidTill}
                     </Text>
                   </View>
                 </View>

@@ -55,10 +55,10 @@ function Departure({
       <RouteDestination
         mode={mode}
         destination={
+          (departure.trip && departure.trip.tripLongName) ||
           departure.pattern.route.longName ||
           departure.headsign ||
-          departure.pattern.headsign ||
-          (departure.trip && departure.trip.tripHeadsign)
+          departure.pattern.headsign
         }
         isArrival={isArrival}
         isLastStop={isLastStop}
