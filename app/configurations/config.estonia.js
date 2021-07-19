@@ -61,7 +61,7 @@ export default {
   shortName: 'Digitransit',
 
   searchParams: { size: 20 },
-  feedIds: ['MNT', 'elron'],
+  feedIds: ['estonia', 'elron'],
 
   defaultMapCenter: {
     lat: 58.790978,
