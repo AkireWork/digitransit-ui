@@ -193,8 +193,8 @@ function getNetworkLayer(config, agent) {
 function getLocale(req, res, config) {
   // TODO: Move this to PreferencesStore
   // 1. use locale from cookie (user selected) 2. browser preferred 3. default
-  let locale =
-    req.cookies.lang || req.acceptsLanguages(config.availableLanguages);
+  // estonian preference: 1. user selected 2. default
+  let locale = req.cookies.lang; // || req.acceptsLanguages(config.availableLanguages);
 
   if (config.availableLanguages.indexOf(locale) === -1) {
     locale = config.defaultLanguage;
