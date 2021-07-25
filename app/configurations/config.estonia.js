@@ -77,9 +77,9 @@ export default {
   GTMid: 'GTM-MTJDVMG',
 
   /*
- * by default search endpoints from all but gtfs sources, correct gtfs source
- * figured based on feedIds config variable
- */
+   * by default search endpoints from all but gtfs sources, correct gtfs source
+   * figured based on feedIds config variable
+   */
   searchSources: ['oa'],
 
   search: {
@@ -173,12 +173,12 @@ export default {
   defaultLanguage: 'et',
   // This timezone data will expire on 31.12.2020
   timezoneData:
-    'Europe/Tallinn|TMT CET CEST EET MSK MSD EEST|-1D -10 -20 -20 -30 -40 -30|'+
-    '012103421212454545454545454546363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363|'+
-    '-26oND teD 11A0 1Ta0 4rXl KSLD 2FX0 2Jg0 WM0 1fA0 1cM0 18J0 1sTX0 1db0 1cN0 1db0 1cN0 1db0 1dd0 1cO0 1cM0 1cM0 1cM0 1cM0 1cM0'+
-    ' 1cM0 1cM0 1cM0 1cM0 1cN0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1o00 11A0 1o00 11A0 1o10 11A0 1qM0'+
-    ' 5QM0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00'+
-    ' 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0'+
+    'Europe/Tallinn|TMT CET CEST EET MSK MSD EEST|-1D -10 -20 -20 -30 -40 -30|' +
+    '012103421212454545454545454546363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363|' +
+    '-26oND teD 11A0 1Ta0 4rXl KSLD 2FX0 2Jg0 WM0 1fA0 1cM0 18J0 1sTX0 1db0 1cN0 1db0 1cN0 1db0 1dd0 1cO0 1cM0 1cM0 1cM0 1cM0 1cM0' +
+    ' 1cM0 1cM0 1cM0 1cM0 1cN0 1cM0 1fA0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1cM0 1fA0 1o00 11A0 1o00 11A0 1o10 11A0 1qM0' +
+    ' 5QM0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00' +
+    ' 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0' +
     ' WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00|41e4',
 
   mainMenu: {
@@ -724,6 +724,9 @@ export default {
       priority: 1,
       shouldTrigger: true,
       persistence: 'repeat',
+      cookie: 'accck',
+      maxAge: 7 * 24 * 60 * 60,
+      close: 'confirm',
       content: {
         et: [
           {

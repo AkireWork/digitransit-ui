@@ -1,4 +1,5 @@
 import Store from 'fluxible/addons/BaseStore';
+import reactCookie from 'react-cookie';
 import { getIsBrowser } from '../util/browser';
 import { setReadMessageIds, getReadMessageIds } from './localStorage';
 
@@ -98,6 +99,15 @@ class MessageStore extends Store {
         changed = true;
       }
       if (this.messages.has(id)) {
+        const msg = this.messages.get(id);
+        if (msg.cookie !== undefined) {
+          reactCookie.save(msg.cookie, msg.id, {
+            // Good up to one week
+            maxAge: msg.maxAge,
+            path: '/',
+          });
+        }
+
         this.messages.delete(id);
         changed = true;
       }
@@ -113,7 +123,10 @@ class MessageStore extends Store {
   getMessages = () => {
     const arr = [];
     this.messages.forEach(msg => {
-      arr.push(msg);
+      const msgCookie = reactCookie.load(msg.cookie);
+      if (msgCookie == undefined) {
+        arr.push(msg);
+      }
     });
 
     arr.sort((el1, el2) => {
