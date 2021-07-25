@@ -382,6 +382,7 @@ function getFavouriteRoutes(favourites, input) {
         shortName
         mode
         longName
+        competentAuthority
         patterns { code }
       }
     }`,
