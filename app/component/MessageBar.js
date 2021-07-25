@@ -4,10 +4,11 @@ import uniqBy from 'lodash/uniqBy';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { intlShape } from 'react-intl';
+import { FormattedMessage, intlShape } from 'react-intl';
 import Relay from 'react-relay/classic';
 import SwipeableViews from 'react-swipeable-views';
 
+import { Link } from 'react-router';
 import Icon from './Icon';
 import MessageBarMessage from './MessageBarMessage';
 import { AlertSeverityLevelType } from '../constants';
@@ -301,20 +302,36 @@ class MessageBar extends Component {
               {this.getTabs(slideIndex, isDisruption)}
             </Tabs>
           </div>
-          <div>
+          {msg.close === 'confirm' ? (
             <button
               id="close-message-bar"
               title={this.context.intl.formatMessage({
-                id: 'messagebar-label-close-message-bar',
-                defaultMessage: 'Close banner',
+                id: 'agree',
+                defaultMessage: 'Agree',
               })}
               onClick={this.handleClose}
-              className="noborder close-button cursor-pointer"
+              className="close-button cursor-pointer"
+              style={{ marginBottom: '0px' }}
               type="button"
             >
-              <Icon img="icon-icon_close" className="close" />
+              <FormattedMessage id="agree" defaultMessage="Agree" />
             </button>
-          </div>
+          ) : (
+            <div>
+              <button
+                id="close-message-bar"
+                title={this.context.intl.formatMessage({
+                  id: 'messagebar-label-close-message-bar',
+                  defaultMessage: 'Close banner',
+                })}
+                onClick={this.handleClose}
+                className="noborder close-button cursor-pointer"
+                type="button"
+              >
+                <Icon img="icon-icon_close" className="close" />
+              </button>
+            </div>
+          )}
         </div>
       </section>
     );
