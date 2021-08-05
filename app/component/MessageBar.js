@@ -311,7 +311,12 @@ class MessageBar extends Component {
               })}
               onClick={this.handleClose}
               className="close-button cursor-pointer"
-              style={{ marginBottom: '0px' }}
+              style={{
+                marginBottom: '0px',
+                margin: 'auto',
+                padding: '5px 10px 5px 20px',
+                marginRight: '20px',
+              }}
               type="button"
             >
               <FormattedMessage id="agree" defaultMessage="Agree" />
