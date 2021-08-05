@@ -509,6 +509,7 @@ export default {
       },
       {
         label: '+372 620 1200',
+        href: `tel:+372 620 1200`,
       },
       {
         name: 'footer-feedback',
