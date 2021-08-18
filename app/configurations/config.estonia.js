@@ -508,6 +508,11 @@ export default {
           'https://www.mnt.ee/et/uudised/kkk-kuidas-toimib-uus-reisiplaneerija',
       },
       {
+        label: '+372 620 1200',
+        href: `tel:+372 620 1200`,
+        icon: 'icon-icon_call_blue',
+      },
+      {
         name: 'footer-feedback',
         nameEn: 'Submit feedback',
         href:
@@ -532,6 +537,11 @@ export default {
         nameEn: 'FAQ',
         href:
           'https://www.mnt.ee/et/uudised/kkk-kuidas-toimib-uus-reisiplaneerija',
+      },
+      {
+        label: '+372 620 1200',
+        href: `tel:+372 620 1200`,
+        icon: 'icon-icon_call_blue',
       },
       {
         name: 'footer-feedback',
@@ -560,6 +570,11 @@ export default {
           'https://www.mnt.ee/et/uudised/kkk-kuidas-toimib-uus-reisiplaneerija',
       },
       {
+        label: '+372 620 1200',
+        href: `tel:+372 620 1200`,
+        icon: 'icon-icon_call_blue',
+      },
+      {
         name: 'footer-feedback',
         nameEn: 'Submit feedback',
         href:
@@ -584,6 +599,11 @@ export default {
         nameEn: 'FAQ',
         href:
           'https://www.mnt.ee/et/uudised/kkk-kuidas-toimib-uus-reisiplaneerija',
+      },
+      {
+        label: '+372 620 1200',
+        href: `tel:+372 620 1200`,
+        icon: 'icon-icon_call_blue',
       },
       {
         name: 'footer-feedback',
