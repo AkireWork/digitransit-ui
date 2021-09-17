@@ -127,18 +127,35 @@ function Column(props) {
 }
 
 function HeaderCell(props) {
-  return <Text style={styles.headerCell} {...props} />;
+  return <Text style={styles.headerCell}>{props.children}</Text>;
 }
 
+const getStopName = itm => {
+  let special = '';
+  if (itm.tripTimeShort.dropoffType === DROPOFF_TYPE_ENTER_ONLY) {
+    special = '\u00A0**';
+  }
+  if (itm.tripTimeShort.pickupType === PICKUP_TYPE_LEAVE_ONLY) {
+    special = '\u00A0*';
+  }
+  return itm.stopName;
+};
+
 function TextCell(props) {
-  return <Text style={styles.cell} {...props} />;
+  return (
+    <Text style={styles.cell}>
+      {props.itm ? getStopName(props.itm) : props.children}
+    </Text>
+  );
 }
 
 function TextDoubleCell(props) {
   return (
     <>
       <View style={props.single ? { marginTop: 10 } : { marginTop: 5 }} />
-      <Text style={styles.doubleCell} {...props} />
+      <Text style={styles.doubleCell}>
+        {props.itm ? getStopName(props.itm) : props.children}
+      </Text>
       <View style={!props.single ? { marginTop: 5 } : {}} />
     </>
   );
@@ -226,80 +243,86 @@ function TimetableWeekViewPdf({ patterns }) {
             )}
 
             <Text>{trip.tripLongName}</Text>
-            {stoptimesChunks.map((chunk, index) =>
-              trip.stoptimesForWeek[0].tripTimesByWeekdaysList.map(
-                (ttt, tttidx, list) => {
-                  const idxs = getIdxs(chunk);
-                  return (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <Table wrap={false} key={index}>
-                      <FirstColumn last={tttidx === list.length - 1}>
-                        <HeaderCell>&nbsp;</HeaderCell>
+            {stoptimesChunks.map(
+              (chunk, index) =>
+                trip.stoptimesForWeek &&
+                trip.stoptimesForWeek[0].tripTimesByWeekdaysList.map(
+                  (ttt, tttidx, list) => {
+                    const idxs = getIdxs(chunk);
+                    return (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <Table wrap={false} key={index}>
+                        <FirstColumn last={tttidx === list.length - 1}>
+                          <HeaderCell>&nbsp;</HeaderCell>
 
-                        <View style={{ marginTop: 5 }} />
+                          <View style={{ marginTop: 5 }} />
 
-                        {chunk[0].tripTimesByWeekdaysList[
-                          tttidx
-                        ].tripTimeByStopNameList.map((itm, itmi) =>
-                          // eslint-disable-next-line no-prototype-builtins
-                          idxs.hasOwnProperty(tttidx) &&
-                          idxs[tttidx].includes(itmi) ? (
-                            <TextDoubleCell single key={itm.__dataID__}>
-                              {itm.stopName}
-                              {itm.tripTimeShort.dropoffType ===
-                                DROPOFF_TYPE_ENTER_ONLY && '\u00A0**'}
-                              {itm.tripTimeShort.pickupType ===
-                                PICKUP_TYPE_LEAVE_ONLY && '\u00A0*'}
-                            </TextDoubleCell>
-                          ) : (
-                            <TextCell key={itm.__dataID__}>
-                              {itm.stopName}
-                              {itm.tripTimeShort.dropoffType ===
-                                DROPOFF_TYPE_ENTER_ONLY && '\u00A0**'}
-                              {itm.tripTimeShort.pickupType ===
-                                PICKUP_TYPE_LEAVE_ONLY && '\u00A0*'}
-                            </TextCell>
-                          ),
-                        )}
-                      </FirstColumn>
-                      {chunk.map(ch => {
-                        return (
-                          <Column
-                            last={tttidx === list.length - 1}
-                            key={ch.__dataID__}
-                          >
-                            <Text style={styles.headerCell}>{ch.weekdays}</Text>
+                          {chunk[0].tripTimesByWeekdaysList[
+                            tttidx
+                          ].tripTimeByStopNameList.map((itm, itmi) =>
+                            // eslint-disable-next-line no-prototype-builtins
+                            idxs.hasOwnProperty(tttidx) &&
+                            idxs[tttidx].includes(itmi) ? (
+                              <View style={{ height: 24 }}>
+                                <Text style={{ lineHeight: 1 }}>
+                                  {itm.stopName}
+                                  {itm.tripTimeShort.dropoffType ===
+                                    DROPOFF_TYPE_ENTER_ONLY && '\u00A0**'}
+                                  {itm.tripTimeShort.pickupType ===
+                                    PICKUP_TYPE_LEAVE_ONLY && '\u00A0*'}
+                                </Text>
+                              </View>
+                            ) : (
+                              <View style={{ height: 15 }}>
+                                <Text style={{ lineHeight: 1 }}>
+                                  {itm.stopName}
+                                  {itm.tripTimeShort.dropoffType ===
+                                    DROPOFF_TYPE_ENTER_ONLY && '\u00A0**'}
+                                  {itm.tripTimeShort.pickupType ===
+                                    PICKUP_TYPE_LEAVE_ONLY && '\u00A0*'}
+                                </Text>
+                              </View>
+                            ),
+                          )}
+                        </FirstColumn>
+                        {chunk.map(ch => {
+                          return (
+                            <Column
+                              last={tttidx === list.length - 1}
+                              key={ch.__dataID__}
+                            >
+                              <Text style={styles.headerCell}>
+                                {ch.weekdays}
+                              </Text>
 
-                            <View style={{ marginTop: 5 }} />
+                              <View style={{ marginTop: 5 }} />
 
-                            {ch.tripTimesByWeekdaysList[
-                              tttidx
-                            ].tripTimeByStopNameList.map((itm, itmi) =>
-                              // eslint-disable-next-line no-prototype-builtins
-                              idxs.hasOwnProperty(tttidx) &&
-                              idxs[tttidx].includes(itmi) ? (
-                                <TextDoubleCell
-                                  single={
-                                    itm.tripTimeShort.scheduledArrival ===
-                                    itm.tripTimeShort.scheduledDeparture
-                                  }
-                                  key={itm.__dataID__}
-                                >
-                                  {renderTime(itm.tripTimeShort)}
-                                </TextDoubleCell>
-                              ) : (
-                                <TextCell key={itm.__dataID__}>
-                                  {renderTime(itm.tripTimeShort)}
-                                </TextCell>
-                              ),
-                            )}
-                          </Column>
-                        );
-                      })}
-                    </Table>
-                  );
-                },
-              ),
+                              {ch.tripTimesByWeekdaysList[
+                                tttidx
+                              ].tripTimeByStopNameList.map((itm, itmi) =>
+                                // eslint-disable-next-line no-prototype-builtins
+                                idxs.hasOwnProperty(tttidx) &&
+                                idxs[tttidx].includes(itmi) ? (
+                                  <View style={{ height: 24 }}>
+                                    <Text style={{ lineHeight: 1 }}>
+                                      {renderTime(itm.tripTimeShort)}
+                                    </Text>
+                                  </View>
+                                ) : (
+                                  <View style={{ height: 15 }}>
+                                    <Text style={{ lineHeight: 1 }}>
+                                      {renderTime(itm.tripTimeShort)}
+                                    </Text>
+                                  </View>
+                                ),
+                              )}
+                            </Column>
+                          );
+                        })}
+                      </Table>
+                    );
+                  },
+                ),
             )}
 
             {trip.stoptimesForWeek.find(
