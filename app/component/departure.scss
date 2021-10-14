@@ -341,6 +341,9 @@
   .route-number-header {
     width: 4em;
   }
+  .weekday-group-header {
+    width: 5em;
+  }
   .route-destination-header {
     padding-left: 1em;
   }
@@ -362,6 +365,9 @@
 .desktop .departure-list-header {
   .route-number-header {
     width: 50px;
+  }
+  .weekday-group-header {
+    width: 5em;
   }
   .route-destination-header {
     padding-left: 1.5em;

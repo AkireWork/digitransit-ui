@@ -193,6 +193,7 @@ const withStore = connectToStores(
             longName
           }
           trips {
+            gtfsId
             tripHeadsign
             tripLongName
           }
