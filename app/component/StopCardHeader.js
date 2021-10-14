@@ -9,6 +9,8 @@ import ServiceAlertIcon from './ServiceAlertIcon';
 import ZoneIcon from './ZoneIcon';
 import { getActiveAlertSeverityLevel } from '../util/alertUtils';
 import ExternalLink from './ExternalLink';
+import { Link } from 'react-router';
+import { PREFIX_TIMETABLE_SUMMARY } from '../util/path';
 
 class StopCardHeader extends React.Component {
   get headerConfig() {
@@ -56,11 +58,13 @@ class StopCardHeader extends React.Component {
       icons,
       stop,
       isPopUp,
+      isTerminal,
     } = this.props;
     if (!stop) {
       return false;
     }
 
+    const prefix = isTerminal ? 'terminaalit' : 'pysakit';
     return (
       <CardHeader
         className={className}
@@ -75,6 +79,7 @@ class StopCardHeader extends React.Component {
         }
         headingStyle={headingStyle}
         name={stop.name}
+        url={isPopUp ? `/${prefix}/${encodeURIComponent(stop.gtfsId)}` : null}
         description={this.getDescription()}
         code={this.headerConfig.showStopCode && stop.code ? stop.code : null}
         externalLink={this.getExternalLink(stop.code, isPopUp)}
@@ -82,6 +87,16 @@ class StopCardHeader extends React.Component {
       >
         {this.headerConfig.showZone &&
           stop.zoneId && <ZoneIcon showTitle zoneId={stop.zoneId} />}
+        {isPopUp && (
+          <div className="card-header-button">
+            <Link to={`/${PREFIX_TIMETABLE_SUMMARY}/${stop.gtfsId}`}>
+              <Icon img="icon-icon_schedule" />
+              <div className="card-header-button-label">
+                <FormattedMessage id="timetable-summary" defaultMessage="Timetable Summary" />
+              </div>
+            </Link>
+          </div>
+        )}
       </CardHeader>
     );
   }
@@ -109,6 +124,7 @@ StopCardHeader.propTypes = {
   headingStyle: PropTypes.string,
   icons: PropTypes.arrayOf(PropTypes.node),
   isPopUp: PropTypes.bool,
+  isTerminal: PropTypes.bool,
 };
 
 StopCardHeader.defaultProps = {

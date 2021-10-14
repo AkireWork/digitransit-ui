@@ -14,7 +14,7 @@ import TimetableRow from './TimetableRow';
 import ComponentUsageExample from './ComponentUsageExample';
 import { RealtimeStateType } from '../constants';
 import TimetableListHeader from './TimetableListHeader';
-import { PREFIX_ROUTES } from '../util/path';
+import {PREFIX_ROUTES} from '../util/path';
 
 class Timetable extends React.Component {
   static propTypes = {
@@ -252,6 +252,7 @@ class Timetable extends React.Component {
             selectedDate={this.props.propsForStopPageActionBar.selectedDate}
             onDateChange={this.props.propsForStopPageActionBar.onDateChange}
             stopPDFURL={stopPDFURL}
+            stop={this.props.stop}
           />
         </div>
         <div className="timetable-for-printing-header">

@@ -34,6 +34,7 @@ class StopMarker extends React.Component {
     disableModeIcons: PropTypes.bool,
     selected: PropTypes.bool,
     bigger: PropTypes.bool,
+    huge: PropTypes.bool,
   };
 
   static contextTypes = {
@@ -66,7 +67,8 @@ class StopMarker extends React.Component {
   };
 
   getIcon = zoom => {
-    const scale = this.props.bigger
+    const scale = this.props.huge ? 2 :
+      this.props.bigger
       ? 1.2
       : this.props.stop.transfer || this.props.selected
         ? 1.5

@@ -15,6 +15,7 @@ import withBreakpoint from '../util/withBreakpoint';
 class TripStopListContainer extends React.PureComponent {
   static propTypes = {
     trip: PropTypes.object.isRequired,
+    stopId: PropTypes.string,
     className: PropTypes.string,
     vehicles: PropTypes.object,
     locationState: PropTypes.object.isRequired,
@@ -73,6 +74,7 @@ class TripStopListContainer extends React.PureComponent {
       breakpoint,
       currentTime,
       trip,
+      stopId,
       tripStart,
       vehicles: propVehicles,
     } = this.props;
@@ -113,13 +115,19 @@ class TripStopListContainer extends React.PureComponent {
     let stopPassed = true;
 
     return trip.stoptimesForDate.map((stoptime, index) => {
-      if (nextStop === stoptime.stop.gtfsId) {
-        stopPassed = false;
-      } else if (
-        stoptime.realtimeDeparture + stoptime.serviceDay > currentTime.unix() &&
-        isEmpty(vehicle)
-      ) {
-        stopPassed = false;
+      if (stopId) {
+        if (stopId === stoptime.stop.gtfsId) {
+          stopPassed = false;
+        }
+      } else {
+        if (nextStop === stoptime.stop.gtfsId) {
+          stopPassed = false;
+        } else if (
+          stoptime.realtimeDeparture + stoptime.serviceDay > currentTime.unix() &&
+          isEmpty(vehicle)
+        ) {
+          stopPassed = false;
+        }
       }
 
       return (

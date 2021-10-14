@@ -122,6 +122,7 @@ export default (
             render={ComponentLoading404Renderer}
           >
             <Route path="kartta" fullscreenMap />
+            <Route path=":stopId" />
           </Route>
         </Route>
       </Route>

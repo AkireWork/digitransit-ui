@@ -5,6 +5,7 @@ import ComponentUsageExample from './ComponentUsageExample';
 import Icon from './Icon';
 import SplitBars from './SplitBars';
 import Favourite from './Favourite';
+import { Link } from 'react-router';
 
 const CardHeader = ({
   className,
@@ -12,6 +13,7 @@ const CardHeader = ({
   headerIcon,
   headingStyle,
   name,
+  url,
   description,
   code,
   externalLink,
@@ -37,7 +39,7 @@ const CardHeader = ({
       )}
       <div className="card-header-wrapper">
         <span className={headingStyle || 'h4'}>
-          {name}
+          {url ? <Link to={url}>{name}</Link> : `${name}`}
           {externalLink || null}
           {headerIcon}
           {unlinked ? null : <span className="link-arrow"> ›</span>}
@@ -84,6 +86,7 @@ CardHeader.propTypes = {
   headerIcon: PropTypes.node,
   headingStyle: PropTypes.string,
   name: PropTypes.string.isRequired,
+  url: PropTypes.string,
   description: PropTypes.string.isRequired,
   code: PropTypes.string,
   externalLink: PropTypes.node,
