@@ -20,6 +20,24 @@ $border-radius-rounded: 30px;
 
     .card-header-wrapper {
       flex-grow: 1;
+
+      .header-primary > a {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .card-header-button {
+    float: right;
+    margin-right: 20px;
+
+    div.card-header-button-label {
+      display: inline-block;
+      @include font-bold;
+      color: $link-color;
+      text-transform: uppercase;
+      font-size: $font-size-xxxsmall;
+      margin-left: 5px;
     }
   }
 

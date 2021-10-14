@@ -30,6 +30,7 @@ class RouteMapContainer extends React.PureComponent {
     tripId: PropTypes.string,
     lat: PropTypes.number,
     lon: PropTypes.number,
+    params: PropTypes.object,
     breakpoint: PropTypes.string.isRequired,
   };
 
@@ -53,7 +54,7 @@ class RouteMapContainer extends React.PureComponent {
 
   render() {
     const { router, location } = this.context;
-    const { pattern, lat, lon, routes, tripId, breakpoint } = this.props;
+    const { pattern, lat, lon, routes, tripId, breakpoint, params} = this.props;
     const { hasCentered, shouldFitBounds } = this.state;
 
     const fullscreen = some(routes, route => route.fullscreenMap);
@@ -82,7 +83,7 @@ class RouteMapContainer extends React.PureComponent {
     };
 
     const leafletObjs = [
-      <RouteLine key="line" pattern={pattern} />,
+      <RouteLine key="line" pattern={pattern} highlightedStop={params.stopId} />,
       <VehicleMarkerContainer
         key="vehicles"
         direction={pattern.directionId}
