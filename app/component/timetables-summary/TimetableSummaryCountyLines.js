@@ -4,15 +4,23 @@ import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import moment from 'moment';
 import connectToStores from 'fluxible-addons-react/connectToStores';
-import DepartureListHeader from '../DepartureListHeader';
 import DepartureTime from '../DepartureTime';
 import RouteNumberContainer from '../RouteNumberContainer';
 import { isCallAgencyDeparture } from '../../util/legUtils';
 import RouteDestination from '../RouteDestination';
 import FilterTimeTableModal from '../FilterTimeTableModal';
 import TimeTableOptionsPanel from '../TimeTableOptionsPanel';
+import {Link, locationShape, routerShape} from "react-router";
+import {PREFIX_ROUTES} from "../../util/path";
+import SecondaryButton from "../SecondaryButton";
+import getContext from "recompose/getContext";
 
 class TimetableSummaryCountyLines extends Component {
+  static contextTypes = {
+    location: locationShape.isRequired,
+    router: routerShape.isRequired,
+  };
+
   static propTypes = {
     stop: PropTypes.any.isRequired,
     patterns: PropTypes.any.isRequired,
@@ -25,9 +33,9 @@ class TimetableSummaryCountyLines extends Component {
     super(props);
     const trips = [];
     props.patterns.forEach(pattern => {
-      pattern.trip.stoptimesForWeek.forEach(stopTimes => {
-        const validFrom = moment(stopTimes.validity.validFrom, 'DD.MM.YYYY');
-        const validTill = moment(stopTimes.validity.validTill, 'DD.MM.YYYY');
+      pattern.patternTimetable.forEach(timetable => {
+        const validFrom = moment(timetable.validity.validFrom, 'DD.MM.YYYY');
+        const validTill = moment(timetable.validity.validTill, 'DD.MM.YYYY');
         const currentTime = moment.unix(props.currentTime).startOf('day');
 
         const isValidTillInTheFuture = validTill.isSameOrAfter(currentTime);
@@ -37,18 +45,15 @@ class TimetableSummaryCountyLines extends Component {
         const isValidFromInTheFuture = validFrom.isAfter(currentTime);
         if (isValidTillInTheFuture && isValidFromInsideTwoWeeksFromNow) {
           trips.push({
-            id: pattern.trip.id,
+            id: timetable.trip.id,
+            gtfsId: timetable.trip.gtfsId,
             code: pattern.code,
             route: pattern.route,
-            tripName: pattern.trip.tripLongName,
+            tripName: timetable.trip.tripLongName,
             headsign: pattern.trip.headsign,
-            weekdays: stopTimes.weekdays,
-            validFrom: isValidFromInTheFuture && stopTimes.validity.validFrom,
-            calendarDatesByFirstStoptime:
-              stopTimes.calendarDatesByFirstStoptime,
-            time:
-              stopTimes.tripTimesByWeekdaysList[0].tripTimeByStopNameList[0]
-                .tripTimeShort.scheduledDeparture,
+            weekdays: timetable.weekdays,
+            validFrom: isValidFromInTheFuture && timetable.validity.validFrom,
+            time: timetable.times[0].scheduledDeparture,
           });
         }
       });
@@ -127,6 +132,12 @@ class TimetableSummaryCountyLines extends Component {
     this.setState({ showRoutes: val.showRoutes });
   };
 
+  printItinerary = e => {
+    e.stopPropagation();
+
+    window.print();
+  };
+
   render() {
     const { trips, showFilterModal, showRoutes } = this.state;
     const { currentTime, intl } = this.props;
@@ -142,12 +153,23 @@ class TimetableSummaryCountyLines extends Component {
           />
         ) : null}
         <div className="row">
-          <div className="columns large-6 medium-12">
+          <div className="columns medium-11">
             <TimeTableOptionsPanel
               showRoutes={showRoutes}
               showFilterModal={this.showModal}
               stop={stopForFilter}
             />
+          </div>
+          <div className="columns medium-1 padding-vertical-small">
+            <div className="print-button-container">
+              <SecondaryButton
+                ariaLabel="print"
+                buttonName="print"
+                buttonClickAction={e => this.printItinerary(e)}
+                buttonIcon="icon-icon_print"
+                smallSize
+              />
+            </div>
           </div>
         </div>
         <div className="departure-list-header row padding-vertical-small">
@@ -187,22 +209,24 @@ class TimetableSummaryCountyLines extends Component {
                   fadeLong
                 />
                 <div className="route-destination-with-desc">
-                  <RouteDestination
-                    mode={trip.route.mode}
-                    destination={`${trip.tripName ||
+                  <Link to={`/${PREFIX_ROUTES}/${trip.route.gtfsId}/pysakit/${trip.code}/${trip.gtfsId}/${this.props.stop.gtfsId}`}>
+                    <RouteDestination
+                      mode={trip.route.mode}
+                      destination={`${trip.tripName ||
                       trip.route.longName ||
                       trip.headsign} ${
-                      trip.validFrom
-                        ? intl.formatMessage(
-                            {
-                              id: 'valid-from',
-                              defaultMessage: '(alates {validFrom})',
-                            },
-                            { validFrom: trip.validFrom },
+                        trip.validFrom
+                          ? intl.formatMessage(
+                          {
+                            id: 'valid-from',
+                            defaultMessage: '(alates {validFrom})',
+                          },
+                          { validFrom: trip.validFrom },
                           )
-                        : ''
-                    }`}
-                  />
+                          : ''
+                        }`}
+                    />
+                  </Link>
                   {trip.route.desc && this.renderRouteDesc(trip)}
                 </div>
               </div>

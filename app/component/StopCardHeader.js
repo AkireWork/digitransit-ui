@@ -78,6 +78,16 @@ class StopCardHeader extends React.Component {
           />
         }
         headingStyle={headingStyle}
+        secondaryLink={
+          isPopUp && (
+            <Link to={`/${PREFIX_TIMETABLE_SUMMARY}/${stop.gtfsId}`}>
+              <Icon img="icon-icon_schedule" />
+              <div className="card-header-link-label">
+                <FormattedMessage id="timetable-summary" defaultMessage="Timetable Summary" />
+              </div>
+            </Link>
+          )
+        }
         name={stop.name}
         url={isPopUp ? `/${prefix}/${encodeURIComponent(stop.gtfsId)}` : null}
         description={this.getDescription()}
@@ -87,16 +97,6 @@ class StopCardHeader extends React.Component {
       >
         {this.headerConfig.showZone &&
           stop.zoneId && <ZoneIcon showTitle zoneId={stop.zoneId} />}
-        {isPopUp && (
-          <div className="card-header-button">
-            <Link to={`/${PREFIX_TIMETABLE_SUMMARY}/${stop.gtfsId}`}>
-              <Icon img="icon-icon_schedule" />
-              <div className="card-header-button-label">
-                <FormattedMessage id="timetable-summary" defaultMessage="Timetable Summary" />
-              </div>
-            </Link>
-          </div>
-        )}
       </CardHeader>
     );
   }

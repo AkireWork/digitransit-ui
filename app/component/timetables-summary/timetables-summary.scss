@@ -1,4 +1,20 @@
+.print-title {
+  display: none;
+
+  @media print {
+    display: block;
+  }
+}
+
 .timetable-summary-container {
+  margin-bottom: 50px;
+
+  @media print {
+    .print-button-container {
+      display: none;
+    }
+  }
+
   .timetable-options-panel {
     margin-top: 20px;
   }
@@ -16,14 +32,34 @@
   .timetable-summary-urban-cards {
     display: flex;
     flex-wrap: wrap;
+
+    @media print {
+      display: block;
+    }
+
+    > .columns {
+      @media print {
+        float: none !important;
+      }
+    }
   }
 
-  div.map {
-    min-height: 15em;
+  .timetable-summary-map {
+    @media print {
+      display: none;
+    }
+
+    div.map {
+      min-height: 15em;
+    }
   }
 
   .departure-list {
     .departure {
+      @media print {
+        break-inside: avoid;
+      }
+
       .time {
         width: 4em;
         padding-right: $padding-medium;
@@ -39,6 +75,10 @@
 
         .route-destination {
           height: auto;
+
+          @media print {
+            width: 100%;
+          }
 
           .destination {
             white-space: pre-wrap;
@@ -68,12 +108,43 @@
 }
 
 .timetable-summary-urban {
+  display: none;
+
+  &.selected {
+    display: block;
+  }
+
+  @media print {
+    display: block;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .pattern-select-label {
+    @media print {
+      display: none;
+    }
+  }
+
+  .pattern-select-print-label {
+    display: none;
+
+    @media print {
+      display: inline;
+    }
+  }
 
   // Tabs
   div.group-tabs {
     display: flex;
     flex-direction: column;
     flex: 0 0 auto;
+    margin-left: 32px;
+
+    @media print {
+      display: none;
+    }
 
     .tabs-navigation {
       flex-shrink: 0;
@@ -100,6 +171,7 @@
         text-align: center;
         font-size: $font-size-xxsmall;
         min-width: 3em;
+        border-bottom: 2px solid $link-color;
         @media print {
           display: none;
         }
@@ -113,8 +185,9 @@
         }
 
         &.is-active {
-          border-bottom: 2px solid $link-color;
-          color: $black;
+          background-color: $link-color;
+          color: $white;
+          display: inline-block;
 
           .icon {
             fill: $black;
@@ -162,61 +235,112 @@
     }
   }
 
-  .timetable-summary-urban-group-row {
-    display: flex;
+  .timetable-summary-urban-group {
+    display: none;
+    float: left;
 
-    .timetable-summary-urban-group-hours {
-      font-weight: bold;
-      width: 22px;
+    &.selected {
+      display: block;
     }
 
-    .timetable-summary-urban-group-minutes {
-      width: auto;
-      padding: 0;
-      margin-left: 10px;
-      float: left;
-      text-align: right;
+    @media print {
+      display: block;
+      width: 33%;
+      padding-right: 5px;
+      padding-left: 5px;
+    }
 
-      span {
-        width: 22px;
-        float: left;
-        margin-left: 10px;
+    .timetable-summary-urban-group-label {
+      margin-left: 50px;
+      display: none;
+
+      @media print {
+        display: block;
       }
     }
 
-    &:nth-child(even) {
-      background-color: $background-color-darker;
+    .timetable-summary-urban-group-row {
+      display: flex;
+
+      .timetable-summary-urban-group-hours {
+        font-weight: bold;
+        width: 22px;
+      }
+
+      .timetable-summary-urban-group-minutes {
+        width: auto;
+        padding: 0;
+        margin-left: 10px;
+        float: left;
+        text-align: right;
+
+        span {
+          width: 22px;
+          float: left;
+          margin-left: 10px;
+        }
+      }
+
+      &:nth-child(even) {
+        background-color: $background-color-darker;
+      }
     }
   }
 
   .route-pattern-select {
     padding-left: 20px;
     margin-top: 20px;
+    overflow: hidden;
+
+    @media print {
+      width: auto;
+      float: left !important;
+    }
 
     select {
       cursor: pointer;
     }
   }
 
-  .route-number {
-    flex: 1;
-    width: auto;
-    font-size: 40px;
-    margin-top: 20px;
-    margin-left: 10px;
-
-    .icon {
-      font-size: 48px;
+  .timetable-summary-route-number {
+    @media print {
+      width: auto;
     }
 
-    .vehicle-number {
-      vertical-align: text-bottom;
-      padding-left: 0.4em;
+    .route-number {
+      flex: 1;
+      width: auto;
+      font-size: 40px;
+      margin-top: 20px;
+      margin-left: 10px;
+
+      .icon {
+        font-size: 48px;
+      }
+
+      .vehicle-number {
+        vertical-align: text-bottom;
+        padding-left: 0.4em;
+      }
     }
   }
 
-  .timetable-summary-stop-list {
-    margin-left: 10px;
+  .timetable-summary-stop-list-container {
+    @media print {
+      width: 0 !important;
+      display: none;
+    }
+
+    .timetable-summary-stop-list {
+      margin-left: 10px;
+    }
+  }
+
+  .timetable-summary-time-groups {
+    @media print {
+      width: 100% !important;
+      float: left !important;
+    }
   }
 
   .timetable-summary-title {

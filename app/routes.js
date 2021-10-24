@@ -13,7 +13,7 @@ import scrollTop from './util/scroll';
 import { PREFIX_ITINERARY_SUMMARY, PREFIX_TIMETABLE_SUMMARY } from './util/path';
 import { preparePlanParams } from './util/planParamUtil';
 import { validateServiceTimeRange } from './util/timeUtils';
-import { errorLoading, getDefault, loadRoute } from './util/routerUtils';
+import {errorLoading, getDefault, loadRoute, RelayRenderer} from './util/routerUtils';
 
 import getStopRoutes from './stopRoutes';
 import routeRoutes from './routeRoutes';
@@ -200,6 +200,7 @@ export default config => {
             ),
           ]).then(([title, content]) => cb(null, { title, content }));
         }}
+        render={RelayRenderer}
         queries={{
           content: stopQueries,
         }}

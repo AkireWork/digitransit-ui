@@ -93,7 +93,7 @@ class TimetableSummaryContainer extends Component {
             <div>
               <FormattedMessage
                 id="county-lines"
-                defaultMessage="Maakonna liinid"
+                defaultMessage="Maakonnaliinid"
               />
             </div>
           </a>
@@ -135,8 +135,11 @@ class TimetableSummaryContainer extends Component {
             </div>
           </h2>
         </div>
+        <h2 className="print-title">{stop.name}</h2>
         <div className="momentum-scroll timetable-summary-container">
-          <StopPageMap stop={stop} params={params} breakpoint={breakpoint} routes={[{fullscreenMap: ''}]}/>
+          <div className="timetable-summary-map">
+            <StopPageMap stop={stop} params={params} breakpoint={breakpoint} routes={[{fullscreenMap: ''}]}/>
+          </div>
           {otherPatterns.length > 0 &&
             cityPatterns.length > 0 &&
             this.renderTabs()}
@@ -178,33 +181,34 @@ export default Relay.createContainer(
             name
             
             trip {
-              id
-              tripTimesWeekdaysGroups
-              tripShortName
               tripLongName
-              
-              stoptimesForWeek (stopId: $stopId) {
-                parts
-                weekdays
-                validity {
-                  validFrom
-                  validTill
+              tripTimesWeekdaysGroups
+            }
+            
+            patternTimetable (stopId: $stopId) {
+              weekdays
+              trip {
+                id
+                gtfsId
+                tripShortName
+                tripLongName
+              }
+              validity {
+                validFrom
+                validTill
+              }
+              times {
+                stop {
+                  gtfsId
+                  name
                 }
-                tripTimesByWeekdaysList {
-                  tripTimeByStopNameList {
-                    stopName
-                    differentDeparture
-                    tripTimeShort {
-                      headsign
-                      realtimeState
-                      scheduledArrival
-                      scheduledDeparture
-                      serviceDay
-                      pickupType
-                      dropoffType
-                    }
-                  }
-                }
+                headsign
+                realtimeState
+                scheduledArrival
+                scheduledDeparture
+                serviceDay
+                pickupType
+                dropoffType
               }
             }
             
@@ -215,6 +219,7 @@ export default Relay.createContainer(
             
             route {
               id
+              gtfsId
               color
               mode
               shortName
