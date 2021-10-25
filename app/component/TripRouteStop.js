@@ -28,6 +28,7 @@ const TripRouteStop = props => {
     mode,
     stop,
     stopPassed,
+    stopCurrent,
     stoptime,
   } = props;
 
@@ -50,6 +51,7 @@ const TripRouteStop = props => {
       className={cx(
         'route-stop location-details_container',
         { passed: stopPassed },
+        { current: stopCurrent },
         className,
       )}
     >
@@ -114,6 +116,7 @@ TripRouteStop.propTypes = {
   mode: PropTypes.string.isRequired,
   color: PropTypes.string,
   stopPassed: PropTypes.bool,
+  stopCurrent: PropTypes.bool,
   stop: PropTypes.object.isRequired,
   distance: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([false])])
     .isRequired,

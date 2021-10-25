@@ -4,7 +4,7 @@ import React from 'react';
 import Relay from 'react-relay/classic';
 import { FormattedMessage, intlShape } from 'react-intl';
 import cx from 'classnames';
-import { routerShape } from 'react-router';
+import {Link, routerShape} from 'react-router';
 
 import Icon from './Icon';
 import CallAgencyWarning from './CallAgencyWarning';
@@ -24,9 +24,10 @@ import {
   getServiceAlertsForRouteStops,
   isAlertActive,
 } from '../util/alertUtils';
-import { PREFIX_ROUTES } from '../util/path';
+import {PREFIX_ROUTES, PREFIX_TIMETABLE_SUMMARY} from '../util/path';
 import withBreakpoint from '../util/withBreakpoint';
 import { RouteAlertsQuery, StopAlertsQuery } from '../util/alertQueries';
+import BackButton from "./BackButton";
 
 const Tab = {
   Disruptions: 'hairiot',
@@ -163,7 +164,7 @@ class RoutePage extends React.Component {
   /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions, jsx-a11y/anchor-is-valid */
   render() {
     const { breakpoint, location, params, route } = this.props;
-    const { patternId } = params;
+    const { patternId, stopId } = params;
     const { config, router } = this.context;
 
     if (route == null) {
@@ -259,7 +260,7 @@ class RoutePage extends React.Component {
               gtfsId={route.gtfsId}
             />
           </nav>
-          {patternId && (
+          {patternId && !stopId && (
             <RoutePatternSelect
               params={params}
               route={route}
@@ -269,7 +270,23 @@ class RoutePage extends React.Component {
               className={cx({ 'bp-large': breakpoint === 'large' })}
             />
           )}
-          <RouteAgencyInfo route={route} />
+          <div className="row">
+            <div className="columns small-9">
+              <RouteAgencyInfo route={route} />
+            </div>
+            <div className="columns small-3 padding-vertical-normal">
+              {stopId &&
+              <div className="right">
+                <BackButton defaultUrl={`/${PREFIX_TIMETABLE_SUMMARY}/${stopId}`} color="#008bde"
+                            text={(<FormattedMessage
+                              id="back"
+                              defaultMessage="Back"
+                            />)}
+                />
+              </div>
+              }
+            </div>
+          </div>
         </div>
       </div>
     );

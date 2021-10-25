@@ -27,11 +27,11 @@ $border-radius-rounded: 30px;
     }
   }
 
-  .card-header-button {
+  .card-header-secondary-link {
     float: right;
     margin-right: 20px;
 
-    div.card-header-button-label {
+    div.card-header-link-label {
       display: inline-block;
       @include font-bold;
       color: $link-color;
