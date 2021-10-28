@@ -241,11 +241,10 @@ const connectedComponent = connectToStores(
   injectIntl(TimetableSummaryCountyLines),
   ['TimeStore'],
   context => ({
-    currentTime: moment('2021-09-28').unix(),
-    // context
-    //   .getStore('TimeStore')
-    //   .getCurrentTime()
-    //   .unix(),
+    currentTime: context
+      .getStore('TimeStore')
+      .getCurrentTime()
+      .unix(),
   }),
 );
 
