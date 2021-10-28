@@ -2,7 +2,7 @@
   display: none;
 
   @media print {
-    display: block;
+    display: inline;
   }
 }
 
@@ -35,6 +35,9 @@
 
     @media print {
       display: block;
+      column-count: 2;
+      -webkit-column-count: 2;
+      -moz-column-count: 2;
     }
 
     > .columns {
@@ -57,6 +60,8 @@
   .departure-list {
     .departure {
       @media print {
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
         break-inside: avoid;
       }
 
@@ -115,7 +120,7 @@
   }
 
   @media print {
-    display: block;
+    font-size: 75%;
     -webkit-column-break-inside: avoid;
     page-break-inside: avoid;
     break-inside: avoid;
@@ -236,7 +241,10 @@
   }
 
   .timetable-summary-urban-group {
+    -webkit-print-color-adjust: exact !important;   /* Chrome, Safari, Edge */
+    color-adjust: exact !important;                 /*Firefox*/
     display: none;
+    width: 100%;
     float: left;
 
     &.selected {
@@ -245,7 +253,6 @@
 
     @media print {
       display: block;
-      width: 33%;
       padding-right: 5px;
       padding-left: 5px;
     }
@@ -265,6 +272,10 @@
       .timetable-summary-urban-group-hours {
         font-weight: bold;
         width: 22px;
+
+        @media print {
+          width: 15px;
+        }
       }
 
       .timetable-summary-urban-group-minutes {
@@ -278,6 +289,14 @@
           width: 22px;
           float: left;
           margin-left: 10px;
+
+          @media print {
+            margin-left: 0px;
+            width: 15px;
+            a {
+              text-decoration: none;
+            }
+          }
         }
       }
 
@@ -300,6 +319,10 @@
     select {
       cursor: pointer;
     }
+  }
+
+  .route-pattern-valid-from {
+    padding-left: 20px;
   }
 
   .timetable-summary-route-number {
@@ -326,20 +349,11 @@
   }
 
   .timetable-summary-stop-list-container {
-    @media print {
-      width: 0 !important;
-      display: none;
-    }
+    -webkit-print-color-adjust: exact !important;   /* Chrome, Safari, Edge */
+    color-adjust: exact !important;                 /*Firefox*/
 
     .timetable-summary-stop-list {
       margin-left: 10px;
-    }
-  }
-
-  .timetable-summary-time-groups {
-    @media print {
-      width: 100% !important;
-      float: left !important;
     }
   }
 

@@ -154,14 +154,14 @@ class TimetableSummaryUrbanLineCard extends Component {
           </div>
           <div className="route-pattern-select columns large-6 medium-12">
             {this.renderPatternSelect(pattern)}
-            {validFrom && <div>
-              <FormattedMessage id="valid-from" defaultMessage="(from {validFrom})"
-                                values={{ validFrom }} />
-            </div>}
           </div>
         </div>
+        {validFrom && <div className="route-pattern-valid-from">
+          <FormattedMessage id="valid-from" defaultMessage="(from {validFrom})"
+                            values={{ validFrom }} />
+        </div>}
         <div className="row padding-vertical-normal">
-          <div className="columns medium-6 timetable-summary-stop-list-container">
+          <div className="columns small-6 timetable-summary-stop-list-container">
             {breakpoint === 'large' &&
               <TimetableSummaryStopList
                 currentStop={stop}
@@ -172,7 +172,9 @@ class TimetableSummaryUrbanLineCard extends Component {
           </div>
           <div className={cx('columns', 'timetable-summary-time-groups', breakpoint === 'large' ? 'small-6' : 'small-12')}>
             {this.renderPatternTimeGroups(pattern)}
-            {pattern.route.desc && pattern.route.desc.split('<br>').map((line, index) => <p key={index}>{line}</p>)}
+            {pattern.route.desc &&
+              <div>{pattern.route.desc.split('<br>').map((line, index) => <p key={index}>{line}</p>)}</div>
+            }
           </div>
         </div>
       </div>

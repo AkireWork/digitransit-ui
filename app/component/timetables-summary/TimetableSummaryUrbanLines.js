@@ -162,11 +162,10 @@ const connectedComponent = connectToStores(
   TimetableSummaryUrbanLines,
   ['TimeStore'],
   context => ({
-    currentTime: moment('2021-08-28', 'YYYY-MM-DD').unix(),
-    // context
-    //   .getStore('TimeStore')
-    //   .getCurrentTime()
-    //   .unix(),
+    currentTime: context
+      .getStore('TimeStore')
+      .getCurrentTime()
+      .unix(),
   }),
 );
 

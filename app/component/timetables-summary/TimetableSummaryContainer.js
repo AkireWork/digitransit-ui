@@ -41,15 +41,16 @@ class TimetableSummaryContainer extends Component {
         area.competent_authority.includes(pattern.route.competentAuthority),
       ),
     );
+    const otherPatterns = props.stop.patterns.filter(
+      pattern =>
+        !urbanLines.areas.find(area =>
+          area.competent_authority.includes(pattern.route.competentAuthority),
+        ),
+    );
 
     this.state = {
       cityPatterns,
-      otherPatterns: props.stop.patterns.filter(
-        pattern =>
-          !urbanLines.areas.find(area =>
-            area.competent_authority.includes(pattern.route.competentAuthority),
-          ),
-      ),
+      otherPatterns,
       activeTab: cityPatterns.length > 0 ? 'urban-lines' : 'county-lines',
     };
   }
@@ -111,6 +112,7 @@ class TimetableSummaryContainer extends Component {
         className={cx('fullscreen', breakpoint === 'large' ? 'desktop' : 'mobile')}
         style={{ display: 'block', flexDirection: 'unset' }}
       >
+        <h2 className="print-title">{stop.name}</h2>
         <div className="desktop-title" style={{ background: 'inherit' }}>
           <h2 style={{ fontSize: '1em', display: 'flex'}}>
             <Link style={{ color: '#008bde', textDecoration: 'none' }} to="/">
@@ -135,7 +137,6 @@ class TimetableSummaryContainer extends Component {
             </div>
           </h2>
         </div>
-        <h2 className="print-title">{stop.name}</h2>
         <div className="momentum-scroll timetable-summary-container">
           <div className="timetable-summary-map">
             <StopPageMap stop={stop} params={params} breakpoint={breakpoint} routes={[{fullscreenMap: ''}]}/>
