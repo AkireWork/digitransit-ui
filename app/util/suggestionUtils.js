@@ -46,6 +46,9 @@ export const isStop = ({ layer }) =>
 export const isTerminal = ({ layer }) =>
   layer === 'station' || layer === 'favouriteStation';
 
+export const isLocation = ({ layer }) =>
+    layer === 'address' || layer === 'currentPosition';
+
 export function extractStopFromName(suggestion) {
   return suggestion.name && suggestion.name.replace(/ [\d-]+$/, '');
 }
