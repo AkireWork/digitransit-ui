@@ -10,7 +10,7 @@ import TripListHeader from './TripListHeader';
 import TripStopListContainer from './TripStopListContainer';
 import withBreakpoint from '../util/withBreakpoint';
 
-function TripStopsContainer({ breakpoint, routes, trip }) {
+function TripStopsContainer({ breakpoint, routes, trip, params }) {
   if (!trip) {
     return null;
   }
@@ -35,6 +35,7 @@ function TripStopsContainer({ breakpoint, routes, trip }) {
       <TripStopListContainer
         key="list"
         trip={trip}
+        stopId={params.stopId}
         tripStart={tripStartTime}
         fullscreenMap={fullscreen}
       />
@@ -55,6 +56,7 @@ TripStopsContainer.propTypes = {
       fullscreenMap: PropTypes.bool,
     }),
   ).isRequired,
+  params: PropTypes.object,
   breakpoint: PropTypes.string.isRequired,
 };
 

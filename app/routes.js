@@ -10,10 +10,10 @@ import TopLevel from './component/TopLevel';
 import Title from './component/Title';
 
 import scrollTop from './util/scroll';
-import { PREFIX_ITINERARY_SUMMARY } from './util/path';
+import { PREFIX_ITINERARY_SUMMARY, PREFIX_TIMETABLE_SUMMARY } from './util/path';
 import { preparePlanParams } from './util/planParamUtil';
 import { validateServiceTimeRange } from './util/timeUtils';
-import { errorLoading, getDefault, loadRoute } from './util/routerUtils';
+import {errorLoading, getDefault, loadRoute, RelayRenderer} from './util/routerUtils';
 
 import getStopRoutes from './stopRoutes';
 import routeRoutes from './routeRoutes';
@@ -26,6 +26,14 @@ const planQueries = {
       }
     }`,
   serviceTimeRange: () => Relay.QL`query { serviceTimeRange }`,
+};
+
+const stopQueries = {
+  stop: () => Relay.QL`
+    query {
+      stop(id: $stopId)
+    }
+  `,
 };
 
 export default config => {
@@ -180,6 +188,21 @@ export default config => {
               getDefault,
             ),
           ]).then(([title, content]) => cb(null, { title, content }));
+        }}
+      />
+      <Route
+        path={`/${PREFIX_TIMETABLE_SUMMARY}/:stopId`}
+        getComponents={(location, cb) => {
+          Promise.all([
+            Promise.resolve(Title),
+            import(/* webpackChunkName: "about" */ './component/timetables-summary/TimetableSummaryContainer').then(
+              getDefault,
+            ),
+          ]).then(([title, content]) => cb(null, { title, content }));
+        }}
+        render={RelayRenderer}
+        queries={{
+          content: stopQueries,
         }}
       />
       {!config.URL.API_URL.includes('/api.') && (

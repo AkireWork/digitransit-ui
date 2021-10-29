@@ -183,6 +183,17 @@ $route-schedule-date-height: 36px;
       }
     }
   }
+
+  &.current {
+    span {
+      font-weight: 700;
+    }
+
+    .route-stop-row_content-container {
+      background-color: $background-color-darker;
+    }
+  }
+
   .route-stop-now {
     min-width: 13%;
     position: relative;
@@ -263,7 +274,6 @@ $route-schedule-date-height: 36px;
             );
             height: 1.25rem;
             overflow: hidden;
-            width: 100%;
           }
           .drop-off-container {
             color: $gray;

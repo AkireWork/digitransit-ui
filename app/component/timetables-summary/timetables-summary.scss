@@ -1,0 +1,387 @@
+.print-title {
+  display: none;
+
+  @media print {
+    display: inline;
+  }
+}
+
+.timetable-summary-container {
+  margin-bottom: 50px;
+
+  @media print {
+    .print-button-container {
+      display: none;
+    }
+  }
+
+  .timetable-options-panel {
+    margin-top: 20px;
+  }
+
+  .row {
+    max-width: 100%;
+  }
+
+  .show-more-less {
+    display: block;
+    margin-top: 5px;
+    cursor: pointer;
+  }
+
+  .timetable-summary-urban-cards {
+    display: flex;
+    flex-wrap: wrap;
+
+    @media print {
+      display: block;
+      column-count: 2;
+      -webkit-column-count: 2;
+      -moz-column-count: 2;
+    }
+
+    > .columns {
+      @media print {
+        float: none !important;
+      }
+    }
+  }
+
+  .timetable-summary-map {
+    @media print {
+      display: none;
+    }
+
+    div.map {
+      min-height: 15em;
+    }
+  }
+
+  .departure-list {
+    .departure {
+      @media print {
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .time {
+        width: 4em;
+        padding-right: $padding-medium;
+        margin-right: $padding-medium;
+      }
+      .route-number {
+        width: 4em;
+      }
+
+      .route-destination-with-desc {
+        display: grid;
+        flex: 1;
+
+        .route-destination {
+          height: auto;
+
+          @media print {
+            width: 100%;
+          }
+
+          .destination {
+            white-space: pre-wrap;
+          }
+        }
+
+        .route-desc {
+          line-height: 1;
+          margin: 10px;
+
+          p {
+            margin-top: 5px;
+            margin-bottom: 0;
+            color: $gray;
+            white-space: pre-wrap;
+          }
+        }
+      }
+      .weekdays-group {
+        width: 4em;
+        text-align: center;
+        padding-right: $padding-medium;
+        margin-right: $padding-medium;
+      }
+    }
+  }
+}
+
+.timetable-summary-urban {
+  display: none;
+
+  &.selected {
+    display: block;
+  }
+
+  @media print {
+    font-size: 75%;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .pattern-select-label {
+    @media print {
+      display: none;
+    }
+  }
+
+  .pattern-select-print-label {
+    display: none;
+
+    @media print {
+      display: inline;
+    }
+  }
+
+  // Tabs
+  div.group-tabs {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    margin-left: 32px;
+
+    @media print {
+      display: none;
+    }
+
+    .tabs-navigation {
+      flex-shrink: 0;
+      width: calc(100% - 20px);
+      margin: 0;
+      padding: 0;
+      border-bottom: 1px solid $light-gray;
+      @media print {
+        padding-left: 0 !important;
+        margin-left: 0 !important;
+        border: none;
+        .route-number {
+          margin-left: 0 !important;
+        }
+      }
+
+      a {
+        @include font-bold;
+        padding: 8px 0 5px;
+        border: none;
+        pointer-events: auto;
+        display: inline-block;
+        text-decoration: none;
+        text-align: center;
+        font-size: $font-size-xxsmall;
+        min-width: 3em;
+        border-bottom: 2px solid $link-color;
+        @media print {
+          display: none;
+        }
+
+        &.activeAlert,
+        &.activeAlert.is-active,
+        &.activeAlert:hover {
+          .icon {
+            fill: $cancelation-red;
+          }
+        }
+
+        &.is-active {
+          background-color: $link-color;
+          color: $white;
+          display: inline-block;
+
+          .icon {
+            fill: $black;
+          }
+        }
+
+        &:hover {
+          color: lighten($black, 20%);
+
+          .icon {
+            fill: lighten($black, 20%);
+          }
+        }
+
+        > div {
+          border-right: 1px solid $light-gray;
+          display: block;
+          margin: 0 0 0 1px;
+          padding: 3px 7px;
+          text-decoration: none;
+          text-align: center;
+          line-height: 1.3em;
+        }
+
+        &:last-child > div {
+          border-right: none;
+        }
+
+        .icon {
+          display: block;
+          width: 1.5em;
+          height: 1.5em;
+          fill: $link-color;
+          color: $background-color;
+          margin: $padding-small auto;
+        }
+      }
+    }
+  }
+
+  .row {
+    .row {
+      margin-right: 0;
+      margin-left: 0;
+    }
+  }
+
+  .timetable-summary-urban-group {
+    -webkit-print-color-adjust: exact !important;   /* Chrome, Safari, Edge */
+    color-adjust: exact !important;                 /*Firefox*/
+    display: none;
+    width: 100%;
+    float: left;
+
+    &.selected {
+      display: block;
+    }
+
+    @media print {
+      display: block;
+      padding-right: 5px;
+      padding-left: 5px;
+    }
+
+    .timetable-summary-urban-group-label {
+      margin-left: 50px;
+      display: none;
+
+      @media print {
+        display: block;
+      }
+    }
+
+    .timetable-summary-urban-group-row {
+      display: flex;
+
+      .timetable-summary-urban-group-hours {
+        font-weight: bold;
+        width: 22px;
+
+        @media print {
+          width: 15px;
+        }
+      }
+
+      .timetable-summary-urban-group-minutes {
+        width: auto;
+        padding: 0;
+        margin-left: 10px;
+        float: left;
+        text-align: right;
+
+        span {
+          width: 22px;
+          float: left;
+          margin-left: 10px;
+
+          @media print {
+            margin-left: 0px;
+            width: 15px;
+            a {
+              text-decoration: none;
+            }
+          }
+        }
+      }
+
+      &:nth-child(even) {
+        background-color: $background-color-darker;
+      }
+    }
+  }
+
+  .route-pattern-select {
+    padding-left: 20px;
+    margin-top: 20px;
+    overflow: hidden;
+
+    @media print {
+      width: auto;
+      float: left !important;
+    }
+
+    select {
+      cursor: pointer;
+    }
+  }
+
+  .route-pattern-valid-from {
+    padding-left: 20px;
+  }
+
+  .timetable-summary-route-number {
+    @media print {
+      width: auto;
+    }
+
+    .route-number {
+      flex: 1;
+      width: auto;
+      font-size: 40px;
+      margin-top: 20px;
+      margin-left: 10px;
+
+      .icon {
+        font-size: 48px;
+      }
+
+      .vehicle-number {
+        vertical-align: text-bottom;
+        padding-left: 0.4em;
+      }
+    }
+  }
+
+  .timetable-summary-stop-list-container {
+    -webkit-print-color-adjust: exact !important;   /* Chrome, Safari, Edge */
+    color-adjust: exact !important;                 /*Firefox*/
+
+    .timetable-summary-stop-list {
+      margin-left: 10px;
+    }
+  }
+
+  .timetable-summary-title {
+    margin-top: 8px;
+  }
+
+  .timetable-summary-stop {
+    max-width: 100%;
+    display: flex;
+    line-height: 1;
+    flex: 1 0 3.5em;
+
+    .timetable-summary-stop_circleline {
+      position: relative;
+      min-width: 15px;
+      .timetable-summary-stop_line {
+        width: 5px;
+        height: 100%;
+        position: absolute;
+        top: 1em;
+        left: 4px;
+      }
+      svg {
+        position: absolute;
+        top: 0.2em;
+        z-index: 3;
+      }
+    }
+  }
+}

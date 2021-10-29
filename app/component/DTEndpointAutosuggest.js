@@ -8,11 +8,10 @@ import Loading from './Loading';
 import {
   suggestionToLocation,
   getGTFSId,
-  isStop,
 } from '../util/suggestionUtils';
 import { dtLocationShape } from '../util/shapes';
 import { getAllEndpointLayers } from '../util/searchUtils';
-import { PREFIX_STOPS, PREFIX_TERMINALS } from '../util/path';
+import { PREFIX_TIMETABLE_SUMMARY } from '../util/path';
 import { startLocationWatch } from '../action/PositionActions';
 import PositionStore from '../store/PositionStore';
 
@@ -119,9 +118,7 @@ export class DTEndpointAutosuggestComponent extends React.Component {
     }
     // stop
     if (item.timetableClicked === true) {
-      const prefix = isStop(item.properties) ? PREFIX_STOPS : PREFIX_TERMINALS;
-
-      const url = `/${prefix}/${getGTFSId(item.properties)}`;
+      const url = `/${PREFIX_TIMETABLE_SUMMARY}/${getGTFSId(item.properties)}`;
       this.context.router.push(url);
       return;
     }

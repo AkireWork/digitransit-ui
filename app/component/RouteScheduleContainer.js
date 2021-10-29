@@ -6,7 +6,6 @@ import connectToStores from 'fluxible-addons-react/connectToStores';
 import { FormattedMessage, intlShape } from 'react-intl';
 import sortBy from 'lodash/sortBy';
 
-import { locationShape, routerShape } from 'react-router';
 import RouteScheduleHeader from './RouteScheduleHeader';
 import RouteScheduleTripRow from './RouteScheduleTripRow';
 import DateSelect from './DateSelect';
@@ -61,8 +60,6 @@ class RouteScheduleContainer extends Component {
   static contextTypes = {
     intl: intlShape.isRequired,
     config: PropTypes.object.isRequired,
-    location: locationShape.isRequired,
-    router: routerShape.isRequired,
   };
 
   static transformTrips(trips, stops) {

@@ -19,19 +19,23 @@ export default class BackButton extends React.Component {
     icon: PropTypes.string,
     className: PropTypes.string,
     color: PropTypes.string,
+    text: PropTypes.node,
+    defaultUrl: PropTypes.string,
   };
 
   static defaultProps = {
     icon: 'icon-icon_arrow-left',
     className: 'back',
     color: 'white',
+    text: null,
+    defaultUrl: '/',
   };
 
   goBack = () => {
     if (hasHistoryEntries()) {
       this.context.router.goBack();
     } else {
-      this.context.router.push('/');
+      this.context.router.push(this.props.defaultUrl);
     }
   };
 
@@ -51,6 +55,7 @@ export default class BackButton extends React.Component {
           color={this.props.color}
           className={`${this.props.className} cursor-pointer`}
         />
+        {this.props.text && <span style={{ color: this.props.color }}>&nbsp;{this.props.text}</span>}
       </button>
     );
   }

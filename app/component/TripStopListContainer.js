@@ -15,6 +15,7 @@ import withBreakpoint from '../util/withBreakpoint';
 class TripStopListContainer extends React.PureComponent {
   static propTypes = {
     trip: PropTypes.object.isRequired,
+    stopId: PropTypes.string,
     className: PropTypes.string,
     vehicles: PropTypes.object,
     locationState: PropTypes.object.isRequired,
@@ -36,12 +37,16 @@ class TripStopListContainer extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = { hasScrolled: false };
+    this.state = { hasScrolled: false, hasScrolledToStop: false };
   }
 
   componentDidMount() {
     if (this.props.breakpoint === 'large') {
       this.scrollToSelectedTailIcon();
+    }
+
+    if (!this.state.hasScrolledToStop) {
+      this.scrollToCurrentStop();
     }
   }
 
@@ -73,6 +78,7 @@ class TripStopListContainer extends React.PureComponent {
       breakpoint,
       currentTime,
       trip,
+      stopId,
       tripStart,
       vehicles: propVehicles,
     } = this.props;
@@ -111,15 +117,24 @@ class TripStopListContainer extends React.PureComponent {
     const nextStop = vehicle && `HSL:${vehicle.next_stop}`;
 
     let stopPassed = true;
+    let stopCurrent = false;
 
     return trip.stoptimesForDate.map((stoptime, index) => {
-      if (nextStop === stoptime.stop.gtfsId) {
-        stopPassed = false;
-      } else if (
-        stoptime.realtimeDeparture + stoptime.serviceDay > currentTime.unix() &&
-        isEmpty(vehicle)
-      ) {
-        stopPassed = false;
+      if (stopId) {
+        if (stopCurrent) stopCurrent = false;
+        if (stopId === stoptime.stop.gtfsId) {
+          stopCurrent = true;
+          stopPassed = false;
+        }
+      } else {
+        if (nextStop === stoptime.stop.gtfsId) {
+          stopPassed = false;
+        } else if (
+          stoptime.realtimeDeparture + stoptime.serviceDay > currentTime.unix() &&
+          isEmpty(vehicle)
+        ) {
+          stopPassed = false;
+        }
       }
 
       return (
@@ -132,6 +147,7 @@ class TripStopListContainer extends React.PureComponent {
           vehicles={vehicleStops[stoptime.stop.gtfsId]}
           selectedVehicle={vehicle}
           stopPassed={stopPassed}
+          stopCurrent={stopCurrent}
           realtime={stoptime.realtime}
           distance={
             nearest != null &&
@@ -158,6 +174,14 @@ class TripStopListContainer extends React.PureComponent {
     if (el) {
       el.scrollIntoView();
       this.setState({ hasScrolled: true });
+    }
+  };
+
+  scrollToCurrentStop = () => {
+    const el = document.getElementsByClassName('current')[0];
+    if (el) {
+      el.scrollIntoView();
+      this.setState({ hasScrolledToStop: true });
     }
   };
 

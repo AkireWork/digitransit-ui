@@ -51,6 +51,7 @@ function RouteLine(props) {
               props.pattern.stops.length - 1 && '-last'}${Math.random()}`}
             mode={modeClass + (props.thin ? ' thin' : '')}
             thin={props.thin}
+            huge={stop.gtfsId === props.highlightedStop}
             bigger
           />
         ))
@@ -96,6 +97,7 @@ RouteLine.propTypes = {
   }).isRequired,
   thin: PropTypes.bool,
   filteredStops: PropTypes.arrayOf(PropTypes.string.isRequired),
+  highlightedStop: PropTypes.string,
 };
 
 RouteLine.defaultProps = {

@@ -1,7 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Link } from 'react-router';
+import { FormattedMessage } from 'react-intl';
 import DateSelect from './DateSelect';
 import SecondaryButton from './SecondaryButton';
+import { PREFIX_TIMETABLE_SUMMARY } from '../util/path';
+import Icon from './Icon';
 
 const DATE_FORMAT = 'YYYYMMDD';
 
@@ -21,6 +25,7 @@ const StopPageActionBar = ({
   startDate,
   selectedDate,
   onDateChange,
+  stop,
 }) => (
   <div id="stop-page-action-bar">
     <DateSelect
@@ -29,23 +34,36 @@ const StopPageActionBar = ({
       dateFormat={DATE_FORMAT}
       onDateChange={onDateChange}
     />
-    <div className="print-button-container">
-      {stopPDFURL && (
+    <div className="button-container">
+      <div className="timetable-summary-button">
+        <Link to={`/${PREFIX_TIMETABLE_SUMMARY}/${stop.gtfsId}`}>
+          <Icon img="icon-icon_schedule" />
+          <div className="timetable-summary-button-label">
+            <FormattedMessage
+              id="timetable-summary"
+              defaultMessage="Timetable Summary"
+            />
+          </div>
+        </Link>
+      </div>
+      <div className="print-button-container">
+        {stopPDFURL && (
+          <SecondaryButton
+            ariaLabel="print-timetable"
+            buttonName="print-timetable"
+            buttonClickAction={e => printStopPDF(e, stopPDFURL)}
+            buttonIcon="icon-icon_print"
+            smallSize
+          />
+        )}
         <SecondaryButton
-          ariaLabel="print-timetable"
-          buttonName="print-timetable"
-          buttonClickAction={e => printStopPDF(e, stopPDFURL)}
+          ariaLabel="print"
+          buttonName="print"
+          buttonClickAction={e => printStop(e)}
           buttonIcon="icon-icon_print"
           smallSize
         />
-      )}
-      <SecondaryButton
-        ariaLabel="print"
-        buttonName="print"
-        buttonClickAction={e => printStop(e)}
-        buttonIcon="icon-icon_print"
-        smallSize
-      />
+      </div>
     </div>
   </div>
 );
@@ -57,6 +75,7 @@ StopPageActionBar.propTypes = {
   selectedDate: PropTypes.string,
   onDateChange: PropTypes.func,
   stopPDFURL: PropTypes.string,
+  stop: PropTypes.object,
 };
 
 export default StopPageActionBar;
