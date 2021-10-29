@@ -10,6 +10,12 @@ import { getLabel } from '../util/suggestionUtils';
 import { dtLocationShape } from '../util/shapes';
 import Icon from './Icon';
 
+const AutosuggestTab = {
+  stops: 'stops',
+  spots: 'spots',
+  routes: 'routes',
+};
+
 class DTAutosuggest extends React.Component {
   static contextTypes = {
     config: PropTypes.object.isRequired,
@@ -50,6 +56,9 @@ class DTAutosuggest extends React.Component {
       suggestions: [],
       editing: false,
       valid: true,
+      stopsActive: true,
+      spotsActive: false,
+      routesActive: false
     };
   }
 
@@ -175,7 +184,7 @@ class DTAutosuggest extends React.Component {
             return;
           }
           // XXX translates current location
-          const suggestions = (searchResult.results || []).map(suggestion => {
+          let suggestions = (searchResult.results || []).map(suggestion => {
             if (suggestion.type === 'CurrentLocation') {
               const translated = { ...suggestion };
               translated.properties.labelId = this.context.intl.formatMessage({
@@ -185,6 +194,12 @@ class DTAutosuggest extends React.Component {
               return translated;
             }
             return suggestion;
+          });
+
+          suggestions = suggestions.filter(suggestion => {
+            return ((this.state.stopsActive && (isStop(suggestion.properties) || isTerminal(suggestion.properties))) ||
+                (this.state.spotsActive && isLocation(suggestion.properties)) ||
+                (this.state.routesActive && !(isStop(suggestion.properties) || isTerminal(suggestion.properties)) && !isLocation(suggestion.properties)))
           });
 
           if (
@@ -252,6 +267,64 @@ class DTAutosuggest extends React.Component {
     />
   );
 
+  renderSuggestionsContainer = ({ containerProps, children, query }) => (
+      <div {...containerProps}>
+        {this.state.editing && (
+            <div className="tabs route-tabs">
+              <nav className="tabs-navigation">
+                <a
+                    className={ this.state.stopsActive ? 'is-active' : null }
+                    onClick={() => {
+                      this.changeTab(AutosuggestTab.stops, query);
+                    }}
+                >
+                  <div>
+                    <Icon img="icon-icon_bus-stop" />
+                    <FormattedMessage id="stops" defaultMessage="Stops" />
+                  </div>
+                </a>
+                <a
+                    className={ this.state.spotsActive ? 'is-active' : null }
+                    onClick={() => {
+                      this.changeTab(AutosuggestTab.spots, query);
+                    }}
+                >
+                  <div>
+                    <Icon img="icon-icon_place" />
+                    <FormattedMessage id="spots" defaultMessage="Locations" />
+                  </div>
+                </a>
+                <a
+                    className={ this.state.routesActive ? 'is-active' : null }
+                    onClick={() => {
+                      this.changeTab(AutosuggestTab.routes, query);
+                    }}
+                >
+                  <div>
+                    <Icon img="icon-icon_bus" />
+                    <FormattedMessage id="routes" defaultMessage="Routes"/>
+                  </div>
+                </a>
+              </nav>
+            </div>
+        )}
+        {children}
+      </div>
+  );
+
+  changeTab = (tab, query) => {
+    this.setState({
+      stopsActive: tab === AutosuggestTab.stops
+    });
+    this.setState({
+      spotsActive: tab === AutosuggestTab.spots
+    });
+    this.setState({
+      routesActive: tab === AutosuggestTab.routes
+    });
+    this.fetchFunction({ value: query });
+  };
+
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
@@ -288,6 +361,7 @@ class DTAutosuggest extends React.Component {
               {this.clearButton()}
             </div>
           )}
+          renderSuggestionsContainer={this.renderSuggestionsContainer}
           onSuggestionSelected={this.onSelected}
           highlightFirstSuggestion
           ref={this.storeInputReference}
