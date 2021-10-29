@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
-import { intlShape } from 'react-intl';
+import {FormattedMessage, intlShape } from 'react-intl';
 import Autosuggest from 'react-autosuggest';
 import isEqual from 'lodash/isEqual';
 import { executeSearch, getAllEndpointLayers } from '../util/searchUtils';
 import SuggestionItem from './SuggestionItem';
-import { getLabel } from '../util/suggestionUtils';
+import { getLabel, isLocation, isStop, isTerminal} from '../util/suggestionUtils';
 import { dtLocationShape } from '../util/shapes';
 import Icon from './Icon';
 
