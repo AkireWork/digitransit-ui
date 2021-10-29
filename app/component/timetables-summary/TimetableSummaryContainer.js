@@ -37,15 +37,10 @@ class TimetableSummaryContainer extends Component {
       selection => selection.type === 'urban-lines',
     );
     const cityPatterns = props.stop.patterns.filter(pattern =>
-      urbanLines.areas.find(area =>
-        area.competent_authority.includes(pattern.route.competentAuthority),
-      ),
+      urbanLines.route_colors.find(color => color === `#${pattern.route.color}`),
     );
-    const otherPatterns = props.stop.patterns.filter(
-      pattern =>
-        !urbanLines.areas.find(area =>
-          area.competent_authority.includes(pattern.route.competentAuthority),
-        ),
+    const otherPatterns = props.stop.patterns.filter(pattern =>
+      !urbanLines.route_colors.find(color => color === `#${pattern.route.color}`)
     );
 
     this.state = {

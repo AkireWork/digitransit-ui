@@ -8,6 +8,9 @@ import cx from "classnames";
 import {Link} from "react-router";
 import {PREFIX_ROUTES} from "../../util/path";
 import {FormattedMessage} from "react-intl";
+import sum from "lodash/sum";
+
+const PRINTOUT_COLUMN_ROW_COUNT_LIMIT = 55;
 
 class TimetableSummaryUrbanLineCard extends Component {
 
@@ -34,6 +37,7 @@ class TimetableSummaryUrbanLineCard extends Component {
       selectedPattern: this.state.patterns.find(
         pattern => pattern.id === patternId,
       ),
+      selectedGroup: undefined,
     });
   };
 
@@ -72,17 +76,26 @@ class TimetableSummaryUrbanLineCard extends Component {
     const weekdayGroups = selectedPattern.trip.tripTimesWeekdaysGroups.filter(group => patternTimesByGroup[group].hours.length > 0);
     const selectedPatternGroup = selectedGroup || weekdayGroups[0];
     const key = `${selectedPattern.id}-${validFrom}`;
-
+    let totalRowCount = 0;
     return (
       <>
         {this.renderPatternTimeGroupTabs(key, weekdayGroups, selectedPatternGroup)}
-        {weekdayGroups.map(group => (
-        <div key={key} className={cx('timetable-summary-urban-group', {'selected': group === selectedPatternGroup})}>
-          {this.renderPatternTimeGroupLabel(group)}
-          {this.renderPatternTimeGroup(selectedPattern, patternTimesByGroup[group])}
-          <br />
-        </div>
-        ))}
+        {weekdayGroups.map(group => {
+          let hasAdditionalMargin = false;
+          let groupRowCount = 2 + patternTimesByGroup[group].hours.length + sum(patternTimesByGroup[group].hours.map(hour => patternTimesByGroup[group][hour].length > 6 ? 1 : 0));
+          totalRowCount += groupRowCount;
+          if (totalRowCount > PRINTOUT_COLUMN_ROW_COUNT_LIMIT) {
+            hasAdditionalMargin = true;
+            totalRowCount = groupRowCount;
+          }
+          return (
+            <div key={key} className={cx('timetable-summary-urban-group', {'selected': group === selectedPatternGroup}, {'with-additional-margin': hasAdditionalMargin})}>
+              {this.renderPatternTimeGroupLabel(group)}
+              {this.renderPatternTimeGroup(selectedPattern, patternTimesByGroup[group])}
+              <br />
+            </div>
+          )
+        })}
       </>
     );
   }
