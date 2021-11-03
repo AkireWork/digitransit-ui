@@ -517,7 +517,7 @@ function getRoutes(input, config) {
         .map(mapRoute)
         .sort((x, y) => routeNameCompare(x.properties, y.properties)),
     )
-    .then(suggestions => take(suggestions, 10));
+    .then(suggestions => take(suggestions, 50));
 }
 
 export const getAllEndpointLayers = () => [
