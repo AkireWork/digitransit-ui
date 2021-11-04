@@ -6,7 +6,7 @@ import Autosuggest from 'react-autosuggest';
 import isEqual from 'lodash/isEqual';
 import { executeSearch, getAllEndpointLayers } from '../util/searchUtils';
 import SuggestionItem from './SuggestionItem';
-import { getLabel, isLocation, isStop, isTerminal} from '../util/suggestionUtils';
+import {getLabel, isLocation, isRoute, isStop, isTerminal} from '../util/suggestionUtils';
 import { dtLocationShape } from '../util/shapes';
 import Icon from './Icon';
 
@@ -197,9 +197,13 @@ class DTAutosuggest extends React.Component {
           });
 
           suggestions = suggestions.filter(suggestion => {
-            return ((this.state.stopsActive && (isStop(suggestion.properties) || isTerminal(suggestion.properties))) ||
-                (this.state.spotsActive && isLocation(suggestion.properties)) ||
-                (this.state.routesActive && !(isStop(suggestion.properties) || isTerminal(suggestion.properties)) && !isLocation(suggestion.properties)))
+            if (this.state.stopsActive) {
+              return isStop(suggestion.properties) || isTerminal(suggestion.properties);
+            } else if (this.state.spotsActive) {
+              return isLocation(suggestion.properties);
+            } else if (this.state.routesActive) {
+              return isRoute(suggestion.properties);
+            } else return false;
           });
 
           if (
