@@ -33,6 +33,10 @@ export default Relay.createContainer(Timetable, {
             serviceDay
             headsign
             pickupType
+            trip {
+              id
+              tripLongName
+            }
           }
         }
       }

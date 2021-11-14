@@ -79,7 +79,10 @@ const SuggestionItem = pure(
             >
               <Icon img="icon-icon_schedule" />
               <div className="suggestion-item-timetable-label">
-                <FormattedMessage id="timetable-summary" defaultMessage="Timetable Summary" />
+                <FormattedMessage
+                  id="timetable-summary"
+                  defaultMessage="Timetable Summary"
+                />
               </div>
             </Link>
           </div>
