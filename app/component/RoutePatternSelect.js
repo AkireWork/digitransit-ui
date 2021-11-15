@@ -66,7 +66,7 @@ class RoutePatternSelect extends Component {
     const options = sortBy(patterns, 'code').map(pattern => {
       return (
         <option key={pattern.code} value={pattern.code}>
-          {pattern.trips[0].tripLongName}
+          {pattern.trips[0].tripLongName + ' ' + pattern.patternTimetable[0].validity.validFrom }
         </option>
       );
     });
@@ -179,6 +179,7 @@ const withStore = connectToStores(
   Relay.createContainer(RoutePatternSelect, {
     initialVariables: {
       serviceDay: moment().format(DATE_FORMAT),
+      stopId: null,
     },
     fragments: {
       route: () => Relay.QL`
@@ -196,6 +197,13 @@ const withStore = connectToStores(
             gtfsId
             tripHeadsign
             tripLongName
+          }
+          
+          patternTimetable (stopId: $stopId) {
+            validity {
+              validFrom
+              validTill
+            }
           }
           tripsForDate(serviceDay: $serviceDay) {
             id

@@ -38,6 +38,9 @@ class Timetable extends React.Component {
               realtimeState: PropTypes.string.isRequired,
               scheduledDeparture: PropTypes.number.isRequired,
               serviceDay: PropTypes.number.isRequired,
+              trip: PropTypes.shape({
+                tripLongName: PropTypes.string,
+              }).isRequired,
             }),
           ).isRequired,
         }),
@@ -125,7 +128,7 @@ class Timetable extends React.Component {
           scheduledDeparture: st.scheduledDeparture,
           serviceDay: st.serviceDay,
           headsign: stoptime.pattern.headsign,
-          longName: stoptime.pattern.route.longName,
+          longName: st.trip.tripLongName,
           isCanceled: st.realtimeState === RealtimeStateType.Canceled,
           gtfsId: stoptime.pattern.route.gtfsId,
         })),
@@ -161,7 +164,7 @@ class Timetable extends React.Component {
       >
         <TimetableRow
           key={`${route.name}:${route.serviceDay}-${route.scheduledDeparture}`}
-          title={route.name}
+          title={route.longName}
           route={route}
           showRoutes={this.state.showRoutes}
         />
