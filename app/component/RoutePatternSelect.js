@@ -49,7 +49,7 @@ class RoutePatternSelect extends Component {
   };
 
   getOptions = () => {
-    const { activeTab, gtfsId, params, route } = this.props;
+    const { activeTab, gtfsId, params, route, serviceDay } = this.props;
     const { router } = this.context;
 
     const patterns =
@@ -64,9 +64,24 @@ class RoutePatternSelect extends Component {
     }
 
     const options = sortBy(patterns, 'code').map(pattern => {
+      if (
+        activeTab === 'aikataulu' &&
+        pattern.patternTimetable &&
+        pattern.patternTimetable.some(patterntimetable =>
+          moment(patterntimetable.validity.validFrom, 'DD.MM.YYYY').isAfter(
+            moment(serviceDay),
+          ),
+        )
+      ) {
+        return (
+          <option key={pattern.code} value={pattern.code}>
+            {`${pattern.trips[0].tripLongName} (${pattern.patternTimetable[0].validity.validFrom})`}
+          </option>
+        );
+      }
       return (
         <option key={pattern.code} value={pattern.code}>
-          {pattern.trips[0].tripLongName + ' ' + pattern.patternTimetable[0].validity.validFrom }
+          {pattern.trips[0].tripLongName}
         </option>
       );
     });
