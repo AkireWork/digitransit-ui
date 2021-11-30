@@ -653,7 +653,7 @@ export const sortSearchResults = (config, results, term = '') => {
           return Math.min(
             getLayerRank(layer, source) +
               match(normalizedTerm, result.properties),
-            0.99,
+            1,
           );
         }
 
