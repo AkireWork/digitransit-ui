@@ -60,7 +60,7 @@ export default {
   name: 'Digitransit beta',
   shortName: 'Digitransit',
 
-  searchParams: { size: 20 },
+  searchParams: { size: 40 },
   feedIds: ['estonia', 'elron'],
 
   defaultMapCenter: {
