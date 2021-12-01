@@ -2,7 +2,8 @@
   display: none;
 
   @media print {
-    display: inline;
+    display: block;
+    margin-bottom: 20px;
   }
 }
 
@@ -35,15 +36,6 @@
 
     @media print {
       display: block;
-      column-count: 2;
-      -webkit-column-count: 2;
-      -moz-column-count: 2;
-    }
-
-    > .columns {
-      @media print {
-        float: none !important;
-      }
     }
   }
 
@@ -54,6 +46,12 @@
 
     div.map {
       min-height: 15em;
+    }
+  }
+
+  .departure-list-header {
+    .route-number-header {
+      width: 55px;
     }
   }
 
@@ -71,6 +69,10 @@
         margin-right: $padding-medium;
       }
       .route-number {
+        width: 5em;
+      }
+
+      .vehicle-number {
         width: 4em;
       }
 
@@ -112,19 +114,62 @@
   }
 }
 
+.page-break {
+  @media print {
+    height: 1px;
+    page-break-after: always;
+    float: none !important;
+    display: block;
+  }
+}
+
 .timetable-summary-urban {
   display: none;
+  margin-bottom: 20px;
 
   &.selected {
     display: block;
+
+    @media print {
+      display: inline-block;
+    }
   }
 
   @media print {
-    display: block;
-    font-size: 75%;
-    -webkit-column-break-inside: avoid;
-    page-break-inside: avoid;
-    break-inside: avoid;
+    display: inline-block;
+    float: left !important;
+    width: 50% !important;
+
+    &.after-page-break {
+      clear: left;
+    }
+
+    &.print-full-screen {
+      clear: left;
+      width: 100% !important;
+
+      .timetable-summary-route-number {
+        width: 25%;
+      }
+
+      .timetable-summary-stop-list-container {
+        width: 25%;
+      }
+
+      .route-pattern-select {
+        width: 75%;
+      }
+
+      .timetable-summary-time-groups {
+        width: 75%;
+
+        .timetable-summary-urban-group {
+          width: 33%;
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+      }
+    }
   }
 
   .pattern-select-label {
@@ -138,6 +183,8 @@
 
     @media print {
       display: inline;
+      font-weight: 700;
+      font-size: $font-size-medium-large;
     }
   }
 
@@ -256,14 +303,6 @@
       display: block;
       padding-right: 5px;
       padding-left: 5px;
-
-      -webkit-column-break-inside: avoid;
-      page-break-inside: avoid;
-      break-inside: avoid;
-
-      &.with-additional-margin {
-        margin-top: 110px;
-      }
     }
 
     .timetable-summary-urban-group-label {
@@ -317,7 +356,7 @@
 
   .route-pattern-select {
     padding-left: 20px;
-    margin-top: 20px;
+    margin-top: 0;
     overflow: hidden;
 
     @media print {
@@ -343,8 +382,12 @@
       flex: 1;
       width: auto;
       font-size: 40px;
-      margin-top: 20px;
+      margin-top: 0;
       margin-left: 10px;
+
+      @media print {
+        font-size: 32px;
+      }
 
       .icon {
         font-size: 48px;
@@ -357,9 +400,23 @@
     }
   }
 
+  .timetable-summary-time-groups {
+    p {
+      overflow-wrap: break-word;
+    }
+
+    @media print {
+      font-size: 75%;
+    }
+  }
+
   .timetable-summary-stop-list-container {
     -webkit-print-color-adjust: exact !important;   /* Chrome, Safari, Edge */
     color-adjust: exact !important;                 /*Firefox*/
+
+    @media print {
+      font-size: 75%;
+    }
 
     .timetable-summary-stop-list {
       margin-left: 10px;

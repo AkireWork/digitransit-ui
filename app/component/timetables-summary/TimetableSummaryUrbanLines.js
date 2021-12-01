@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
+import connectToStores from 'fluxible-addons-react/connectToStores';
+import moment from 'moment';
 import TimetableSummaryUrbanLineCard from './TimetableSummaryUrbanLineCard';
-import connectToStores from "fluxible-addons-react/connectToStores";
-import moment from "moment";
-import SecondaryButton from "../SecondaryButton";
+import SecondaryButton from '../SecondaryButton';
+import { isPatternFullScreenForPrint } from '../../util/patternUtils';
 
 const WEEKDAYS = 'ETKNRLP';
 
@@ -16,44 +17,9 @@ class TimetableSummaryUrbanLines extends Component {
     currentTime: PropTypes.any.isRequired,
   };
 
-  utcTime = timestamp => {
-    return moment(timestamp * 1000).utc();
-  };
-
-  splitWeekdays = weekdays => {
-    if (weekdays.indexOf('-') > -1) {
-      const start = WEEKDAYS.indexOf(weekdays[0]);
-      const end = WEEKDAYS.indexOf(weekdays[2]);
-      const weekdaysArray = [];
-      for (let i = start; i <= end; i++) {
-        weekdaysArray.push(WEEKDAYS[i]);
-      }
-      weekdays = weekdaysArray.join(',');
-    }
-
-    return weekdays;
-  };
-
-  weekdaysInGroup = (weekdays, group) => {
-    return this.splitWeekdays(weekdays).includes(this.splitWeekdays(group));
-  };
-
-  compareValidFroms = (a, b) => {
-    const { currentTime } = this.props;
-    const aValidFrom = a.validFrom === 'CURRENT' ? currentTime : moment(a.validFrom, 'DD.MM.YYYY').unix();
-    const bValidFrom = b.validFrom === 'CURRENT' ? currentTime : moment(b.validFrom, 'DD.MM.YYYY').unix();
-
-    return aValidFrom - bValidFrom;
-  };
-
-  printItinerary = e => {
-    e.stopPropagation();
-
-    window.print();
-  };
-
-  render() {
-    const { stop, patterns, breakpoint, currentTime } = this.props;
+  constructor(props) {
+    super(props);
+    const { patterns, currentTime } = props;
     const sortedPatterns = patterns.sort((a, b) => {
       const shortNameCompare = a.route.shortName.localeCompare(b.route.shortName);
       const stopTimesCountCompare = a.patternTimetable.length > b.patternTimetable.length ? -1 : 1;
@@ -87,7 +53,7 @@ class TimetableSummaryUrbanLines extends Component {
 
           let timetableData = validityPeriod.timetableData.find(data => data.pattern.id === pattern.id);
           if (!timetableData) {
-            let patternTimesByGroup = {};
+            const patternTimesByGroup = {};
             pattern.trip.tripTimesWeekdaysGroups
               .sort((a, b) => WEEKDAYS.indexOf(a.charAt(0)) - WEEKDAYS.indexOf(b.charAt(0)))
               .forEach(group => {
@@ -128,6 +94,62 @@ class TimetableSummaryUrbanLines extends Component {
       });
     });
 
+    Object.keys(routesWithValidity).forEach(routeId => {
+      routesWithValidity[routeId].validPeriods = routesWithValidity[routeId].validPeriods
+        .sort((a, b) => this.compareValidFroms(a, b));
+    });
+
+    this.state = {
+      routesWithValidity,
+    };
+  }
+
+  utcTime = timestamp => {
+    return moment(timestamp * 1000).utc();
+  };
+
+  splitWeekdays = weekdays => {
+    if (weekdays.indexOf('-') > -1) {
+      const start = WEEKDAYS.indexOf(weekdays[0]);
+      const end = WEEKDAYS.indexOf(weekdays[2]);
+      const weekdaysArray = [];
+      for (let i = start; i <= end; i++) {
+        weekdaysArray.push(WEEKDAYS[i]);
+      }
+      weekdays = weekdaysArray.join(',');
+    }
+
+    return weekdays;
+  };
+
+  weekdaysInGroup = (weekdays, group) => {
+    return this.splitWeekdays(weekdays).includes(this.splitWeekdays(group));
+  };
+
+  compareValidFroms = (a, b) => {
+    const { currentTime } = this.props;
+    const aValidFrom =
+      a.validFrom === 'CURRENT'
+        ? currentTime
+        : moment(a.validFrom, 'DD.MM.YYYY').unix();
+    const bValidFrom =
+      b.validFrom === 'CURRENT'
+        ? currentTime
+        : moment(b.validFrom, 'DD.MM.YYYY').unix();
+
+    return aValidFrom - bValidFrom;
+  };
+
+  printItinerary = e => {
+    e.stopPropagation();
+
+    window.print();
+  };
+
+  render() {
+    const { stop, breakpoint } = this.props;
+    const { routesWithValidity } = this.state;
+    let numberOfColumns = 0;
     return (
       <>
         <div className="print-button-container padding-vertical-small">
@@ -140,18 +162,33 @@ class TimetableSummaryUrbanLines extends Component {
           />
         </div>
         <div className="row no-padding no-margin timetable-summary-urban-cards">
-          {Object.keys(routesWithValidity)
-            .map(routeId => routesWithValidity[routeId].validPeriods.sort((a, b) => this.compareValidFroms(a, b))
-              .map(period => (
-                <div className="columns large-4 medium-6 small-12" key={routeId + period.validFrom}>
-                  <TimetableSummaryUrbanLineCard
-                    stop={stop}
-                    validFrom={period.validFrom !== 'CURRENT' && period.validFrom}
-                    data={period.timetableData}
-                    breakpoint={breakpoint}
-                  />
-                </div>
-              )))}
+          {Object.keys(routesWithValidity).map((routeId, routeIndex) =>
+            routesWithValidity[routeId].validPeriods.map(period => {
+              const card = (
+                <TimetableSummaryUrbanLineCard
+                  numberOfColumns={numberOfColumns}
+                  key={`urban-card-${routeIndex}-${period.validFrom}`}
+                  stop={stop}
+                  validFrom={period.validFrom !== 'CURRENT' && period.validFrom}
+                  data={period.timetableData}
+                  breakpoint={breakpoint}
+                />
+              );
+
+              period.timetableData.forEach(data => {
+                const isFullScreenForPrint = isPatternFullScreenForPrint(
+                  data.pattern,
+                  data.times,
+                );
+                if (isFullScreenForPrint && numberOfColumns % 2 === 1) {
+                  numberOfColumns += 1;
+                }
+                numberOfColumns += isFullScreenForPrint ? 2 : 1;
+              });
+
+              return card;
+            }),
+          )}
         </div>
       </>
     );

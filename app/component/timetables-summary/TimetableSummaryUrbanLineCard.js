@@ -1,20 +1,18 @@
 import PropTypes from 'prop-types';
 /* eslint-disable react/no-array-index-key */
-import React, {Component} from 'react';
-import RouteNumber from "../RouteNumber";
-import Icon from "../Icon";
-import TimetableSummaryStopList from "./TimetableSummaryStopList";
-import cx from "classnames";
-import {Link} from "react-router";
-import {PREFIX_ROUTES} from "../../util/path";
-import {FormattedMessage} from "react-intl";
-import sum from "lodash/sum";
-
-const PRINTOUT_COLUMN_ROW_COUNT_LIMIT = 55;
+import React, { Component } from 'react';
+import cx from 'classnames';
+import { Link } from 'react-router';
+import { FormattedMessage } from 'react-intl';
+import RouteNumber from '../RouteNumber';
+import Icon from '../Icon';
+import TimetableSummaryStopList from './TimetableSummaryStopList';
+import { PREFIX_ROUTES } from '../../util/path';
+import { isPatternFullScreenForPrint } from '../../util/patternUtils';
 
 class TimetableSummaryUrbanLineCard extends Component {
-
   static propTypes = {
+    numberOfColumns: PropTypes.number.isRequired,
     stop: PropTypes.any.isRequired,
     validFrom: PropTypes.any,
     data: PropTypes.any.isRequired,
@@ -51,12 +49,14 @@ class TimetableSummaryUrbanLineCard extends Component {
             <>
               <Icon img="icon-icon_arrow-dropdown" />
               <select
-                id={`pattern-select-${selectedPattern.route.id}`}
+                id={`pattern-select-${selectedPattern.id}`}
                 onChange={e => this.onChangePattern(e.target.value)}
                 value={selectedPattern.id}
               >
                 {patterns.map(pattern => (
-                  <option key={`${pattern.id}`} value={pattern.id}>{pattern.trip.tripLongName}</option>
+                  <option key={`${pattern.id}`} value={pattern.id}>
+                    {pattern.trip.tripLongName}
+                  </option>
                 ))}
               </select>
             </>
@@ -64,7 +64,9 @@ class TimetableSummaryUrbanLineCard extends Component {
             <span>{patterns[0].trip.tripLongName}</span>
           )}
         </span>
-        <span className="pattern-select-print-label">{selectedPattern.trip.tripLongName}</span>
+        <span className="pattern-select-print-label">
+          {selectedPattern.trip.tripLongName}
+        </span>
       </>
     );
   }
@@ -72,29 +74,37 @@ class TimetableSummaryUrbanLineCard extends Component {
   renderPatternTimeGroups(selectedPattern) {
     const { data, validFrom } = this.props;
     const { selectedGroup } = this.state;
-    const patternTimesByGroup = data.find(d => d.pattern.id === selectedPattern.id).times;
-    const weekdayGroups = selectedPattern.trip.tripTimesWeekdaysGroups.filter(group => patternTimesByGroup[group].hours.length > 0);
+    const patternTimesByGroup = data.find(
+      d => d.pattern.id === selectedPattern.id,
+    ).times;
+    const weekdayGroups = selectedPattern.trip.tripTimesWeekdaysGroups.filter(
+      group => patternTimesByGroup[group].hours.length > 0,
+    );
     const selectedPatternGroup = selectedGroup || weekdayGroups[0];
-    const key = `${selectedPattern.id}-${validFrom}`;
-    let totalRowCount = 0;
+    const key = `group-${selectedPattern.id}-${validFrom}`;
     return (
       <>
-        {this.renderPatternTimeGroupTabs(key, weekdayGroups, selectedPatternGroup)}
+        {this.renderPatternTimeGroupTabs(
+          key,
+          weekdayGroups,
+          selectedPatternGroup,
+        )}
         {weekdayGroups.map(group => {
-          let hasAdditionalMargin = false;
-          let groupRowCount = 2 + patternTimesByGroup[group].hours.length + sum(patternTimesByGroup[group].hours.map(hour => patternTimesByGroup[group][hour].length > 6 ? 1 : 0));
-          totalRowCount += groupRowCount;
-          if (totalRowCount > PRINTOUT_COLUMN_ROW_COUNT_LIMIT) {
-            hasAdditionalMargin = true;
-            totalRowCount = groupRowCount;
-          }
           return (
-            <div key={key} className={cx('timetable-summary-urban-group', {'selected': group === selectedPatternGroup}, {'with-additional-margin': hasAdditionalMargin})}>
+            <div
+              key={`${key}-${group}`}
+              className={cx('timetable-summary-urban-group', {
+                selected: group === selectedPatternGroup,
+              })}
+            >
               {this.renderPatternTimeGroupLabel(group)}
-              {this.renderPatternTimeGroup(selectedPattern, patternTimesByGroup[group])}
+              {this.renderPatternTimeGroup(
+                selectedPattern,
+                patternTimesByGroup[group],
+              )}
               <br />
             </div>
-          )
+          );
         })}
       </>
     );
@@ -113,7 +123,8 @@ class TimetableSummaryUrbanLineCard extends Component {
       <div className="tabs group-tabs">
         <nav className="tabs-navigation">
           {weekdayGroups.map(group => (
-            <a key={`${key}-${group}`}
+            <a
+              key={`tab-${key}-${group}`}
               className={cx({
                 'is-active': group === selectedPatternGroup,
               })}
@@ -137,13 +148,23 @@ class TimetableSummaryUrbanLineCard extends Component {
 
   renderPatternTimeGroup(selectedPattern, patternTimeGroup) {
     return patternTimeGroup.hours.map(hour => (
-      <div key={`${selectedPattern.id}-${hour}`} className="timetable-summary-urban-group-row row">
-        <div className="columns timetable-summary-urban-group-hours">{hour}</div>
+      <div
+        key={`group-row-hour-${selectedPattern.id}-${hour}`}
+        className="timetable-summary-urban-group-row row"
+      >
+        <div className="columns timetable-summary-urban-group-hours">
+          {hour}
+        </div>
         <div className="columns timetable-summary-urban-group-minutes">
           {patternTimeGroup[hour].map(trip => (
-            <span>
-              <Link to={`/${PREFIX_ROUTES}/${trip.route.gtfsId}/pysakit/${trip.code}/${trip.gtfsId}/${this.props.stop.gtfsId}`}
-                    key={`${selectedPattern.id}-${hour}-${trip.minutes}`}>{trip.minutes}</Link>
+            <span
+              key={`group-row-hour-links-${selectedPattern.id}-${hour}-${trip.minutes}`}
+            >
+              <Link
+                to={`/${PREFIX_ROUTES}/${trip.route.gtfsId}/pysakit/${trip.code}/${trip.gtfsId}/${this.props.stop.gtfsId}`}
+              >
+                {trip.minutes}
+              </Link>
             </span>
           ))}
         </div>
@@ -152,46 +173,97 @@ class TimetableSummaryUrbanLineCard extends Component {
   }
 
   render() {
-    const { stop, breakpoint, validFrom } = this.props;
+    const { data, numberOfColumns, stop, breakpoint, validFrom } = this.props;
     const { patterns, selectedPattern } = this.state;
+    let columnCount = numberOfColumns;
+    const output = [];
+    patterns.forEach(pattern => {
+      const patternTimesByGroup = data.find(d => d.pattern.id === pattern.id)
+        .times;
+      const isFirstCard = columnCount === 0;
+      const isCurrentCardFullScreenForPrint = isPatternFullScreenForPrint(
+        pattern,
+        patternTimesByGroup,
+      );
+      const isPageFull = !isFirstCard && columnCount % 2 === 0;
+      const shouldRenderPageBreak =
+        (!isFirstCard && isCurrentCardFullScreenForPrint) || isPageFull;
 
-    return patterns.map(pattern => (
-      <div className={cx('timetable-summary-urban', { selected: pattern.id === selectedPattern.id})}>
-        <div className="row padding-vertical-normal" style={{position: 'relative'}}>
-          <div className="columns large-6 timetable-summary-route-number">
-            <RouteNumber
-              color={pattern.route.color ? `#${pattern.route.color}` : null}
-              mode={pattern.route.mode}
-              text={pattern.route.shortName}
-            />
-          </div>
-          <div className="route-pattern-select columns large-6 medium-12">
-            {this.renderPatternSelect(pattern)}
-          </div>
-        </div>
-        {validFrom && <div className="route-pattern-valid-from">
-          <FormattedMessage id="valid-from" defaultMessage="(from {validFrom})"
-                            values={{ validFrom }} />
-        </div>}
-        <div className="row padding-vertical-normal">
-          <div className="columns small-6 timetable-summary-stop-list-container">
-            {breakpoint === 'large' &&
-              <TimetableSummaryStopList
-                currentStop={stop}
-                stops={pattern.stops}
-                route={pattern.route}
+      if (isCurrentCardFullScreenForPrint && columnCount % 2 === 1) {
+        columnCount += 1;
+      }
+
+      columnCount += isCurrentCardFullScreenForPrint ? 2 : 1;
+
+      if (shouldRenderPageBreak) {
+        output.push(<div className="page-break" />);
+      }
+
+      output.push(
+        <div
+          key={`timetable-summary-urban-${pattern.id}}`}
+          className={cx(
+            'timetable-summary-urban columns large-4 medium-6 small-12',
+            {
+              selected: pattern.id === selectedPattern.id,
+              'print-full-screen': isCurrentCardFullScreenForPrint,
+              'after-page-break': shouldRenderPageBreak,
+            },
+          )}
+        >
+          <div className="row" style={{ position: 'relative' }}>
+            <div className="columns large-6 timetable-summary-route-number">
+              <RouteNumber
+                color={pattern.route.color ? `#${pattern.route.color}` : null}
+                mode={pattern.route.mode}
+                text={pattern.route.shortName}
               />
-            }
+            </div>
+            <div className="route-pattern-select columns large-6 medium-12">
+              {this.renderPatternSelect(pattern)}
+            </div>
           </div>
-          <div className={cx('columns', 'timetable-summary-time-groups', breakpoint === 'large' ? 'small-6' : 'small-12')}>
-            {this.renderPatternTimeGroups(pattern)}
-            {pattern.route.desc &&
-              <div>{pattern.route.desc.split('<br>').map((line, index) => <p key={index}>{line}</p>)}</div>
-            }
+          {validFrom && (
+            <div className="route-pattern-valid-from">
+              <FormattedMessage
+                id="valid-from"
+                defaultMessage="(from {validFrom})"
+                values={{ validFrom }}
+              />
+            </div>
+          )}
+          <div className="row padding-vertical-normal">
+            <div className="columns small-6 timetable-summary-stop-list-container">
+              {breakpoint === 'large' && (
+                <TimetableSummaryStopList
+                  currentStop={stop}
+                  stops={pattern.stops}
+                  route={pattern.route}
+                />
+              )}
+            </div>
+            <div
+              className={cx(
+                'columns',
+                'timetable-summary-time-groups',
+                breakpoint === 'large' ? 'small-6' : 'small-12',
+              )}
+            >
+              {this.renderPatternTimeGroups(pattern)}
+              {pattern.route.desc && (
+                <div className="route-desc">
+                  {pattern.route.desc.split('<br>').map((line, index) => (
+                    <p key={index}>{line}</p>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      </div>
-    ));
+        </div>,
+      );
+    });
+
+    return output;
   }
 }
 

@@ -14,7 +14,7 @@ const TimetableSummaryStopList = ({ currentStop, stops, route }, { config }) => 
   let currentStopIndex = -1;
 
   stops.forEach((stop, index) => {
-    if (currentStop.gtfsId === stop.gtfsId) {
+    if (currentStop.gtfsId === stop.gtfsId && !isStopReached) {
       isStopReached = true;
       currentStopIndex = index;
     }
@@ -74,11 +74,11 @@ const TimetableSummaryStopList = ({ currentStop, stops, route }, { config }) => 
             {index !== array.length - 1 && (
               <div
                 className={cx('timetable-summary-stop_line', mode)}
-                style={{ backgroundColor: data.color }}
+                style={{ backgroundColor: `${data.color}` }}
               />
             )}
           </div>
-          <div className={`timetable-summary-title ${mode}`} style={{ color: data.color }}>
+          <div className={`timetable-summary-title ${mode}`} style={{ color: `${data.color}` }}>
             <div>
               <span>{data.stopName}</span>
             </div>
