@@ -101,6 +101,9 @@ class TimetableSummaryContainer extends Component {
   render() {
     const { stop, breakpoint, params } = this.props;
     const { activeTab, cityPatterns, otherPatterns } = this.state;
+    const shouldRenderTabs = otherPatterns.length > 0 && cityPatterns.length > 0;
+    const shouldRenderCountyLines = otherPatterns && otherPatterns.length > 0 && activeTab === 'county-lines';
+    const shouldRenderUrbanLines = cityPatterns && cityPatterns.length > 0 && activeTab === 'urban-lines';
 
     return (
       <div
@@ -136,18 +139,16 @@ class TimetableSummaryContainer extends Component {
           <div className="timetable-summary-map">
             <StopPageMap stop={stop} params={params} breakpoint={breakpoint} routes={[{fullscreenMap: ''}]}/>
           </div>
-          {otherPatterns.length > 0 &&
-            cityPatterns.length > 0 &&
-            this.renderTabs()}
+          {shouldRenderTabs && this.renderTabs()}
 
-          {activeTab === 'urban-lines' && (
+          {shouldRenderUrbanLines && (
             <TimetableSummaryUrbanLines
               stop={stop}
               patterns={cityPatterns}
               breakpoint={breakpoint}
             />
           )}
-          {activeTab === 'county-lines' && (
+          {shouldRenderCountyLines && (
             <TimetableSummaryCountyLines
               stop={stop}
               patterns={otherPatterns}

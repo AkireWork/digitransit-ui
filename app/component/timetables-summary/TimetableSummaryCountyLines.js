@@ -33,6 +33,12 @@ class TimetableSummaryCountyLines extends Component {
     super(props);
     const trips = [];
     props.patterns.forEach(pattern => {
+      const lastStop = pattern.stops.slice(-1).pop();
+      const isLastStop = props.stop.gtfsId === lastStop.gtfsId;
+      if (isLastStop) {
+        return;
+      }
+
       pattern.patternTimetable.forEach(timetable => {
         const validFrom = moment(timetable.validity.validFrom, 'DD.MM.YYYY');
         const validTill = moment(timetable.validity.validTill, 'DD.MM.YYYY');
