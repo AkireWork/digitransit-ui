@@ -1,12 +1,18 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
-import {FormattedMessage, intlShape } from 'react-intl';
+import { FormattedMessage, intlShape } from 'react-intl';
 import Autosuggest from 'react-autosuggest';
 import isEqual from 'lodash/isEqual';
 import { executeSearch, getAllEndpointLayers } from '../util/searchUtils';
 import SuggestionItem from './SuggestionItem';
-import {getLabel, isLocation, isRoute, isStop, isTerminal} from '../util/suggestionUtils';
+import {
+  getLabel,
+  isLocation,
+  isRoute,
+  isStop,
+  isTerminal,
+} from '../util/suggestionUtils';
 import { dtLocationShape } from '../util/shapes';
 import Icon from './Icon';
 
@@ -58,7 +64,7 @@ class DTAutosuggest extends React.Component {
       valid: true,
       stopsActive: true,
       spotsActive: false,
-      routesActive: false
+      routesActive: false,
     };
   }
 
@@ -198,12 +204,18 @@ class DTAutosuggest extends React.Component {
 
           suggestions = suggestions.filter(suggestion => {
             if (this.state.stopsActive) {
-              return isStop(suggestion.properties) || isTerminal(suggestion.properties);
-            } else if (this.state.spotsActive) {
+              return (
+                isStop(suggestion.properties) ||
+                isTerminal(suggestion.properties)
+              );
+            }
+            if (this.state.spotsActive) {
               return isLocation(suggestion.properties);
-            } else if (this.state.routesActive) {
+            }
+            if (this.state.routesActive) {
               return isRoute(suggestion.properties);
-            } else return false;
+            }
+            return false;
           });
 
           if (
@@ -272,59 +284,59 @@ class DTAutosuggest extends React.Component {
   );
 
   renderSuggestionsContainer = ({ containerProps, children, query }) => (
-      <div {...containerProps}>
-        {this.state.editing && (
-            <div className="tabs route-tabs">
-              <nav className="tabs-navigation">
-                <a
-                    className={ this.state.stopsActive ? 'is-active' : null }
-                    onClick={() => {
-                      this.changeTab(AutosuggestTab.stops, query);
-                    }}
-                >
-                  <div>
-                    <Icon img="icon-icon_bus-stop" />
-                    <FormattedMessage id="stops" defaultMessage="Stops" />
-                  </div>
-                </a>
-                <a
-                    className={ this.state.spotsActive ? 'is-active' : null }
-                    onClick={() => {
-                      this.changeTab(AutosuggestTab.spots, query);
-                    }}
-                >
-                  <div>
-                    <Icon img="icon-icon_place" />
-                    <FormattedMessage id="spots" defaultMessage="Locations" />
-                  </div>
-                </a>
-                <a
-                    className={ this.state.routesActive ? 'is-active' : null }
-                    onClick={() => {
-                      this.changeTab(AutosuggestTab.routes, query);
-                    }}
-                >
-                  <div>
-                    <Icon img="icon-icon_bus" />
-                    <FormattedMessage id="routes" defaultMessage="Routes"/>
-                  </div>
-                </a>
-              </nav>
-            </div>
-        )}
-        {children}
-      </div>
+    <div {...containerProps}>
+      {this.state.editing && (
+        <div className="tabs route-tabs">
+          <nav className="tabs-navigation">
+            <a
+              className={this.state.stopsActive ? 'is-active' : null}
+              onClick={() => {
+                this.changeTab(AutosuggestTab.stops, query);
+              }}
+            >
+              <div>
+                <Icon img="icon-icon_bus-stop" />
+                <FormattedMessage id="stops" defaultMessage="Stops" />
+              </div>
+            </a>
+            <a
+              className={this.state.spotsActive ? 'is-active' : null}
+              onClick={() => {
+                this.changeTab(AutosuggestTab.spots, query);
+              }}
+            >
+              <div>
+                <Icon img="icon-icon_place" />
+                <FormattedMessage id="spots" defaultMessage="Locations" />
+              </div>
+            </a>
+            <a
+              className={this.state.routesActive ? 'is-active' : null}
+              onClick={() => {
+                this.changeTab(AutosuggestTab.routes, query);
+              }}
+            >
+              <div>
+                <Icon img="icon-icon_bus" />
+                <FormattedMessage id="routes" defaultMessage="Routes" />
+              </div>
+            </a>
+          </nav>
+        </div>
+      )}
+      {children}
+    </div>
   );
 
   changeTab = (tab, query) => {
     this.setState({
-      stopsActive: tab === AutosuggestTab.stops
+      stopsActive: tab === AutosuggestTab.stops,
     });
     this.setState({
-      spotsActive: tab === AutosuggestTab.spots
+      spotsActive: tab === AutosuggestTab.spots,
     });
     this.setState({
-      routesActive: tab === AutosuggestTab.routes
+      routesActive: tab === AutosuggestTab.routes,
     });
     this.fetchFunction({ value: query });
   };

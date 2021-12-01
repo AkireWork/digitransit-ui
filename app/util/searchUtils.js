@@ -11,7 +11,7 @@ import uniqWith from 'lodash/uniqWith';
 
 import { getJson } from './xhrPromise';
 import { distance } from './geo-utils';
-import { uniqByLabel, isStop } from './suggestionUtils';
+import { uniqByLabel, isStop, isRoute} from './suggestionUtils';
 import mapPeliasModality from './pelias-to-modality-mapper';
 import { PREFIX_ROUTES } from './path';
 
@@ -123,6 +123,23 @@ export function routeNameCompare(a, b) {
 function truEq(val1, val2) {
   // accept equality of non nullish values
   return val1 && val2 && val1 === val2;
+}
+
+export function isRelevant(item, query) {
+  if (isRoute(item.properties)) {
+    return true;
+  }
+  const label = item.properties.label;
+
+  if (!query) {
+    return true;
+  }
+
+  if (!label) {
+    return false;
+  }
+
+  return normalize(label).indexOf(normalize(query)) !== -1;
 }
 
 export function isDuplicate(item1, item2) {
@@ -627,8 +644,10 @@ export const sortSearchResults = (config, results, term = '') => {
   const normalizedTerm = normalize(term);
   const isLineSearch = isLineIdentifier(normalizedTerm);
 
+  const relevantResults = results.filter(result => isRelevant(result, term));
+
   const orderedResults = orderBy(
-    results,
+    relevantResults,
     [
       // rank matching routes best
       result =>
@@ -776,7 +795,7 @@ export function executeSearchImmediate(
         searchComponents.push(
           getGeocodingSearchResult(
             input,
-            undefined,
+            config.searchParams,
             language,
             focusPoint,
             sources,
