@@ -36,17 +36,17 @@ class TimetableSummaryContainer extends Component {
     const urbanLines = config.timetablesSelection.find(
       selection => selection.type === 'urban-lines',
     );
-    const cityPatterns = props.stop.patterns.filter(pattern =>
+    const cityPatterns = props.stop?.patterns?.filter(pattern =>
       urbanLines.route_colors.find(color => color === `#${pattern.route.color}`),
     );
-    const otherPatterns = props.stop.patterns.filter(pattern =>
+    const otherPatterns = props.stop?.patterns?.filter(pattern =>
       !urbanLines.route_colors.find(color => color === `#${pattern.route.color}`)
     );
 
     this.state = {
       cityPatterns,
       otherPatterns,
-      activeTab: cityPatterns.length > 0 ? 'urban-lines' : 'county-lines',
+      activeTab: cityPatterns?.length > 0 ? 'urban-lines' : 'county-lines',
     };
   }
 
@@ -98,12 +98,46 @@ class TimetableSummaryContainer extends Component {
     );
   }
 
+  renderNoStopNotice() {
+    return (
+      <div className="timetable-summary-error">
+        <Icon img="icon-icon_error_page_not_found" />
+        <p>
+          <FormattedMessage
+            id="stop-does-not-exist"
+            defaultMessage="Stop does not exist"
+          />
+        </p>
+      </div>
+    );
+  }
+
+  renderNoDeparturesNotice() {
+    return (
+      <div className="timetable-summary-error">
+        <Icon img="icon-icon_attention" />
+        <p>
+          <FormattedMessage
+            id="no-departures"
+            defaultMessage="No departures"
+          />
+        </p>
+      </div>
+    );
+  }
+
   render() {
     const { stop, breakpoint, params } = this.props;
     const { activeTab, cityPatterns, otherPatterns } = this.state;
+
+    if (!stop) {
+      return this.renderNoStopNotice();
+    }
+
     const shouldRenderTabs = otherPatterns.length > 0 && cityPatterns.length > 0;
     const shouldRenderCountyLines = otherPatterns && otherPatterns.length > 0 && activeTab === 'county-lines';
     const shouldRenderUrbanLines = cityPatterns && cityPatterns.length > 0 && activeTab === 'urban-lines';
+    const shouldRenderNoDeparturesNotice = cityPatterns && cityPatterns.length === 0 || otherPatterns && otherPatterns.length === 0;
 
     return (
       <div
@@ -155,6 +189,7 @@ class TimetableSummaryContainer extends Component {
               breakpoint={breakpoint}
             />
           )}
+          {shouldRenderNoDeparturesNotice && this.renderNoDeparturesNotice()}
         </div>
       </div>
     );

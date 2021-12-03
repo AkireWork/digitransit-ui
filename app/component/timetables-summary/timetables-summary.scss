@@ -465,3 +465,32 @@
     }
   }
 }
+
+.timetable-summary-error {
+  align-items: center;
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  justify-content: center;
+
+  .icon-container {
+    margin-top: 1.25rem;
+    svg {
+      height: 130px;
+      width: 150px;
+    }
+  }
+
+  p {
+    font-size: $font-size-large;
+    a {
+      font-size: $font-size-large;
+      color: $primary-color;
+      border-bottom: 1px dotted;
+      text-decoration: none;
+    }
+    button {
+      margin: 0;
+    }
+  }
+}
