@@ -11,7 +11,7 @@ import uniqWith from 'lodash/uniqWith';
 
 import { getJson } from './xhrPromise';
 import { distance } from './geo-utils';
-import { uniqByLabel, isStop, isRoute} from './suggestionUtils';
+import { uniqByLabel, isStop, isRoute } from './suggestionUtils';
 import mapPeliasModality from './pelias-to-modality-mapper';
 import { PREFIX_ROUTES } from './path';
 
@@ -139,7 +139,9 @@ export function isRelevant(item, query) {
     return false;
   }
 
-  return normalize(label).indexOf(normalize(query)) !== -1;
+  return normalize(query)
+      .split(/(\s+)/)
+      .every(queryBit => normalize(label).indexOf(queryBit) !== -1);
 }
 
 export function isDuplicate(item1, item2) {
