@@ -140,8 +140,8 @@ export function isRelevant(item, query) {
   }
 
   return normalize(query)
-      .split(/(\s+)/)
-      .every(queryBit => normalize(label).indexOf(queryBit) !== -1);
+    .split(/(\s+)/)
+    .every(queryBit => normalize(label).indexOf(queryBit) !== -1);
 }
 
 export function isDuplicate(item1, item2) {
@@ -714,6 +714,8 @@ export function executeSearchImmediate(
   const endpointSearches = { type: 'endpoint', term: input, results: [] };
   const searchSearches = { type: 'search', term: input, results: [] };
 
+  const adjustedInput = input.replace(/\s/g, '-');
+
   let endpointSearchesPromise;
   let searchSearchesPromise;
   const endpointLayers = layers || getAllEndpointLayers();
@@ -762,7 +764,7 @@ export function executeSearchImmediate(
 
       searchComponents.push(
         getStructuredVenueGeocodingResult(
-          input,
+          adjustedInput,
           config.searchParams,
           language,
           focusPoint,
@@ -770,7 +772,7 @@ export function executeSearchImmediate(
           config,
         ),
         getGeocodingAutocompleteResult(
-          input,
+          adjustedInput,
           config.searchParams,
           language,
           focusPoint,
@@ -796,7 +798,7 @@ export function executeSearchImmediate(
       if (sources) {
         searchComponents.push(
           getGeocodingSearchResult(
-            input,
+            adjustedInput,
             config.searchParams,
             language,
             focusPoint,
