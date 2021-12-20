@@ -338,6 +338,8 @@ class DTAutosuggest extends React.Component {
     this.setState({
       routesActive: tab === AutosuggestTab.routes,
     });
+    this.props.isFocused(true);
+    this.input.focus();
     this.fetchFunction({ value: query });
   };
 
