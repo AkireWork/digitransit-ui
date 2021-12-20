@@ -507,9 +507,9 @@ function getRoutes(input, config) {
 
   const query = Relay.createQuery(
     Relay.QL`
-    query routes($name: String) {
+    query routes($longName: String) {
       viewer {
-        routes(name: $name ) {
+        routes(longName: $longName ) {
           gtfsId
           agency {name}
           shortName
@@ -522,7 +522,7 @@ function getRoutes(input, config) {
         }
       }
     }`,
-    { name: input },
+    { longName: input },
   );
 
   return getRelayQuery(query)
