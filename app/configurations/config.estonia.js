@@ -516,7 +516,7 @@ export default {
         name: 'footer-feedback',
         nameEn: 'Submit feedback',
         href:
-          'https://app.recommy.com/SI/SI.aspx?id=&td=Mi1bkew0I9w=&tg=TkxWhz5XDF4=&TL=5U3QQE93T/0=&si=1&st=1',
+          'https://app.recommy.com/SI/SI2.aspx?id=&td=KE2Y5lq4ypo=&tg=fWiU09vZwtc=&TL=5U3QQE93T/0=&si=1&st=1',
         icon: 'icon-icon_speech-bubble',
       },
       {
@@ -547,7 +547,7 @@ export default {
         name: 'footer-feedback',
         nameEn: 'Submit feedback',
         href:
-          'https://app.recommy.com/SI/SI.aspx?id=&td=7op6SqiaLzk=&tg=TkxWhz5XDF4=&TL=tsyn3gyGHcQ=&si=1&st=1',
+          'https://app.recommy.com/SI/SI2.aspx?id=&td=nlH3vv632gE=&tg=fWiU09vZwtc=&TL=tsyn3gyGHcQ=&si=1&st=1',
         icon: 'icon-icon_speech-bubble',
       },
       {
@@ -578,7 +578,7 @@ export default {
         name: 'footer-feedback',
         nameEn: 'Submit feedback',
         href:
-          'https://app.recommy.com/SI/SI.aspx?id=&td=N7BXNUTBGHQ=&tg=TkxWhz5XDF4=&TL=OWN9c1aiwPM=&si=1&st=1',
+          'https://app.recommy.com/SI/SI2.aspx?id=&td=nlH3vv632gE=&tg=fWiU09vZwtc=&TL=tsyn3gyGHcQ=&si=1&st=1',
         icon: 'icon-icon_speech-bubble',
       },
       {
@@ -609,7 +609,7 @@ export default {
         name: 'footer-feedback',
         nameEn: 'Submit feedback',
         href:
-          'https://app.recommy.com/SI/SI.aspx?id=&td=hVgAtJmFpGk=&tg=TkxWhz5XDF4=&TL=vF8qXhonlDQ=&si=1&st=1',
+          'https://app.recommy.com/SI/SI2.aspx?id=&td=AoajZKdZbFc=&tg=fWiU09vZwtc=&TL=vF8qXhonlDQ=&si=1&st=1',
         icon: 'icon-icon_speech-bubble',
       },
       {
