@@ -11,7 +11,7 @@ import uniqWith from 'lodash/uniqWith';
 
 import { getJson } from './xhrPromise';
 import { distance } from './geo-utils';
-import { uniqByLabel, isStop, isRoute} from './suggestionUtils';
+import { uniqByLabel, isStop, isRoute } from './suggestionUtils';
 import mapPeliasModality from './pelias-to-modality-mapper';
 import { PREFIX_ROUTES } from './path';
 
@@ -139,7 +139,9 @@ export function isRelevant(item, query) {
     return false;
   }
 
-  return normalize(label).indexOf(normalize(query)) !== -1;
+  return normalize(query)
+    .split(/(\s+)/)
+    .every(queryBit => normalize(label).indexOf(queryBit) !== -1);
 }
 
 export function isDuplicate(item1, item2) {
@@ -505,9 +507,9 @@ function getRoutes(input, config) {
 
   const query = Relay.createQuery(
     Relay.QL`
-    query routes($name: String) {
+    query routes($longName: String) {
       viewer {
-        routes(name: $name ) {
+        routes(longName: $longName ) {
           gtfsId
           agency {name}
           shortName
@@ -520,7 +522,7 @@ function getRoutes(input, config) {
         }
       }
     }`,
-    { name: input },
+    { longName: input },
   );
 
   return getRelayQuery(query)
@@ -712,6 +714,8 @@ export function executeSearchImmediate(
   const endpointSearches = { type: 'endpoint', term: input, results: [] };
   const searchSearches = { type: 'search', term: input, results: [] };
 
+  const adjustedInput = input.replace(/\s/g, '-');
+
   let endpointSearchesPromise;
   let searchSearchesPromise;
   const endpointLayers = layers || getAllEndpointLayers();
@@ -760,7 +764,7 @@ export function executeSearchImmediate(
 
       searchComponents.push(
         getStructuredVenueGeocodingResult(
-          input,
+          adjustedInput,
           config.searchParams,
           language,
           focusPoint,
@@ -768,7 +772,7 @@ export function executeSearchImmediate(
           config,
         ),
         getGeocodingAutocompleteResult(
-          input,
+          adjustedInput,
           config.searchParams,
           language,
           focusPoint,
@@ -794,7 +798,7 @@ export function executeSearchImmediate(
       if (sources) {
         searchComponents.push(
           getGeocodingSearchResult(
-            input,
+            adjustedInput,
             config.searchParams,
             language,
             focusPoint,
