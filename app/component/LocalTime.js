@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { isStyleGuide } from '../util/browser';
 
-const LocalTime = ({ forceUtc, time }) => {
+export const LocalTime = ({ forceUtc, time }) => {
   const wrapper = Number.isFinite(time)
     ? moment(time < 1e10 ? time * 1000 : time)
     : time;
@@ -11,6 +11,16 @@ const LocalTime = ({ forceUtc, time }) => {
     wrapper.utc();
   }
   return wrapper.format('HH:mm');
+};
+
+export const LocalTimeFuture = ({ forceUtc, time }) => {
+  const wrapper = Number.isFinite(time)
+      ? moment(time < 1e10 ? time * 1000 : time)
+      : time;
+  if (forceUtc || isStyleGuide) {
+    wrapper.utc();
+  }
+  return wrapper.format('DD.MM HH:mm');
 };
 
 LocalTime.displayName = 'LocalTime';
@@ -24,4 +34,4 @@ LocalTime.defaultProps = {
   forceUtc: false,
 };
 
-export default LocalTime;
+export default { LocalTime, LocalTimeFuture };

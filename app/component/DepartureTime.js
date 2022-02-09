@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { intlShape, FormattedMessage } from 'react-intl';
 
 import Icon from './Icon';
-import LocalTime from './LocalTime';
+import { LocalTime, LocalTimeFuture } from './LocalTime';
 
 import ComponentUsageExample from './ComponentUsageExample';
 import {
@@ -23,9 +23,15 @@ function DepartureTime(props, context) {
     timeDiffInMinutes < 0 ||
     timeDiffInMinutes > context.config.minutesToDepartureLimit
   ) {
-    shownTime = (
-      <LocalTime forceUtc={props.useUTC} time={props.departureTime} />
-    );
+    if (!props.otherDay) {
+      shownTime = (
+        <LocalTime forceUtc={props.useUTC} time={props.departureTime} />
+      );
+    } else {
+      shownTime = (
+        <LocalTimeFuture forceUtc={props.useUTC} time={props.departureTime} />
+      );
+    }
   } else if (timeDiffInMinutes === 0) {
     shownTime = <FormattedMessage id="arriving-soon" defaultMessage="Now" />;
   } else {
@@ -67,10 +73,9 @@ function DepartureTime(props, context) {
         {realtime}
         {shownTime}
       </span>
-      {props.canceled &&
-        props.showCancelationIcon && (
-          <Icon className="caution" img="icon-icon_caution" />
-        )}
+      {props.canceled && props.showCancelationIcon && (
+        <Icon className="caution" img="icon-icon_caution" />
+      )}
     </React.Fragment>
   );
 }
@@ -125,6 +130,7 @@ DepartureTime.propTypes = {
   style: PropTypes.object,
   useUTC: PropTypes.bool,
   showCancelationIcon: PropTypes.bool,
+  otherDay: PropTypes.bool,
 };
 
 DepartureTime.defaultProps = {
@@ -143,10 +149,11 @@ export default DepartureTime;
  * from departure-list-container.
  *
  *  @param stoptime stoptime from graphql
+ *  @param otherDay
  *  @param pattern pattern from graphql
  */
 
-export const mapStopTime = (stoptime, pattern) => ({
+export const mapStopTime = (stoptime, otherDay, pattern) => ({
   stop: stoptime.stop,
   canceled: stoptime.realtimeState === 'CANCELED',
   departureTime:
@@ -157,22 +164,25 @@ export const mapStopTime = (stoptime, pattern) => ({
   realtime: stoptime.realtimeDeparture !== -1 && stoptime.realtime,
   pattern: pattern && pattern.pattern,
   trip: stoptime.trip,
+  otherDay,
 });
 
 /**
  * maps stoptime to DepartureTime component
  *  @param stoptime stoptime from graphql
  *  @param currentTime
+ *  @param otherDay
  *  @param showCancelationIcon whether an icon should be shown if the departure is canceled.
  */
 export const fromStopTime = (
   stoptime,
   currentTime,
+  otherDay,
   showCancelationIcon = true,
 ) => (
   <DepartureTime
     currentTime={currentTime}
-    {...mapStopTime(stoptime)}
+    {...mapStopTime(stoptime, otherDay)}
     showCancelationIcon={showCancelationIcon}
   />
 );

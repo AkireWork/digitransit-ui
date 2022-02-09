@@ -27,8 +27,7 @@ const asDepartures = stoptimes =>
         const isArrival = stoptime.pickupType === 'NONE';
         let isLastStop = false;
         if (stoptime.trip && stoptime.trip.stops) {
-          const lastStop = stoptime.trip.stops.slice(-1).pop();
-          isLastStop = stoptime.stop.id === lastStop.id;
+          isLastStop = stoptime.stopSequence === stoptime.trip.stops.length;
         }
         /* OTP returns either scheduled time or realtime prediction in
            * 'realtimeDeparture' and 'realtimeArrival' fields.
@@ -200,6 +199,7 @@ class DepartureListContainer extends Component {
 
     const departures = asDepartures(stoptimes)
       .filter(departure => !(isTerminal && departure.isArrival))
+      .filter(departure => !departure.isLastStop)
       .filter(departure => currentTime < departure.stoptime)
       .slice(0, limit);
 
@@ -292,6 +292,7 @@ const containerComponent = Relay.createContainer(DepartureListContainer, {
           serviceDay
           pickupType
           stopHeadsign
+          stopSequence
           stop {
             id
             code
