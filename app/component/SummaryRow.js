@@ -5,7 +5,7 @@ import React from 'react';
 import { FormattedMessage, intlShape } from 'react-intl';
 
 import Icon from './Icon';
-import LocalTime from './LocalTime';
+import { LocalTime } from './LocalTime';
 import RelativeDuration from './RelativeDuration';
 import RouteNumber from './RouteNumber';
 import RouteNumberContainer from './RouteNumberContainer';

@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import LocalTime from './LocalTime';
+import { LocalTime } from './LocalTime';
 import RouteNumberContainer from './RouteNumberContainer';
 
 const TimetableRow = ({ route, showRoutes }) =>
