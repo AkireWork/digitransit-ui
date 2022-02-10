@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import LocalTime from './LocalTime';
+import { LocalTime } from './LocalTime';
 
 const DepartureCancelationInfo = ({
   routeMode,

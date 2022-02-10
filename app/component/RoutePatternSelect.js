@@ -53,7 +53,7 @@ class RoutePatternSelect extends Component {
     const { router } = this.context;
 
     const patterns =
-      activeTab === 'aikataulu'
+        (activeTab === 'aikataulu' || activeTab === 'pysakit')
         ? route.patterns
         : route.patterns.filter(
             p => Array.isArray(p.tripsForDate) && p.tripsForDate.length > 0,
@@ -104,7 +104,7 @@ class RoutePatternSelect extends Component {
           hidden:
             this.props.route.patterns.find(
               o => o.tripsForDate && o.tripsForDate.length > 0,
-            ) === undefined && this.props.activeTab !== 'aikataulu',
+            ) === undefined && (this.props.activeTab !== 'aikataulu' && this.props.activeTab !== 'pysakit'),
         })}
       >
         {options && (options.length > 2 || options.length === 1) ? (
