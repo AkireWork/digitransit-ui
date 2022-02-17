@@ -127,7 +127,7 @@ class RouteStopListContainer extends React.PureComponent {
           nearest.stop.gtfsId) === stop.gtfsId;
       const safeStop = this.getSafeStop(
         stop,
-        i < array.length - 1 ? array[i + 1] : undefined,
+        i < array.length - 1 && i === 0 ? array[i + 1] : undefined,
         lastStop,
         repeatStops,
       );
@@ -149,7 +149,7 @@ class RouteStopListContainer extends React.PureComponent {
           distance={isNearest ? nearest.distance : null}
           ref={isNearest ? this.setNearestStop : null}
           currentTime={this.props.currentTime.unix()}
-          otherDay={this.nextTripDate !== undefined}
+          otherDay={safeStop.stopTimesForPattern.length > 0 && this.props.currentTime.unix() < safeStop.stopTimesForPattern[0].serviceDay}
           last={i === stops.length - 1}
           className={rowClassName}
         />
