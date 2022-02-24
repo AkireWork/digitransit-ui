@@ -4,7 +4,7 @@ import React from 'react';
 import Relay from 'react-relay/classic';
 import { FormattedMessage, intlShape } from 'react-intl';
 import cx from 'classnames';
-import {Link, routerShape} from 'react-router';
+import { Link, routerShape } from 'react-router';
 
 import Icon from './Icon';
 import CallAgencyWarning from './CallAgencyWarning';
@@ -24,10 +24,11 @@ import {
   getServiceAlertsForRouteStops,
   isAlertActive,
 } from '../util/alertUtils';
-import {PREFIX_ROUTES, PREFIX_TIMETABLE_SUMMARY} from '../util/path';
+import { PREFIX_ROUTES, PREFIX_TIMETABLE_SUMMARY } from '../util/path';
 import withBreakpoint from '../util/withBreakpoint';
 import { RouteAlertsQuery, StopAlertsQuery } from '../util/alertQueries';
-import BackButton from "./BackButton";
+import BackButton from './BackButton';
+import {getValidFrom, setValidFrom} from "../store/localStorage";
 
 const Tab = {
   Disruptions: 'hairiot',
@@ -64,9 +65,17 @@ class RoutePage extends React.Component {
     }).isRequired,
     params: PropTypes.shape({
       patternId: PropTypes.string.isRequired,
+      timetable: PropTypes.string,
     }).isRequired,
     breakpoint: PropTypes.string.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      validFrom: null,
+    };
+  }
 
   // gets called if pattern has not been visited before
   componentDidMount() {
@@ -119,7 +128,21 @@ class RoutePage extends React.Component {
     const { location, params, route } = this.props;
     const { config, executeAction, getStore, router } = this.context;
     const { client, topics } = getStore('RealTimeInformationStore');
+    let validFrom;
+    let patternCode = newPattern;
 
+    console.log(newPattern);
+    if (newPattern && newPattern.length > 10) {
+      validFrom = newPattern.substr(newPattern.length - 10, newPattern.length);
+      patternCode = newPattern.substr(0, newPattern.length - 10);
+    }
+
+    console.log(getValidFrom().validFrom);
+    setValidFrom(validFrom);
+    console.log(getValidFrom().validFrom);
+
+    this.setState({ validFrom });
+    console.log(`route page: ${this.state.validFrom}`);
     // if config contains mqtt feed and old client has not been removed
     if (client) {
       const { realTime } = config;
@@ -127,7 +150,7 @@ class RoutePage extends React.Component {
       const agency = routeParts[0];
       const source = realTime[agency];
 
-      const pattern = route.patterns.find(({ code }) => code === newPattern);
+      const pattern = route.patterns.find(({ code }) => code === patternCode);
       if (pattern) {
         const id = source.routeSelector(this.props);
         executeAction(changeRealTimeClientTopics, {
@@ -150,7 +173,7 @@ class RoutePage extends React.Component {
     router.replace(
       decodeURIComponent(location.pathname).replace(
         new RegExp(`${params.patternId}(.*)`),
-        newPattern,
+        patternCode,
       ),
     );
   };
@@ -166,6 +189,8 @@ class RoutePage extends React.Component {
     const { breakpoint, location, params, route } = this.props;
     const { patternId, stopId } = params;
     const { config, router } = this.context;
+    const { validFrom } = this.state;
+    console.log(`route page render: ${  validFrom}`);
 
     if (route == null) {
       /* In this case there is little we can do
@@ -263,6 +288,7 @@ class RoutePage extends React.Component {
           {patternId && !stopId && (
             <RoutePatternSelect
               params={params}
+              validFrom={validFrom}
               route={route}
               onSelectChange={this.onPatternChange}
               gtfsId={route.gtfsId}
@@ -275,16 +301,15 @@ class RoutePage extends React.Component {
               <RouteAgencyInfo route={route} />
             </div>
             <div className="columns small-3 padding-vertical-normal">
-              {stopId &&
-              <div className="right">
-                <BackButton defaultUrl={`/${PREFIX_TIMETABLE_SUMMARY}/${stopId}`} color="#008bde"
-                            text={(<FormattedMessage
-                              id="back"
-                              defaultMessage="Back"
-                            />)}
-                />
-              </div>
-              }
+              {stopId && (
+                <div className="right">
+                  <BackButton
+                    defaultUrl={`/${PREFIX_TIMETABLE_SUMMARY}/${stopId}`}
+                    color="#008bde"
+                    text={<FormattedMessage id="back" defaultMessage="Back" />}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
