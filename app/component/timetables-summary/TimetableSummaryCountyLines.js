@@ -11,7 +11,7 @@ import RouteDestination from '../RouteDestination';
 import FilterTimeTableModal from '../FilterTimeTableModal';
 import TimeTableOptionsPanel from '../TimeTableOptionsPanel';
 import {Link, locationShape, routerShape} from "react-router";
-import {PREFIX_ROUTES} from "../../util/path";
+import {PREFIX_ROUTES, PREFIX_STOPS} from "../../util/path";
 import SecondaryButton from "../SecondaryButton";
 import getContext from "recompose/getContext";
 
@@ -60,6 +60,7 @@ class TimetableSummaryCountyLines extends Component {
             weekdays: timetable.weekdays,
             validFrom: isValidFromInTheFuture && timetable.validity.validFrom,
             time: timetable.times[0].scheduledDeparture,
+            pickupType: timetable.times[0].pickupType,
           });
         }
       });
@@ -215,7 +216,7 @@ class TimetableSummaryCountyLines extends Component {
                   fadeLong
                 />
                 <div className="route-destination-with-desc">
-                  <Link to={`/${PREFIX_ROUTES}/${trip.route.gtfsId}/pysakit/${trip.code}/${trip.gtfsId}/${this.props.stop.gtfsId}`}>
+                  <Link to={`/${PREFIX_ROUTES}/${trip.route.gtfsId}/${PREFIX_STOPS}/${trip.code}/${trip.gtfsId}?stopId=${this.props.stop.gtfsId}`}>
                     <RouteDestination
                       mode={trip.route.mode}
                       destination={`${trip.tripName ||
@@ -233,6 +234,15 @@ class TimetableSummaryCountyLines extends Component {
                         }`}
                     />
                   </Link>
+                  {trip.pickupType === 'NONE' && (
+                    <span className="drop-off-container">
+                      <span className="drop-off-stop-icon bus" />
+                      <FormattedMessage
+                        id="route-destination-arrives"
+                        defaultMessage="Drop-off only"
+                      />
+                    </span>
+                  )}
                   {trip.route.desc && this.renderRouteDesc(trip)}
                 </div>
               </div>

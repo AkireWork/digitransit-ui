@@ -18,6 +18,7 @@ import {
   vehicle as exampleVehicle,
 } from './ExampleData';
 import { getActiveAlertSeverityLevel } from '../util/alertUtils';
+import {FormattedMessage} from "react-intl";
 
 const TripRouteStop = props => {
   const {
@@ -25,6 +26,7 @@ const TripRouteStop = props => {
     color,
     currentTime,
     distance,
+    last,
     mode,
     stop,
     stopPassed,
@@ -86,6 +88,15 @@ const TripRouteStop = props => {
                   currentTime,
                 )}
               />
+              {stoptime.pickupType === 'NONE' && !last && (
+                <span className="drop-off-container">
+                  <span className="drop-off-stop-icon bus" />
+                  <FormattedMessage
+                    id="route-destination-arrives"
+                    defaultMessage="Drop-off only"
+                  />
+                </span>
+              )}
             </div>
             <div>
               {stop.code && <StopCode code={stop.code} />}
@@ -125,6 +136,7 @@ TripRouteStop.propTypes = {
   pattern: PropTypes.string.isRequired,
   route: PropTypes.string.isRequired,
   className: PropTypes.string,
+  last: PropTypes.bool,
   selectedVehicle: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.oneOf([false]),

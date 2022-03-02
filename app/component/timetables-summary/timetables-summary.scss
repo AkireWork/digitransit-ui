@@ -92,6 +92,25 @@
           }
         }
 
+        .drop-off-container {
+          color: $gray;
+          font-size: $font-size-xsmall;
+          font-family: $font-family-narrow;
+          font-weight: 400;
+
+          span {
+            vertical-align: middle;
+          }
+        }
+        .drop-off-stop-icon {
+          margin-left: 0.5em;
+          margin-right: 0.3em;
+          display: inline-block;
+          width: 13px;
+          height: 12px;
+          background: url(drop_off_svg($gray));
+        }
+
         .route-desc {
           line-height: 1;
           margin: 10px;

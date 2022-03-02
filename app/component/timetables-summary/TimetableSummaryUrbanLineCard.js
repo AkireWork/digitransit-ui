@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import RouteNumber from '../RouteNumber';
 import Icon from '../Icon';
 import TimetableSummaryStopList from './TimetableSummaryStopList';
-import { PREFIX_ROUTES } from '../../util/path';
+import {PREFIX_ROUTES, PREFIX_STOPS} from '../../util/path';
 import { isPatternFullScreenForPrint } from '../../util/patternUtils';
 
 class TimetableSummaryUrbanLineCard extends Component {
@@ -161,7 +161,7 @@ class TimetableSummaryUrbanLineCard extends Component {
               key={`group-row-hour-links-${selectedPattern.id}-${hour}-${trip.minutes}`}
             >
               <Link
-                to={`/${PREFIX_ROUTES}/${trip.route.gtfsId}/pysakit/${trip.code}/${trip.gtfsId}/${this.props.stop.gtfsId}`}
+                to={`/${PREFIX_ROUTES}/${trip.route.gtfsId}/${PREFIX_STOPS}/${trip.code}/${trip.gtfsId}?stopId=${this.props.stop.gtfsId}`}
               >
                 {trip.minutes}
               </Link>

@@ -234,6 +234,7 @@ const connectedComponent = Relay.createContainer(
           scheduledDeparture
           serviceDay
           realtimeState
+          pickupType
         }
       }
     `,
