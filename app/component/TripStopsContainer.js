@@ -36,6 +36,7 @@ function TripStopsContainer({ breakpoint, routes, trip }, { location }) {
         key="list"
         trip={trip}
         stopId={location.query.stopId}
+        stopIndex={location.query.index || '0'}
         tripStart={tripStartTime}
         fullscreenMap={fullscreen}
       />

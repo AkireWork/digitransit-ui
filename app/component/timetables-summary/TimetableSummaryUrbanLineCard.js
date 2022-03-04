@@ -161,7 +161,7 @@ class TimetableSummaryUrbanLineCard extends Component {
               key={`group-row-hour-links-${selectedPattern.id}-${hour}-${trip.minutes}`}
             >
               <Link
-                to={`/${PREFIX_ROUTES}/${trip.route.gtfsId}/${PREFIX_STOPS}/${trip.code}/${trip.gtfsId}?stopId=${this.props.stop.gtfsId}`}
+                to={`/${PREFIX_ROUTES}/${trip.route.gtfsId}/${PREFIX_STOPS}/${trip.code}/${trip.gtfsId}?stopId=${this.props.stop.gtfsId}&index=${trip.stopIndex}`}
               >
                 {trip.minutes}
               </Link>

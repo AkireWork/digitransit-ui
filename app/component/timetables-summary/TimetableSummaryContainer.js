@@ -230,6 +230,7 @@ export default Relay.createContainer(
                 validTill
               }
               times {
+                stopSequence
                 stop {
                   gtfsId
                   name
