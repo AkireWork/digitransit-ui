@@ -113,10 +113,8 @@ class RouteStopListContainer extends React.PureComponent {
     let lastStop;
 
     const stopCodes = stops.map(stop => stop.code);
-    const repeatStops = new Map(
-      stops
-        .filter(stop => stopCodes.filter(s => s === stop.code).length > 1)
-        .map(i => [i.code, i.val]),
+    const repeatStops = stopCodes.filter(
+      stopCode => stops.filter(s => s.code === stopCode).length > 1,
     );
 
     return stops.map((stop, i, array) => {
@@ -185,7 +183,7 @@ class RouteStopListContainer extends React.PureComponent {
       );
       if (correctPattern !== undefined) {
         safe.stopTimesForPattern.push(correctPattern);
-        if (repeatStops[safe.code] !== undefined) {
+        if (repeatStops.includes(safe.code)) {
           patternIndex += 1;
         }
       }
