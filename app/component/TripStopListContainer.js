@@ -16,6 +16,7 @@ class TripStopListContainer extends React.PureComponent {
   static propTypes = {
     trip: PropTypes.object.isRequired,
     stopId: PropTypes.string,
+    stopIndex: PropTypes.string,
     className: PropTypes.string,
     vehicles: PropTypes.object,
     locationState: PropTypes.object.isRequired,
@@ -79,6 +80,7 @@ class TripStopListContainer extends React.PureComponent {
       currentTime,
       trip,
       stopId,
+      stopIndex,
       tripStart,
       vehicles: propVehicles,
     } = this.props;
@@ -118,13 +120,17 @@ class TripStopListContainer extends React.PureComponent {
 
     let stopPassed = true;
     let stopCurrent = false;
+    let stopCount = 0;
 
     return trip.stoptimesForDate.map((stoptime, index) => {
-      if (stopId) {
+      if (stopId && stopIndex) {
         if (stopCurrent) stopCurrent = false;
         if (stopId === stoptime.stop.gtfsId) {
-          stopCurrent = true;
-          stopPassed = false;
+          if (parseInt(stopIndex) === stopCount) {
+            stopCurrent = true;
+            stopPassed = false;
+          }
+          stopCount += 1;
         }
       } else {
         if (nextStop === stoptime.stop.gtfsId) {
@@ -139,7 +145,7 @@ class TripStopListContainer extends React.PureComponent {
 
       return (
         <TripRouteStop
-          key={stoptime.stop.gtfsId}
+          key={`trip-stop-${index}-${stoptime.stop.gtfsId}`}
           stoptime={stoptime}
           stop={stoptime.stop}
           mode={mode}
@@ -234,6 +240,7 @@ const connectedComponent = Relay.createContainer(
           scheduledDeparture
           serviceDay
           realtimeState
+          pickupType
         }
       }
     `,

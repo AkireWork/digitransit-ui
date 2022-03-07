@@ -11,7 +11,7 @@ import RouteDestination from '../RouteDestination';
 import FilterTimeTableModal from '../FilterTimeTableModal';
 import TimeTableOptionsPanel from '../TimeTableOptionsPanel';
 import {Link, locationShape, routerShape} from "react-router";
-import {PREFIX_ROUTES} from "../../util/path";
+import {PREFIX_ROUTES, PREFIX_STOPS} from "../../util/path";
 import SecondaryButton from "../SecondaryButton";
 import getContext from "recompose/getContext";
 
@@ -35,7 +35,8 @@ class TimetableSummaryCountyLines extends Component {
     props.patterns.forEach(pattern => {
       const lastStop = pattern.stops.slice(-1).pop();
       const isLastStop = props.stop.gtfsId === lastStop.gtfsId;
-      if (isLastStop) {
+      const stopCountInPattern = pattern.stops.filter(stop => stop.gtfsId === props.stop.gtfsId).length;
+      if (isLastStop && stopCountInPattern === 1) {
         return;
       }
 
@@ -50,16 +51,24 @@ class TimetableSummaryCountyLines extends Component {
         );
         const isValidFromInTheFuture = validFrom.isAfter(currentTime);
         if (isValidTillInTheFuture && isValidFromInsideTwoWeeksFromNow) {
-          trips.push({
-            id: timetable.trip.id,
-            gtfsId: timetable.trip.gtfsId,
-            code: pattern.code,
-            route: pattern.route,
-            tripName: timetable.trip.tripLongName,
-            headsign: pattern.trip.headsign,
-            weekdays: timetable.weekdays,
-            validFrom: isValidFromInTheFuture && timetable.validity.validFrom,
-            time: timetable.times[0].scheduledDeparture,
+          timetable.times.forEach((time, index) => {
+            if (time.stopSequence === pattern.stops.length) {
+              return;
+            }
+
+            trips.push({
+              id: timetable.trip.id,
+              gtfsId: timetable.trip.gtfsId,
+              code: pattern.code,
+              route: pattern.route,
+              tripName: timetable.trip.tripLongName,
+              headsign: pattern.trip.headsign,
+              weekdays: timetable.weekdays,
+              validFrom: isValidFromInTheFuture && timetable.validity.validFrom,
+              timeIndex: index,
+              time: time.scheduledDeparture,
+              pickupType: time.pickupType,
+            });
           });
         }
       });
@@ -215,7 +224,7 @@ class TimetableSummaryCountyLines extends Component {
                   fadeLong
                 />
                 <div className="route-destination-with-desc">
-                  <Link to={`/${PREFIX_ROUTES}/${trip.route.gtfsId}/pysakit/${trip.code}/${trip.gtfsId}/${this.props.stop.gtfsId}`}>
+                  <Link to={`/${PREFIX_ROUTES}/${trip.route.gtfsId}/${PREFIX_STOPS}/${trip.code}/${trip.gtfsId}?stopId=${this.props.stop.gtfsId}&index=${trip.timeIndex}`}>
                     <RouteDestination
                       mode={trip.route.mode}
                       destination={`${trip.tripName ||
@@ -233,6 +242,15 @@ class TimetableSummaryCountyLines extends Component {
                         }`}
                     />
                   </Link>
+                  {trip.pickupType === 'NONE' && (
+                    <span className="drop-off-container">
+                      <span className="drop-off-stop-icon bus" />
+                      <FormattedMessage
+                        id="route-destination-arrives"
+                        defaultMessage="Drop-off only"
+                      />
+                    </span>
+                  )}
                   {trip.route.desc && this.renderRouteDesc(trip)}
                 </div>
               </div>
