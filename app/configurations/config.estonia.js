@@ -922,7 +922,7 @@ export default {
         { name: 'Narva', competent_authority: ['Narva linn'] },
         { name: 'Kohtla-Järve', competent_authority: ['Kohtla-Järve linn'] },
         { name: 'Viljandi', competent_authority: ['Viljandimaa'] },
-        { name: 'Rakvere', competent_authority: ['Lääne-Virumaa'] },
+        { name: 'Rakvere', competent_authority: ['Rakvere linnaliin'] },
         { name: 'Kuressaare', competent_authority: ['Saaremaa'] },
         { name: 'Sillamäe', competent_authority: ['Sillamäe linn'] },
       ],
