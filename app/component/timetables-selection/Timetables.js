@@ -97,7 +97,7 @@ const Timetables = ({ routes, currentLanguage, params }, { config }) => {
                   />
                   <div
                     style={{
-                      width: '75px',
+                      width: '90px',
                       display: 'inline-block',
                       margin: 'auto auto',
                       paddingLeft: '5px',

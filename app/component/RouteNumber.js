@@ -7,7 +7,7 @@ import IconWithIcon from './IconWithIcon';
 import ComponentUsageExample from './ComponentUsageExample';
 import { realtimeDeparture as exampleRealtimeDeparture } from './ExampleData';
 
-const LONG_ROUTE_NUMBER_LENGTH = 6;
+const LONG_ROUTE_NUMBER_LENGTH = 4;
 
 function RouteNumber(props, context) {
   let mode = props.mode.toLowerCase();
@@ -22,7 +22,6 @@ function RouteNumber(props, context) {
   // length doesn't fit in the tab view
   const hasNoShortName =
     props.text &&
-    new RegExp(/^([^0-9]*)$/).test(props.text) &&
     props.text.length > 3;
 
   const getIcon = (icon, isCallAgency, hasDisruption, badgeFill, badgeText) => {
