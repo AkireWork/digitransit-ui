@@ -255,10 +255,12 @@ $route-schedule-date-height: 36px;
             text-decoration: none;
           }
           .itinerary-stop-code {
+            white-space: nowrap;
             display: block;
             max-height: 18px;
           }
           .route-stop-address {
+            width: 100%;
             font-family: $font-family-narrow;
             font-weight: 400;
             letter-spacing: 0;
