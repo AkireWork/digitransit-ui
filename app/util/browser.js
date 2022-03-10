@@ -24,6 +24,8 @@ export const isChrome =
 export const isSamsungBrowser =
   isBrowser && navigator.userAgent.match(/SamsungBrowser/) != null;
 export const isIe = isBrowser && navigator.userAgent.match(/Trident/) != null;
+export const isSafari =
+  isBrowser && navigator.vendor && navigator.vendor.indexOf('Apple') > -1;
 export const isImperial = config => {
   if (
     config.imperialEnabled &&
