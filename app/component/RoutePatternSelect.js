@@ -6,6 +6,7 @@ import sortBy from 'lodash/sortBy';
 import { routerShape } from 'react-router';
 import connectToStores from 'fluxible-addons-react/connectToStores';
 import moment from 'moment';
+import { isSafari } from "../util/browser";
 
 import Icon from './Icon';
 import ComponentUsageExample from './ComponentUsageExample';
@@ -107,7 +108,7 @@ class RoutePatternSelect extends Component {
             ) === undefined && (this.props.activeTab !== 'aikataulu' && this.props.activeTab !== 'pysakit'),
         })}
       >
-        {options && (options.length > 2 || options.length === 1) ? (
+        {options && (isSafari || options.length > 2 || options.length === 1) ? (
           <React.Fragment>
             <Icon img="icon-icon_arrow-dropdown" />
             <select
