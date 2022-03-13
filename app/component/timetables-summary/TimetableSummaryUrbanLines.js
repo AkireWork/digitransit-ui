@@ -71,22 +71,25 @@ class TimetableSummaryUrbanLines extends Component {
 
           pattern.trip.tripTimesWeekdaysGroups.forEach(group => {
             if (this.weekdaysInGroup(timetable.weekdays, group)) {
-              const departureTime = this.utcTime(timetable.times[0].scheduledDeparture);
-              const departureHH = departureTime.format('HH');
-              const departureMM = departureTime.format('mm');
+              timetable.times.forEach((time, index) => {
+                const departureTime = this.utcTime(time.scheduledDeparture);
+                const departureHH = departureTime.format('HH');
+                const departureMM = departureTime.format('mm');
 
-              if (!timetableData.times[group][departureHH]) {
-                timetableData.times[group][departureHH] = [];
-                timetableData.times[group].hours.push(departureHH);
-              }
+                if (!timetableData.times[group][departureHH]) {
+                  timetableData.times[group][departureHH] = [];
+                  timetableData.times[group].hours.push(departureHH);
+                }
 
-              timetableData.times[group][departureHH].push({
-                minutes: departureMM,
-                route: {
-                  gtfsId: pattern.route.gtfsId,
-                },
-                code: pattern.code,
-                gtfsId: timetable.trip.gtfsId,
+                timetableData.times[group][departureHH].push({
+                  minutes: departureMM,
+                  stopIndex: index,
+                  route: {
+                    gtfsId: pattern.route.gtfsId,
+                  },
+                  code: pattern.code,
+                  gtfsId: timetable.trip.gtfsId,
+                });
               });
             }
           });

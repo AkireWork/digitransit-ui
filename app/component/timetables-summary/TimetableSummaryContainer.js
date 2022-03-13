@@ -137,7 +137,7 @@ class TimetableSummaryContainer extends Component {
     const shouldRenderTabs = otherPatterns.length > 0 && cityPatterns.length > 0;
     const shouldRenderCountyLines = otherPatterns && otherPatterns.length > 0 && activeTab === 'county-lines';
     const shouldRenderUrbanLines = cityPatterns && cityPatterns.length > 0 && activeTab === 'urban-lines';
-    const shouldRenderNoDeparturesNotice = cityPatterns && cityPatterns.length === 0 || otherPatterns && otherPatterns.length === 0;
+    const shouldRenderNoDeparturesNotice = cityPatterns && cityPatterns.length === 0 && otherPatterns && otherPatterns.length === 0;
 
     return (
       <div
@@ -230,6 +230,7 @@ export default Relay.createContainer(
                 validTill
               }
               times {
+                stopSequence
                 stop {
                   gtfsId
                   name

@@ -113,10 +113,8 @@ class RouteStopListContainer extends React.PureComponent {
     let lastStop;
 
     const stopCodes = stops.map(stop => stop.code);
-    const repeatStops = new Map(
-      stops
-        .filter(stop => stopCodes.filter(s => s === stop.code).length > 1)
-        .map(i => [i.code, i.val]),
+    const repeatStops = stopCodes.filter(
+      stopCode => stops.filter(s => s.code === stopCode).length > 1,
     );
 
     return stops.map((stop, i, array) => {
@@ -149,7 +147,11 @@ class RouteStopListContainer extends React.PureComponent {
           distance={isNearest ? nearest.distance : null}
           ref={isNearest ? this.setNearestStop : null}
           currentTime={this.props.currentTime.unix()}
-          otherDay={safeStop.stopTimesForPattern.length > 0 && this.props.currentTime.unix() < safeStop.stopTimesForPattern[0].serviceDay}
+          otherDay={
+            safeStop.stopTimesForPattern.length > 0 &&
+            this.props.currentTime.unix() <
+              safeStop.stopTimesForPattern[0].serviceDay
+          }
           last={i === stops.length - 1}
           className={rowClassName}
         />
@@ -173,7 +175,7 @@ class RouteStopListContainer extends React.PureComponent {
     ) {
       const correctPattern = this.findStopTimeBetween(
         patternIndex,
-        stop.stopTimesForPattern[patternIndex],
+        stop,
         lastSafeStop
           ? lastSafeStop.stopTimesForPattern[safe.stopTimesForPattern.length]
           : undefined,
@@ -181,7 +183,7 @@ class RouteStopListContainer extends React.PureComponent {
       );
       if (correctPattern !== undefined) {
         safe.stopTimesForPattern.push(correctPattern);
-        if (repeatStops[safe.code] !== undefined) {
+        if (repeatStops.includes(safe.code)) {
           patternIndex += 1;
         }
       }
@@ -191,40 +193,54 @@ class RouteStopListContainer extends React.PureComponent {
     return safe;
   };
 
-  findStopTimeBetween = (patternIndex, stop, previous, nextPatterns) => {
+  findStopTimeBetween = (patternIndex, thisPattern, previous, nextPatterns) => {
+    const stopTime = thisPattern.stopTimesForPattern[patternIndex];
     let result;
     if (previous !== undefined) {
       if (
         // after previous scheduled departure
         result === undefined &&
-        stop.scheduledDeparture - previous.scheduledDeparture >= 0 &&
-        stop.scheduledDeparture - previous.scheduledDeparture < 43200
+        stopTime.scheduledDeparture - previous.scheduledDeparture >= 0 &&
+        stopTime.scheduledDeparture - previous.scheduledDeparture < 43200
       ) {
-        result = stop;
+        result = stopTime;
       } else if (
-        stop.scheduledDeparture - previous.scheduledDeparture >= 0 && // after previous scheduled departure
-        stop.scheduledDeparture - previous.scheduledDeparture < 43200 &&
-        stop.scheduledDeparture - previous.scheduledDeparture < // closer to previous scheduled departure than previous pattern
+        stopTime.scheduledDeparture - previous.scheduledDeparture >= 0 && // after previous scheduled departure
+        stopTime.scheduledDeparture - previous.scheduledDeparture < 43200 &&
+        stopTime.scheduledDeparture - previous.scheduledDeparture < // closer to previous scheduled departure than previous pattern
           result.scheduledDeparture - previous.scheduledDeparture
       ) {
-        result = stop;
+        result = stopTime;
       }
     } else if (nextPatterns !== undefined) {
       for (let i = 0; i < nextPatterns.length; i++) {
         if (i - patternIndex > 1) {
           break;
+        } else if ( //in case of a first stop is repeat stop and first stoptime of first stop is actually endtime of previous pattern that has already departed from first stop.
+          patternIndex === 0 &&
+          result === undefined &&
+          thisPattern.stopTimesForPattern.length > 1 &&
+          thisPattern.stopTimesForPattern[1].scheduledDeparture -
+            thisPattern.stopTimesForPattern[0].scheduledDeparture >=
+            0 &&
+          nextPatterns[i].scheduledDeparture -
+            thisPattern.stopTimesForPattern[1].scheduledDeparture >=
+            0
+        ) {
+          break;
         } else if (
           // before next scheduled departure
           result === undefined &&
-          nextPatterns[i].scheduledDeparture - stop.scheduledDeparture >= 0
+          nextPatterns[i].scheduledDeparture - stopTime.scheduledDeparture >= 0
         ) {
-          result = stop;
+          result = stopTime;
         } else if (
-          nextPatterns[i].scheduledDeparture - stop.scheduledDeparture >= 0 && // before next scheduled departure
-          nextPatterns[i].scheduledDeparture - stop.scheduledDeparture < // and closer to it thant previous pattern
+          nextPatterns[i].scheduledDeparture - stopTime.scheduledDeparture >=
+            0 && // before next scheduled departure
+          nextPatterns[i].scheduledDeparture - stopTime.scheduledDeparture < // and closer to it thant previous pattern
             nextPatterns[i].scheduledDeparture - result.scheduledDeparture
         ) {
-          result = stop;
+          result = stopTime;
         }
       }
     }
