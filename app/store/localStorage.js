@@ -327,15 +327,6 @@ export function setOldSearchesStorage(data) {
   setItem('saved-searches', data);
 }
 
-export function setValidFrom(data) {
-  const validFrom = { validFrom: data };
-  setItem('validFrom', validFrom);
-}
-
-export function getValidFrom() {
-  return getItemAsJson('validFrom', '{"validFrom": "default valid from"}');
-}
-
 export function setPositioningHasSucceeded(state) {
   setItem('positioningSuccesful', { state });
 }

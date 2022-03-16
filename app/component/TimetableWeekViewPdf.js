@@ -201,15 +201,25 @@ function TimetableWeekViewPdf({ patterns }) {
     return map;
   };
 
+  const getTimetables = ptrns => {
+    const timetables = [];
+    // eslint-disable-next-line no-unused-expressions
+    ptrns?.forEach(pattern =>
+      pattern.patternTimetable?.forEach(timetable =>
+        timetables.push(timetable),
+      ),
+    );
+    return timetables;
+  };
+
   return (
     <Document>
-      {patterns?.map(({ trip, __dataID__ }, i) => {
+      {getTimetables(patterns)?.map(({ trip, __dataID__ }, i) => {
         const stoptimesChunks = chunkArray(trip.stoptimesForWeek, 7);
 
         return (
           // eslint-disable-next-line dot-notation
           <Page size="A4" style={styles.page} key={__dataID__}>
-            {i === 0 ? (
               <View style={styles.header}>
                 <View style={{ flexDirection: 'row', marginBottom: '20px' }}>
                   <Text
@@ -238,9 +248,6 @@ function TimetableWeekViewPdf({ patterns }) {
                   </View>
                 </View>
               </View>
-            ) : (
-              <View />
-            )}
 
             <Text>{trip.tripLongName}</Text>
             {stoptimesChunks.map(
@@ -251,7 +258,7 @@ function TimetableWeekViewPdf({ patterns }) {
                     const idxs = getIdxs(chunk);
                     return (
                       // eslint-disable-next-line react/no-array-index-key
-                      <Table wrap={false} key={index}>
+                      <Table wrap={false} key={chunk.__dataID__}>
                         <FirstColumn last={tttidx === list.length - 1}>
                           <HeaderCell>&nbsp;</HeaderCell>
 

@@ -28,7 +28,6 @@ import { PREFIX_ROUTES, PREFIX_TIMETABLE_SUMMARY } from '../util/path';
 import withBreakpoint from '../util/withBreakpoint';
 import { RouteAlertsQuery, StopAlertsQuery } from '../util/alertQueries';
 import BackButton from './BackButton';
-import {getValidFrom, setValidFrom} from "../store/localStorage";
 
 const Tab = {
   Disruptions: 'hairiot',
@@ -73,8 +72,22 @@ class RoutePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      validFrom: null,
+      validFrom: this.getValidFrom(),
     };
+  }
+
+  getValidFrom() {
+    const { location } = this.props;
+    let validFrom = '';
+    const uri = decodeURIComponent(location.pathname);
+    if (uri.includes('ajanjakso')) {
+      validFrom = uri.substr(uri.length - 8, 8);
+      validFrom = `${validFrom.substr(0, 2)}.${validFrom.substr(
+        2,
+        2,
+      )}.${validFrom.substr(4, 4)}`;
+    }
+    return validFrom;
   }
 
   // gets called if pattern has not been visited before
@@ -131,15 +144,16 @@ class RoutePage extends React.Component {
     let validFrom;
     let patternCode = newPattern;
 
-    console.log(newPattern);
-    if (newPattern && newPattern.length > 10) {
-      validFrom = newPattern.substr(newPattern.length - 10, newPattern.length);
-      patternCode = newPattern.substr(0, newPattern.length - 10);
+    if (newPattern) {
+      const patternInfo = newPattern.split(' ');
+      if (patternInfo.length === 2) {
+        patternCode = patternInfo[0];
+        validFrom = patternInfo[1];
+      } else {
+        patternCode = patternInfo[0];
+        validFrom = '';
+      }
     }
-
-    console.log(getValidFrom().validFrom);
-    setValidFrom(validFrom);
-    console.log(getValidFrom().validFrom);
 
     this.setState({ validFrom });
     console.log(`route page: ${this.state.validFrom}`);
@@ -170,11 +184,19 @@ class RoutePage extends React.Component {
       }
     }
 
+    let uri = decodeURIComponent(location.pathname);
+    uri = uri.replace(new RegExp(`${params.patternId}(.*)`), patternCode);
+    if (validFrom !== undefined && validFrom !== '') {
+      if (uri.includes('ajanjakso')) {
+        uri =
+            uri.substr(0, uri.length - 8) +
+            validFrom.replaceAll('.', '');
+      } else {
+        uri = `${uri}/ajanjakso/${validFrom.replaceAll('.', '')}`;
+      }
+    }
     router.replace(
-      decodeURIComponent(location.pathname).replace(
-        new RegExp(`${params.patternId}(.*)`),
-        patternCode,
-      ),
+      uri,
     );
   };
 
@@ -189,8 +211,6 @@ class RoutePage extends React.Component {
     const { breakpoint, location, params, route } = this.props;
     const { patternId, stopId } = params;
     const { config, router } = this.context;
-    const { validFrom } = this.state;
-    console.log(`route page render: ${  validFrom}`);
 
     if (route == null) {
       /* In this case there is little we can do
@@ -288,7 +308,7 @@ class RoutePage extends React.Component {
           {patternId && !stopId && (
             <RoutePatternSelect
               params={params}
-              validFrom={validFrom}
+              validFrom={this.state.validFrom}
               route={route}
               onSelectChange={this.onPatternChange}
               gtfsId={route.gtfsId}

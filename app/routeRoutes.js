@@ -101,6 +101,16 @@ export default (
             render={ComponentLoading404Renderer}
           />
           <Route
+              path="ajanjakso/:validFrom"
+              getComponents={getComponents(() =>
+                  import(/* webpackChunkName: "route" */ './component/PatternStopsContainer').then(
+                      getDefault,
+                  ),
+              )}
+              queries={componentPatternQueries}
+              render={ComponentLoading404Renderer}
+          />
+          <Route
             path="kartta"
             getComponents={getComponents(() =>
               import(/* webpackChunkName: "route" */ './component/PatternStopsContainer').then(
@@ -127,31 +137,55 @@ export default (
       </Route>
       <Route path="aikataulu">
         <IndexRedirect to=":routeId%3A0%3A01" />
-        <Route
-          path=":patternId"
-          disableMapOnMobile
-          getComponents={getComponents(() =>
-            import(/* webpackChunkName: "route" */ './component/RouteScheduleContainer').then(
-              getDefault,
-            ),
-          )}
-          queries={componentPatternQueries}
-          render={ComponentLoading404Renderer}
-        />
+        <Route path=":patternId">
+          <IndexRoute
+              disableMapOnMobile
+              getComponents={getComponents(() =>
+                  import(/* webpackChunkName: "route" */ './component/RouteScheduleContainer').then(
+                      getDefault,
+                  ),
+              )}
+              queries={componentPatternQueries}
+              render={ComponentLoading404Renderer}
+          />
+          <Route
+              path="ajanjakso/:validFrom"
+              disableMapOnMobile
+              getComponents={getComponents(() =>
+                  import(/* webpackChunkName: "route" */ './component/RouteScheduleContainer').then(
+                      getDefault,
+                  ),
+              )}
+              queries={componentPatternQueries}
+              render={ComponentLoading404Renderer}
+          />
+        </Route>
       </Route>
       <Route path="hairiot">
         <IndexRedirect to=":routeId%3A0%3A01" />
-        <Route
-          path=":patternId"
-          disableMapOnMobile
-          getComponents={getComponents(() =>
-            import(/* webpackChunkName: "route" */ './component/RouteDescriptionContainer').then(
-              getDefault,
-            ),
-          )}
-          queries={componentRouteQueries}
-          render={ComponentLoading404Renderer}
-        />
+        <Route path=":patternId">
+          <IndexRoute
+              disableMapOnMobile
+              getComponents={getComponents(() =>
+                  import(/* webpackChunkName: "route" */ './component/RouteDescriptionContainer').then(
+                      getDefault,
+                  ),
+              )}
+              queries={componentRouteQueries}
+              render={ComponentLoading404Renderer}
+          />
+          <Route
+              path="ajanjakso/:validFrom"
+              disableMapOnMobile
+              getComponents={getComponents(() =>
+                  import(/* webpackChunkName: "route" */ './component/RouteDescriptionContainer').then(
+                      getDefault,
+                  ),
+              )}
+              queries={componentRouteQueries}
+              render={ComponentLoading404Renderer}
+          />
+        </Route>
       </Route>
     </Route>
   </Route>

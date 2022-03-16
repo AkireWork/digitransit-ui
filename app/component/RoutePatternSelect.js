@@ -5,9 +5,9 @@ import cx from 'classnames';
 import { routerShape } from 'react-router';
 import connectToStores from 'fluxible-addons-react/connectToStores';
 import moment from 'moment';
-import { isSafari } from "../util/browser";
-
 import { orderBy } from 'lodash';
+import { isSafari } from '../util/browser';
+
 import Icon from './Icon';
 import ComponentUsageExample from './ComponentUsageExample';
 import {
@@ -59,13 +59,16 @@ class RoutePatternSelect extends Component {
     const safePatterns = [];
     patterns.forEach(pattern => {
       if (pattern.patternTimetable) {
+        let currentPresent = false;
         const timetables = pattern.patternTimetable.filter(timetable => {
           const validFrom = moment(timetable.validity.validFrom, 'DD.MM.YYYY');
           const validTill = moment(timetable.validity.validTill, 'DD.MM.YYYY');
           if (
             (validFrom.isBefore(thisDay) || validFrom.isSame(thisDay)) &&
-            (validTill.isAfter(thisDay) || validTill.isSame(thisDay))
+            (validTill.isAfter(thisDay) || validTill.isSame(thisDay)) &&
+            !currentPresent
           ) {
+            currentPresent = true;
             return true;
           }
           if (
@@ -79,12 +82,25 @@ class RoutePatternSelect extends Component {
         if (timetables.length === 1) {
           safePatterns.push(pattern);
         } else if (timetables.length > 1) {
-          timetables.forEach((timetable, index, arr) => {
-            const copyPattern = Object.assign({}, pattern);
-            copyPattern.patternTimetable = copyPattern.patternTimetable.filter(
-              (tmtbl, i, a) => index === i,
-            );
-            safePatterns.push(copyPattern);
+          let validFromList = pattern.patternTimetable.map(
+            timetable => timetable.validity.validFrom,
+          );
+          validFromList = validFromList.filter(
+            (n, i) => validFromList.indexOf(n) === i,
+          );
+          timetables.forEach(timetable => {
+            if (
+              validFromList.some(
+                fromValue => fromValue === timetable.validity.validFrom,
+              )
+            ) {
+              const copyPattern = Object.assign({}, pattern);
+              copyPattern.patternTimetable = [timetable];
+              safePatterns.push(copyPattern);
+              validFromList = validFromList.filter(
+                fromValue => fromValue !== timetable.validity.validFrom,
+              );
+            }
           });
         }
       } else {
@@ -120,8 +136,8 @@ class RoutePatternSelect extends Component {
 
     patterns = orderBy(
       patterns,
-      ['code', 'patternTimetable[0].validity.validFrom'],
-      ['asc', 'desc'],
+      ['code', 'patternTimetable[0].trip.gtfsId'],
+      ['asc', 'asc'],
     );
 
     const options = patterns.map(pattern => {
@@ -137,9 +153,7 @@ class RoutePatternSelect extends Component {
         return (
           <option
             key={pattern.code + pattern.patternTimetable[0].validity.validFrom}
-            value={
-              pattern.code + pattern.patternTimetable[0].validity.validFrom
-            }
+            value={`${pattern.code} ${pattern.patternTimetable[0].validity.validFrom}`}
           >
             {`${pattern.trips[0].tripLongName} (${pattern.patternTimetable[0].validity.validFrom})`}
           </option>
@@ -148,9 +162,9 @@ class RoutePatternSelect extends Component {
       return (
         <option
           key={pattern.code + pattern.patternTimetable[0].validity.validFrom}
-          value={pattern.code + pattern.patternTimetable[0].validity.validFrom}
+          value={`${pattern.code} `}
         >
-          {pattern.trips[0].tripLongName}
+          {`${pattern.trips[0].tripLongName} (${pattern.patternTimetable[0].validity.validFrom})`}
         </option>
       );
     });
@@ -165,25 +179,14 @@ class RoutePatternSelect extends Component {
       this.setState({ loading: false });
     }
 
-    console.log(`enne pattern select muutmist ${validFrom}`);
-    if (
-      !validFrom ||
-      !patterns.some(
-        pattern => pattern.patternTimetable[0].validity.validFrom === validFrom,
-      )
-    ) {
-      this.validFrom = patterns[0].patternTimetable[0].validity.validFrom;
-
-      console.log(`peale pattern select muutmist: ${this.validFrom}`);
-    } else {
-      this.validFrom = validFrom;
-    }
     return options;
   };
 
   render() {
     const options = this.getOptions();
-    const validFrom = this.validFrom ? this.validFrom : '';
+    const {
+      validFrom,
+    } = this.props;
     console.log(`pattern select render: ${validFrom}`);
 
     return this.state.loading === true ? (
@@ -206,7 +209,8 @@ class RoutePatternSelect extends Component {
               id="select-route-pattern"
               onChange={e => this.props.onSelectChange(e.target.value)}
               value={
-                this.props.params && this.props.params.patternId + validFrom
+                this.props.params &&
+                `${this.props.params.patternId} ${validFrom}`
               }
             >
               {options}
@@ -222,7 +226,8 @@ class RoutePatternSelect extends Component {
                 this.props.onSelectChange(
                   options.find(
                     o =>
-                      o.props.value !== this.props.params.patternId + validFrom,
+                      o.props.value !==
+                      `${this.props.params.patternId} ${validFrom}`,
                   ).props.value,
                 )
               }
@@ -230,7 +235,8 @@ class RoutePatternSelect extends Component {
                 this.props.onSelectChange(
                   options.find(
                     o =>
-                      o.props.value !== this.props.params.patternId + validFrom,
+                      o.props.value !==
+                      `${this.props.params.patternId} ${validFrom}`,
                   ).props.value,
                 )
               }
@@ -238,7 +244,8 @@ class RoutePatternSelect extends Component {
               {options &&
                 options.filter(
                   o =>
-                    o.props.value === this.props.params.patternId + validFrom,
+                    o.props.value ===
+                    `${this.props.params.patternId} ${validFrom}`,
                 )[0]}
             </div>
 
@@ -249,7 +256,8 @@ class RoutePatternSelect extends Component {
                 this.props.onSelectChange(
                   options.find(
                     o =>
-                      o.props.value !== this.props.params.patternId + validFrom,
+                      o.props.value !==
+                      `${this.props.params.patternId} ${validFrom}`,
                   ).props.value,
                 )
               }
