@@ -164,7 +164,7 @@ class RoutePatternSelect extends Component {
           key={pattern.code + pattern.patternTimetable[0].validity.validFrom}
           value={`${pattern.code} `}
         >
-          {`${pattern.trips[0].tripLongName} (${pattern.patternTimetable[0].validity.validFrom})`}
+          {`${pattern.trips[0].tripLongName})`}
         </option>
       );
     });
