@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import Relay from 'react-relay/classic';
 import cx from 'classnames';
-import sortBy from 'lodash/sortBy';
 import { routerShape } from 'react-router';
 import connectToStores from 'fluxible-addons-react/connectToStores';
 import moment from 'moment';
-import { isSafari } from "../util/browser";
+import { orderBy } from 'lodash';
+import { isSafari } from '../util/browser';
 
 import Icon from './Icon';
 import ComponentUsageExample from './ComponentUsageExample';
@@ -28,7 +28,10 @@ class RoutePatternSelect extends Component {
     activeTab: PropTypes.string.isRequired,
     relay: PropTypes.object.isRequired,
     gtfsId: PropTypes.string.isRequired,
+    validFrom: PropTypes.string,
   };
+
+  validFrom = undefined;
 
   static contextTypes = {
     router: routerShape.isRequired,
@@ -45,18 +48,85 @@ class RoutePatternSelect extends Component {
   componentWillMount = () => {
     const options = this.getOptions();
     if (options === null) {
-      this.setState({ loading: true });
+      this.state = {
+        loading: true,
+      };
     }
   };
 
+  getSafePatterns(patterns, serviceDay) {
+    const thisDay = moment(serviceDay);
+    const safePatterns = [];
+    patterns.forEach(pattern => {
+      if (pattern.patternTimetable) {
+        let currentPresent = false;
+        const timetables = pattern.patternTimetable.filter(timetable => {
+          const validFrom = moment(timetable.validity.validFrom, 'DD.MM.YYYY');
+          const validTill = moment(timetable.validity.validTill, 'DD.MM.YYYY');
+          if (
+            (validFrom.isBefore(thisDay) || validFrom.isSame(thisDay)) &&
+            (validTill.isAfter(thisDay) || validTill.isSame(thisDay)) &&
+            !currentPresent
+          ) {
+            currentPresent = true;
+            return true;
+          }
+          if (
+            validFrom.isAfter(thisDay) &&
+            validFrom.diff(thisDay, 'days') < 15
+          ) {
+            return true;
+          }
+          return false;
+        });
+        if (timetables.length === 1) {
+          safePatterns.push(pattern);
+        } else if (timetables.length > 1) {
+          let validFromList = pattern.patternTimetable.map(
+            timetable => timetable.validity.validFrom,
+          );
+          validFromList = validFromList.filter(
+            (n, i) => validFromList.indexOf(n) === i,
+          );
+          timetables.forEach(timetable => {
+            if (
+              validFromList.some(
+                fromValue => fromValue === timetable.validity.validFrom,
+              )
+            ) {
+              const copyPattern = Object.assign({}, pattern);
+              copyPattern.patternTimetable = [timetable];
+              safePatterns.push(copyPattern);
+              validFromList = validFromList.filter(
+                fromValue => fromValue !== timetable.validity.validFrom,
+              );
+            }
+          });
+        }
+      } else {
+        safePatterns.push(pattern);
+      }
+    });
+    return safePatterns;
+  }
+
   getOptions = () => {
-    const { activeTab, gtfsId, params, route, serviceDay } = this.props;
+    const {
+      activeTab,
+      gtfsId,
+      params,
+      route,
+      serviceDay,
+      validFrom,
+    } = this.props;
     const { router } = this.context;
 
-    const patterns =
-        (activeTab === 'aikataulu' || activeTab === 'pysakit')
-        ? route.patterns
-        : route.patterns.filter(
+    const safePatterns = this.getSafePatterns(route.patterns, serviceDay);
+
+    let patterns =
+      activeTab === 'aikataulu' || activeTab === 'pysakit'
+        ? safePatterns
+        : safePatterns.filter(
             p => Array.isArray(p.tripsForDate) && p.tripsForDate.length > 0,
           );
 
@@ -64,9 +134,15 @@ class RoutePatternSelect extends Component {
       return null;
     }
 
-    const options = sortBy(patterns, 'code').map(pattern => {
+    patterns = orderBy(
+      patterns,
+      ['code', 'patternTimetable[0].trip.gtfsId'],
+      ['asc', 'asc'],
+    );
+
+    const options = patterns.map(pattern => {
       if (
-        activeTab === 'aikataulu' &&
+        (activeTab === 'aikataulu' || activeTab === 'pysakit') &&
         pattern.patternTimetable &&
         pattern.patternTimetable.some(patterntimetable =>
           moment(patterntimetable.validity.validFrom, 'DD.MM.YYYY').isAfter(
@@ -75,28 +151,44 @@ class RoutePatternSelect extends Component {
         )
       ) {
         return (
-          <option key={pattern.code} value={pattern.code}>
+          <option
+            key={pattern.code + pattern.patternTimetable[0].validity.validFrom}
+            value={`${pattern.code} ${pattern.patternTimetable[0].validity.validFrom}`}
+          >
             {`${pattern.trips[0].tripLongName} (${pattern.patternTimetable[0].validity.validFrom})`}
           </option>
         );
       }
       return (
-        <option key={pattern.code} value={pattern.code}>
-          {pattern.trips[0].tripLongName}
+        <option
+          key={pattern.code + pattern.patternTimetable[0].validity.validFrom}
+          value={`${pattern.code} `}
+        >
+          {`${pattern.trips[0].tripLongName})`}
         </option>
       );
     });
 
-    if (options.every(o => o.key !== params.patternId)) {
-      router.replace(`/${PREFIX_ROUTES}/${gtfsId}/pysakit/${options[0].key}`);
+    if (
+      options.every(
+        o => o.key.substr(0, o.key.length - 10) !== params.patternId,
+      )
+    ) {
+      router.replace(`/${PREFIX_ROUTES}/${gtfsId}/pysakit/${options[0].value}`);
     } else if (options.length > 0 && this.state.loading === true) {
       this.setState({ loading: false });
     }
+
     return options;
   };
 
   render() {
     const options = this.getOptions();
+    const {
+      validFrom,
+    } = this.props;
+    console.log(`pattern select render: ${validFrom}`);
+
     return this.state.loading === true ? (
       <div className={cx('route-pattern-select', this.props.className)} />
     ) : (
@@ -105,7 +197,9 @@ class RoutePatternSelect extends Component {
           hidden:
             this.props.route.patterns.find(
               o => o.tripsForDate && o.tripsForDate.length > 0,
-            ) === undefined && (this.props.activeTab !== 'aikataulu' && this.props.activeTab !== 'pysakit'),
+            ) === undefined &&
+            this.props.activeTab !== 'aikataulu' &&
+            this.props.activeTab !== 'pysakit',
         })}
       >
         {options && (isSafari || options.length > 2 || options.length === 1) ? (
@@ -114,7 +208,10 @@ class RoutePatternSelect extends Component {
             <select
               id="select-route-pattern"
               onChange={e => this.props.onSelectChange(e.target.value)}
-              value={this.props.params && this.props.params.patternId}
+              value={
+                this.props.params &&
+                `${this.props.params.patternId} ${validFrom}`
+              }
             >
               {options}
             </select>
@@ -128,21 +225,27 @@ class RoutePatternSelect extends Component {
               onKeyPress={() =>
                 this.props.onSelectChange(
                   options.find(
-                    o => o.props.value !== this.props.params.patternId,
+                    o =>
+                      o.props.value !==
+                      `${this.props.params.patternId} ${validFrom}`,
                   ).props.value,
                 )
               }
               onClick={() =>
                 this.props.onSelectChange(
                   options.find(
-                    o => o.props.value !== this.props.params.patternId,
+                    o =>
+                      o.props.value !==
+                      `${this.props.params.patternId} ${validFrom}`,
                   ).props.value,
                 )
               }
             >
               {options &&
                 options.filter(
-                  o => o.props.value === this.props.params.patternId,
+                  o =>
+                    o.props.value ===
+                    `${this.props.params.patternId} ${validFrom}`,
                 )[0]}
             </div>
 
@@ -152,7 +255,9 @@ class RoutePatternSelect extends Component {
               onClick={() =>
                 this.props.onSelectChange(
                   options.find(
-                    o => o.props.value !== this.props.params.patternId,
+                    o =>
+                      o.props.value !==
+                      `${this.props.params.patternId} ${validFrom}`,
                   ).props.value,
                 )
               }

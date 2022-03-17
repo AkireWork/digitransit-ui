@@ -29,38 +29,10 @@ class RouteStopListContainer extends React.PureComponent {
 
   static contextTypes = {
     config: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
   };
 
   componentDidMount() {
-    if (
-      this.props.pattern.stops.filter(
-        stop => stop.stopTimesForPattern.length !== 0,
-      ).length === 0
-    ) {
-      const thisDate = this.props.currentTime.format('YYYYMMDD');
-      this.props.pattern.trips[0].activeDates.forEach(date => {
-        if (
-          this.nextTripDate === undefined &&
-          date.localeCompare(thisDate) > 0
-        ) {
-          this.nextTripDate = date;
-        } else if (
-          date.localeCompare(thisDate) > 0 &&
-          date.localeCompare(this.nextTripDate) < 0
-        ) {
-          this.nextTripDate = date;
-        }
-      });
-    }
-    const nextUnix = this.props.currentTime.unix();
-    const queryUnix =
-      this.nextTripDate !== undefined
-        ? moment(this.nextTripDate, 'YYYYMMDD').unix()
-        : nextUnix;
-    this.props.relay.setVariables({
-      currentTime: nextUnix,
-      queryTime: queryUnix,
-    });
     if (this.nearestStop) {
       this.nearestStop.element.scrollIntoView(false);
     }
@@ -75,11 +47,60 @@ class RouteStopListContainer extends React.PureComponent {
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
-    return (
-      nextProps.pattern.stops.filter(
+    const { location } = this.context;
+    const shouldUpdate = location.pathname !== nextContext.location.pathname ||
+        nextProps.pattern.stops.filter(
+            stop => stop.stopTimesForPattern.length !== 0,
+        ).length !== 0;
+    return shouldUpdate;
+  }
+
+  componentDidUpdate() {
+    const queryTime = this.getQueryTime();
+    const thisDate = this.props.currentTime.format('YYYYMMDD');
+    const validFromDate = queryTime
+        ? queryTime.substr(4, 4) +
+        queryTime.substr(2, 2) +
+        queryTime.substr(0, 2)
+        : thisDate;
+    if (
+        (this.props.pattern.stops.filter(
+            stop => stop.stopTimesForPattern.length !== 0,
+        ).length === 0) ||
+        (queryTime && validFromDate.localeCompare(thisDate)) > 0
+    ) {
+      this.props.pattern.trips.forEach(trip => {
+        trip.activeDates.forEach(date => {
+          if (
+              this.nextTripDate === undefined &&
+              date.localeCompare(validFromDate) >= 0
+          ) {
+            this.nextTripDate = date;
+          } else if (
+              date.localeCompare(validFromDate) >= 0 &&
+              date.localeCompare(this.nextTripDate) < 0
+          ) {
+            this.nextTripDate = date;
+          }
+        });
+      });
+    } else if (
+      !queryTime &&
+      this.props.pattern.stops.filter(
         stop => stop.stopTimesForPattern.length !== 0,
       ).length !== 0
-    );
+    ) {
+      this.nextTripDate = undefined;
+    }
+    const nextUnix = this.props.currentTime.unix();
+    const queryUnix =
+        this.nextTripDate !== undefined
+            ? moment(this.nextTripDate, 'YYYYMMDD').unix()
+            : nextUnix;
+    this.props.relay.setVariables({
+      currentTime: nextUnix,
+      queryTime: queryUnix,
+    });
   }
 
   getStops() {
@@ -162,6 +183,16 @@ class RouteStopListContainer extends React.PureComponent {
   setNearestStop = element => {
     this.nearestStop = element;
   };
+
+  getQueryTime() {
+    const { location } = this.context;
+    let validFrom;
+    const uri = decodeURIComponent(location.pathname);
+    if (uri.includes('ajanjakso')) {
+      validFrom = uri.substr(uri.length - 8, 8);
+    }
+    return validFrom;
+  }
 
   getSafeStop = (stop, nextStop, lastSafeStop, repeatStops) => {
     const safe = Object.assign({}, stop);
