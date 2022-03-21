@@ -47,15 +47,8 @@ const CityBikeCard = (
           </>
         }
         icon={getCityBikeNetworkIcon(networkConfig)}
-        name={
-          <a
-            href="https://ratas.tartu.ee"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {station.name}
-          </a>
-        }
+        name={station.name}
+        className="bike card"
         unlinked
       />
       {children}

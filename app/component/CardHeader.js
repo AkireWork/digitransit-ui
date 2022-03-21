@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
+import { Link } from 'react-router';
 import ComponentUsageExample from './ComponentUsageExample';
 import Icon from './Icon';
 import SplitBars from './SplitBars';
 import Favourite from './Favourite';
-import { Link } from 'react-router';
 
 const CardHeader = ({
   className,
@@ -40,16 +40,29 @@ const CardHeader = ({
       )}
       <div className="card-header-wrapper">
         {secondaryLink && (
-          <div className="card-header-secondary-link">
-            {secondaryLink}
-          </div>
+          <div className="card-header-secondary-link">{secondaryLink}</div>
         )}
-        <span className={headingStyle || 'h4'}>
-          {url ? <Link to={url}>{name}</Link> : `${name}`}
-          {externalLink || null}
-          {headerIcon}
-          {unlinked ? null : <span className="link-arrow"> ›</span>}
-        </span>
+        {className === 'bike card' ? (
+          <span className={headingStyle || 'h4'}>
+            <a
+              href="https://ratas.tartu.ee"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {name}
+            </a>
+            {externalLink || null}
+            {headerIcon}
+            {unlinked ? null : <span className="link-arrow"> ›</span>}
+          </span>
+        ) : (
+          <span className={headingStyle || 'h4'}>
+            {url ? <Link to={url}>{name}</Link> : `${name}`}
+            {externalLink || null}
+            {headerIcon}
+            {unlinked ? null : <span className="link-arrow"> ›</span>}
+          </span>
+        )}
         <div className="card-sub-header">
           {code != null ? <p className="card-code">{code}</p> : null}
           {description != null && description !== 'null' ? (
