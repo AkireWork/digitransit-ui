@@ -205,9 +205,11 @@ function TimetableWeekViewPdf({ patterns }) {
     const timetables = [];
     // eslint-disable-next-line no-unused-expressions
     ptrns?.forEach(pattern =>
-      pattern.patternTimetable?.forEach(timetable =>
-        timetables.push(timetable),
-      ),
+      pattern.patternTimetable?.forEach((timetable, index) => {
+        // eslint-disable-next-line no-param-reassign
+        timetable.trip.weekdays = timetable.trip.tripTimesWeekdaysGroups[index];
+        timetables.push(timetable);
+      }),
     );
     return timetables;
   };
@@ -303,7 +305,7 @@ function TimetableWeekViewPdf({ patterns }) {
                               key={ch.__dataID__}
                             >
                               <Text style={styles.headerCell}>
-                                {ch.weekdays}
+                                {trip.weekdays ? trip.weekdays : ch.weekdays}
                               </Text>
 
                               <View style={{ marginTop: 5 }} />

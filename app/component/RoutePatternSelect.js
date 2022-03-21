@@ -79,9 +79,9 @@ class RoutePatternSelect extends Component {
           }
           return false;
         });
-        if (timetables.length === 1) {
+        if (timetables.length === 1 && pattern.patternTimetable.length === 1) {
           safePatterns.push(pattern);
-        } else if (timetables.length > 1) {
+        } else if (timetables.length >= 1) {
           let validFromList = pattern.patternTimetable.map(
             timetable => timetable.validity.validFrom,
           );
