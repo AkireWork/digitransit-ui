@@ -195,8 +195,13 @@ class RouteScheduleContainer extends Component {
         });
         // eslint-disable-next-line no-param-reassign
         timetable.trip.routeTypeLabel = this.context.intl.formatMessage({
-          id: RouteTypeLine(pattern.trip.route.color),
+          id: RouteTypeLine(timetable.trip.route.color),
           defaultMessage: 'Regional line (Commercial)',
+        });
+        // eslint-disable-next-line no-param-reassign
+        timetable.trip.routeValidFromLabel = this.context.intl.formatMessage({
+          id: 'timetable-valid-from',
+          defaultMessage: 'The timetable is valid from:',
         });
         // eslint-disable-next-line no-param-reassign
         timetable.trip.routeValidTillLabel = this.context.intl.formatMessage({

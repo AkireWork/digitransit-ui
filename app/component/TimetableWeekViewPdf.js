@@ -214,7 +214,7 @@ function TimetableWeekViewPdf({ patterns }) {
 
   return (
     <Document>
-      {getTimetables(patterns)?.map(({ trip, __dataID__ }, i) => {
+      {getTimetables(patterns)?.map(({ trip, validity, __dataID__ }, i) => {
         const stoptimesChunks = chunkArray(trip.stoptimesForWeek, 7);
 
         return (
@@ -242,6 +242,10 @@ function TimetableWeekViewPdf({ patterns }) {
                       {trip.serviceManagerLabel} {trip.route.competentAuthority}
                     </Text>
                     <Text style={styles.subheader}>{trip.routeTypeLabel}</Text>
+                    {true && (<Text style={styles.subheader}>
+                      {trip.routeValidFromLabel} {validity.validFrom}
+                    </Text>
+                  )}
                     <Text style={styles.subheader}>
                       {trip.routeValidTillLabel} {trip.tripTimesValidTill}
                     </Text>
