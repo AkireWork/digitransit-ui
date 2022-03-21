@@ -79,9 +79,9 @@ class RoutePatternSelect extends Component {
           }
           return false;
         });
-        if (timetables.length === 1) {
+        if (timetables.length === 1 && pattern.patternTimetable.length === 1) {
           safePatterns.push(pattern);
-        } else if (timetables.length > 1) {
+        } else if (timetables.length >= 1) {
           let validFromList = pattern.patternTimetable.map(
             timetable => timetable.validity.validFrom,
           );
@@ -164,7 +164,7 @@ class RoutePatternSelect extends Component {
           key={pattern.code + pattern.patternTimetable[0].validity.validFrom}
           value={`${pattern.code} `}
         >
-          {`${pattern.trips[0].tripLongName})`}
+          {`${pattern.trips[0].tripLongName}`}
         </option>
       );
     });

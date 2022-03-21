@@ -205,16 +205,18 @@ function TimetableWeekViewPdf({ patterns }) {
     const timetables = [];
     // eslint-disable-next-line no-unused-expressions
     ptrns?.forEach(pattern =>
-      pattern.patternTimetable?.forEach(timetable =>
-        timetables.push(timetable),
-      ),
+      pattern.patternTimetable?.forEach((timetable, index) => {
+        // eslint-disable-next-line no-param-reassign
+        timetable.trip.weekdays = timetable.trip.tripTimesWeekdaysGroups[index];
+        timetables.push(timetable);
+      }),
     );
     return timetables;
   };
 
   return (
     <Document>
-      {getTimetables(patterns)?.map(({ trip, __dataID__ }, i) => {
+      {getTimetables(patterns)?.map(({ trip, validity, __dataID__ }, i) => {
         const stoptimesChunks = chunkArray(trip.stoptimesForWeek, 7);
 
         return (
@@ -242,6 +244,10 @@ function TimetableWeekViewPdf({ patterns }) {
                       {trip.serviceManagerLabel} {trip.route.competentAuthority}
                     </Text>
                     <Text style={styles.subheader}>{trip.routeTypeLabel}</Text>
+                    {true && (<Text style={styles.subheader}>
+                      {trip.routeValidFromLabel} {validity.validFrom}
+                    </Text>
+                  )}
                     <Text style={styles.subheader}>
                       {trip.routeValidTillLabel} {trip.tripTimesValidTill}
                     </Text>
@@ -299,7 +305,7 @@ function TimetableWeekViewPdf({ patterns }) {
                               key={ch.__dataID__}
                             >
                               <Text style={styles.headerCell}>
-                                {ch.weekdays}
+                                {trip.weekdays ? trip.weekdays : ch.weekdays}
                               </Text>
 
                               <View style={{ marginTop: 5 }} />
