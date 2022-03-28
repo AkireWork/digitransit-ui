@@ -204,13 +204,38 @@ function TimetableWeekViewPdf({ patterns }) {
   const getTimetables = ptrns => {
     const timetables = [];
     // eslint-disable-next-line no-unused-expressions
-    ptrns?.forEach(pattern =>
+    ptrns?.forEach(pattern => {
+      const timetableStarts = [];
+      const uniqueTimetables = pattern.patternTimetable
+        ?.map(timetable => timetable.validity.validFrom)
+        .filter((value, index, self) => {
+          return self.indexOf(value) === index;
+        });
+      // eslint-disable-next-line no-unused-expressions
       pattern.patternTimetable?.forEach((timetable, index) => {
-        // eslint-disable-next-line no-param-reassign
-        timetable.trip.weekdays = timetable.trip.tripTimesWeekdaysGroups[index];
-        timetables.push(timetable);
-      }),
-    );
+        if (!timetableStarts.some(st => st === timetable.validity.validFrom)) {
+          // eslint-disable-next-line no-param-reassign
+          timetable.trip.weekdays =
+            timetable.trip.tripTimesWeekdaysGroups[index];
+          if (
+            uniqueTimetables.length === 2 &&
+            timetable.trip.stoptimesForWeek.length > 1
+          ) {
+            // eslint-disable-next-line no-param-reassign
+            timetable.trip.stoptimesForWeek = timetable.trip.stoptimesForWeek.slice(
+              timetableStarts.length === 0
+                ? 0
+                : Math.floor(timetable.trip.stoptimesForWeek.length / 2),
+              timetableStarts.length === 0
+                ? Math.floor(timetable.trip.stoptimesForWeek.length / 2)
+                : timetable.trip.stoptimesForWeek.length,
+            );
+          }
+          timetables.push(timetable);
+          timetableStarts.push(timetable.validity.validFrom);
+        }
+      });
+    });
     return timetables;
   };
 
@@ -222,38 +247,39 @@ function TimetableWeekViewPdf({ patterns }) {
         return (
           // eslint-disable-next-line dot-notation
           <Page size="A4" style={styles.page} key={__dataID__}>
-              <View style={styles.header}>
-                <View style={{ flexDirection: 'row', marginBottom: '20px' }}>
-                  <Text
-                    style={{
-                      margin: '20px',
-                      marginBottom: '25px',
-                      fontSize: '25px',
-                    }}
-                  >
-                    {trip.route.shortName}
+            <View style={styles.header}>
+              <View style={{ flexDirection: 'row', marginBottom: '20px' }}>
+                <Text
+                  style={{
+                    margin: '20px',
+                    marginBottom: '25px',
+                    fontSize: '25px',
+                  }}
+                >
+                  {trip.route.shortName}
+                </Text>
+                <View style={{ display: 'grid', fontSize: '10px' }}>
+                  <Text style={{ fontSize: '15px' }}>
+                    {trip.route.longName}
                   </Text>
-                  <View style={{ display: 'grid', fontSize: '10px' }}>
-                    <Text style={{ fontSize: '15px' }}>
-                      {trip.route.longName}
-                    </Text>
+                  <Text style={styles.subheader}>
+                    {trip.serviceOperatorLabel} {trip.route.agency.name}
+                  </Text>
+                  <Text style={styles.subheader}>
+                    {trip.serviceManagerLabel} {trip.route.competentAuthority}
+                  </Text>
+                  <Text style={styles.subheader}>{trip.routeTypeLabel}</Text>
+                  {true && (
                     <Text style={styles.subheader}>
-                      {trip.serviceOperatorLabel} {trip.route.agency.name}
-                    </Text>
-                    <Text style={styles.subheader}>
-                      {trip.serviceManagerLabel} {trip.route.competentAuthority}
-                    </Text>
-                    <Text style={styles.subheader}>{trip.routeTypeLabel}</Text>
-                    {true && (<Text style={styles.subheader}>
                       {trip.routeValidFromLabel} {validity.validFrom}
                     </Text>
                   )}
-                    <Text style={styles.subheader}>
-                      {trip.routeValidTillLabel} {trip.tripTimesValidTill}
-                    </Text>
-                  </View>
+                  <Text style={styles.subheader}>
+                    {trip.routeValidTillLabel} {validity.validTill}
+                  </Text>
                 </View>
               </View>
+            </View>
 
             <Text>{trip.tripLongName}</Text>
             {stoptimesChunks.map(
