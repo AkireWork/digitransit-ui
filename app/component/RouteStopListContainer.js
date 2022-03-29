@@ -36,6 +36,7 @@ class RouteStopListContainer extends React.PureComponent {
     if (this.nearestStop) {
       this.nearestStop.element.scrollIntoView(false);
     }
+    this.componentDidUpdate();
   }
 
   componentWillReceiveProps({ relay, currentTime }) {
@@ -48,10 +49,11 @@ class RouteStopListContainer extends React.PureComponent {
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     const { location } = this.context;
-    const shouldUpdate = location.pathname !== nextContext.location.pathname ||
-        nextProps.pattern.stops.filter(
-            stop => stop.stopTimesForPattern.length !== 0,
-        ).length !== 0;
+    const shouldUpdate =
+      location.pathname !== nextContext.location.pathname ||
+      nextProps.pattern.stops.filter(
+        stop => stop.stopTimesForPattern.length !== 0,
+      ).length !== 0;
     return shouldUpdate;
   }
 
@@ -59,26 +61,31 @@ class RouteStopListContainer extends React.PureComponent {
     const queryTime = this.getQueryTime();
     const thisDate = this.props.currentTime.format('YYYYMMDD');
     const validFromDate = queryTime
-        ? queryTime.substr(4, 4) +
-        queryTime.substr(2, 2) +
-        queryTime.substr(0, 2)
-        : thisDate;
+      ? queryTime.substr(4, 4) + queryTime.substr(2, 2) + queryTime.substr(0, 2)
+      : thisDate;
+    const currentSeconds = this.props.currentTime.diff(
+      this.props.currentTime.clone().startOf('day'),
+      'seconds',
+    );
     if (
-        (this.props.pattern.stops.filter(
-            stop => stop.stopTimesForPattern.length !== 0,
-        ).length === 0) ||
-        (queryTime && validFromDate.localeCompare(thisDate)) > 0
+      this.props.pattern.stops.filter(
+        stop => stop.stopTimesForPattern.length !== 0,
+      ).length === 0 ||
+      this.props.pattern.stops[0].stopTimesForPattern[0].scheduledDeparture -
+        currentSeconds <
+        0 ||
+      (queryTime && validFromDate.localeCompare(thisDate)) > 0
     ) {
       this.props.pattern.trips.forEach(trip => {
         trip.activeDates.forEach(date => {
           if (
-              this.nextTripDate === undefined &&
-              date.localeCompare(validFromDate) >= 0
+            this.nextTripDate === undefined &&
+            date.localeCompare(validFromDate) > 0
           ) {
             this.nextTripDate = date;
           } else if (
-              date.localeCompare(validFromDate) >= 0 &&
-              date.localeCompare(this.nextTripDate) < 0
+            date.localeCompare(validFromDate) > 0 &&
+            date.localeCompare(this.nextTripDate) < 0
           ) {
             this.nextTripDate = date;
           }
@@ -94,9 +101,9 @@ class RouteStopListContainer extends React.PureComponent {
     }
     const nextUnix = this.props.currentTime.unix();
     const queryUnix =
-        this.nextTripDate !== undefined
-            ? moment(this.nextTripDate, 'YYYYMMDD').unix()
-            : nextUnix;
+      this.nextTripDate !== undefined
+        ? moment(this.nextTripDate, 'YYYYMMDD').unix()
+        : nextUnix;
     this.props.relay.setVariables({
       currentTime: nextUnix,
       queryTime: queryUnix,
@@ -199,6 +206,7 @@ class RouteStopListContainer extends React.PureComponent {
     safe.stopTimesForPattern = [];
     const stopPatterns = stop.stopTimesForPattern;
     let patternIndex = 0;
+    let lastCorrectPattern;
 
     while (
       patternIndex < stopPatterns.length &&
@@ -212,8 +220,15 @@ class RouteStopListContainer extends React.PureComponent {
           : undefined,
         nextStop ? nextStop.stopTimesForPattern : undefined,
       );
-      if (correctPattern !== undefined) {
+      if (
+        correctPattern !== undefined &&
+        (lastCorrectPattern === undefined ||
+          correctPattern.scheduledDeparture -
+            lastCorrectPattern.scheduledDeparture >
+            0)
+      ) {
         safe.stopTimesForPattern.push(correctPattern);
+        lastCorrectPattern = correctPattern;
         if (repeatStops.includes(safe.code)) {
           patternIndex += 1;
         }
@@ -247,7 +262,8 @@ class RouteStopListContainer extends React.PureComponent {
       for (let i = 0; i < nextPatterns.length; i++) {
         if (i - patternIndex > 1) {
           break;
-        } else if ( //in case of a first stop is repeat stop and first stoptime of first stop is actually endtime of previous pattern that has already departed from first stop.
+        } else if (
+          // in case of a first stop is repeat stop and first stoptime of first stop is actually endtime of previous pattern that has already departed from first stop.
           patternIndex === 0 &&
           result === undefined &&
           thisPattern.stopTimesForPattern.length > 1 &&

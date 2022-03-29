@@ -187,7 +187,6 @@ class RoutePatternSelect extends Component {
     const {
       validFrom,
     } = this.props;
-    console.log(`pattern select render: ${validFrom}`);
 
     return this.state.loading === true ? (
       <div className={cx('route-pattern-select', this.props.className)} />
