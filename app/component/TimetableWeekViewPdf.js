@@ -206,31 +206,18 @@ function TimetableWeekViewPdf({ patterns }) {
     // eslint-disable-next-line no-unused-expressions
     ptrns?.forEach(pattern => {
       const timetableStarts = [];
-      const uniqueTimetables = pattern.patternTimetable
-        ?.map(timetable => timetable.validity.validFrom)
-        .filter((value, index, self) => {
-          return self.indexOf(value) === index;
-        });
       // eslint-disable-next-line no-unused-expressions
-      pattern.patternTimetable?.forEach((timetable, index) => {
+      pattern.patternTimetable?.forEach((timetable, index, self) => {
         if (!timetableStarts.some(st => st === timetable.validity.validFrom)) {
           // eslint-disable-next-line no-param-reassign
-          timetable.trip.weekdays =
-            timetable.trip.tripTimesWeekdaysGroups[index];
-          if (
-            uniqueTimetables.length === 2 &&
-            timetable.trip.stoptimesForWeek.length > 1
-          ) {
-            // eslint-disable-next-line no-param-reassign
-            timetable.trip.stoptimesForWeek = timetable.trip.stoptimesForWeek.slice(
-              timetableStarts.length === 0
-                ? 0
-                : Math.floor(timetable.trip.stoptimesForWeek.length / 2),
-              timetableStarts.length === 0
-                ? Math.floor(timetable.trip.stoptimesForWeek.length / 2)
-                : timetable.trip.stoptimesForWeek.length,
-            );
-          }
+          const tripsOnThisPattern = self.filter(tmtbl => tmtbl.validity.validFrom === timetable.validity.validFrom);
+          const tripWeekdays = tripsOnThisPattern.map(tmtbl => tmtbl.weekdays);
+          const tripStartTimes = tripsOnThisPattern.map(tmtbl => tmtbl.trip.departureStoptime.scheduledDeparture);
+
+          // eslint-disable-next-line no-param-reassign
+          timetable.trip.stoptimesForWeek = timetable.trip.stoptimesForWeek.filter(stoptime => tripStartTimes.some(starttime => starttime === stoptime.calendarDatesByFirstStoptime.time))
+          timetable.trip.stoptimesForWeek.forEach((stopTime, indx) => (stopTime.weekdays = tripWeekdays[indx]));
+
           timetables.push(timetable);
           timetableStarts.push(timetable.validity.validFrom);
         }
@@ -331,7 +318,7 @@ function TimetableWeekViewPdf({ patterns }) {
                               key={ch.__dataID__}
                             >
                               <Text style={styles.headerCell}>
-                                {trip.weekdays ? trip.weekdays : ch.weekdays}
+                                {ch.weekdays}
                               </Text>
 
                               <View style={{ marginTop: 5 }} />

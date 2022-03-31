@@ -315,6 +315,7 @@ const connectedComponent = connectToStores(
       initialVariables: {
         serviceDay: moment().format(DATE_FORMAT),
         stopId: null,
+        serviceDate: null,
       },
       fragments: {
         pattern: () => Relay.QL`
@@ -338,6 +339,7 @@ const connectedComponent = connectToStores(
                     validFrom
                     validTill
                   }
+                  weekdays
                   trip {
                     id
                     gtfsId
@@ -345,6 +347,9 @@ const connectedComponent = connectToStores(
                     wheelchairAccessible
                     tripTimesWeekdaysGroups
                     tripTimesValidTill
+                    departureStoptime (serviceDate: $serviceDate) {
+                      scheduledDeparture
+                    }
                     route {
                         color
                         shortName
