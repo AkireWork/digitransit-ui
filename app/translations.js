@@ -279,8 +279,8 @@ const translations = {
     'route-here': 'Route here',
     'route-information': 'Route info',
     'route-least-elevation-changes': 'Avoid changes in elevation',
-    'route-least-transfers': 'Avoid transfers',
-    'route-least-walking': 'Avoid walking',
+    'route-least-transfers': 'Reduce transfers',
+    'route-least-walking': 'Reduce walking',
     'route-not-possible':
       'Unfortunately, your route is not available. Technical error: "{error}"',
     'route-page.description': 'Route {route_short_name} - {route_long_name}',
@@ -706,8 +706,8 @@ const translations = {
     'route-here': 'Teekond siia',
     'route-information': 'Liini info',
     'route-least-elevation-changes': 'Välista kõrguse muutust',
-    'route-least-transfers': 'Välista ümberistumisi',
-    'route-least-walking': 'Välista kõndimist',
+    'route-least-transfers': 'Vähenda ümberistumisi',
+    'route-least-walking': 'Vähenda kõndimist',
     'route-not-possible':
       'Kahjuks ei ole sinu teekond saadaval. Tehniline viga: "{error}"',
     'route-page.description': 'Teekond {shortName} - {longName}',
@@ -1129,8 +1129,8 @@ const translations = {
     'route-here': 'Reititä tänne',
     'route-information': 'Linjatiedot',
     'route-least-elevation-changes': 'Vältä korkeuseroja',
-    'route-least-transfers': 'Vältä vaihtoja',
-    'route-least-walking': 'Vältä kävelyä',
+    'route-least-transfers': 'Vähennä siirtoja',
+    'route-least-walking': 'Vähennä kävelyä',
     'route-not-possible':
       'Valitettavasti reittisi ei ole mahdollinen. Tekninen virhe: "{error}"',
     'route-page.description': 'Linja {shortName}, {longName}',
@@ -1557,8 +1557,8 @@ const translations = {
     'route-here': 'Маршрут сюда',
     'route-information': 'Информация',
     'route-least-elevation-changes': 'Исключить изменения высоты',
-    'route-least-transfers': 'Исключить трансферы',
-    'route-least-walking': 'Исключить ходьбу пешком',
+    'route-least-transfers': 'Сократить пересадки',
+    'route-least-walking': 'Сократить ходьбу',
     'route-not-possible':
       'К сожалению, Ваш маршрут недоступен. Техническая ошибка: "{ошибка}"',
     'route-page.description': 'Маршрут {route_short_name} - {route_long_name}',

@@ -143,7 +143,6 @@ export default {
       availableOptionSets: [
         'least-transfers',
         'least-walking',
-        'public-transport-with-bicycle',
         'saved-settings',
       ],
     },

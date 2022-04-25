@@ -117,15 +117,6 @@ class QuickSettingsPanel extends React.Component {
         walkBoardCost: config.defaultOptions.walkBoardCost.more,
         walkReluctance: config.defaultOptions.walkReluctance.least,
       },
-      'public-transport-with-bicycle': {
-        ...defaultSettings,
-        modes: [
-          StreetMode.Bicycle,
-          ...getDefaultTransportModes(config).filter(
-            mode => !hasBikeRestriction(config, mode),
-          ),
-        ].join(','),
-      },
       [QuickOptionSetType.PreferWalkingRoutes]: {
         ...defaultSettings,
         optimize: OptimizeType.Safe,
@@ -384,16 +375,6 @@ class QuickSettingsPanel extends React.Component {
                   {this.context.intl.formatMessage({
                     id: 'route-prefer-greenways',
                     defaultMessage: 'Prefer cycling routes',
-                  })}
-                </option>
-              )}
-              {applicableQuickOptionSets.includes(
-                'public-transport-with-bicycle',
-              ) && (
-                <option value="public-transport-with-bicycle">
-                  {this.context.intl.formatMessage({
-                    id: 'route-public-transport-with-bicycle',
-                    defaultMessage: 'Public transport with bicycle',
                   })}
                 </option>
               )}
