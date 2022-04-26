@@ -34,7 +34,7 @@ export const getGTFSId = ({ id, gtfsId }) => {
     if (id.indexOf('#') === -1) {
       return id.substring(5);
     }
-    return id.substring(id.indexOf('GTFS:') +5, id.indexOf('#'));
+    return id.substring(id.indexOf('GTFS:') + 5, id.indexOf('#'));
   }
 
   return undefined;
@@ -47,10 +47,13 @@ export const isTerminal = ({ layer }) =>
   layer === 'station' || layer === 'favouriteStation';
 
 export const isLocation = ({ layer }) =>
-    layer === 'address' || layer === 'venue'|| layer === 'currentPosition'|| layer === 'favouritePlace';
+  layer === 'address' ||
+  layer === 'venue' ||
+  layer === 'currentPosition' ||
+  layer === 'favouritePlace';
 
 export const isRoute = ({ layer }) =>
-    layer && layer.toLowerCase().includes('route');
+  layer && layer.toLowerCase().includes('route');
 
 export function extractStopFromName(suggestion) {
   return suggestion.name && suggestion.name.replace(/ [\d-]+$/, '');
@@ -70,7 +73,7 @@ export function getAddressLabel(suggestion) {
       .filter(x => !!x)
       .join(', ');
     if (suggestion.localadmin && suggestion.localadmin !== suggestion.name) {
-      label = suggestion.localadmin + ', ' + label;
+      label = `${suggestion.localadmin}, ${label}`;
     }
   }
   return label.replace(/,\s*$/, '').replace(/^, /, '');
@@ -105,6 +108,9 @@ export const getNameLabel = memoize(
       case 'route-SUBWAY':
       case 'route-FERRY':
       case 'route-AIRPLANE':
+        const region = suggestion.competentAuthority
+          ? `(${suggestion.competentAuthority})`
+          : '';
         return !plain && suggestion.shortName
           ? [
               <span key={suggestion.gtfsId}>
@@ -116,8 +122,11 @@ export const getNameLabel = memoize(
                 </span>
                 <span className="suggestion-type">
                   &nbsp;-&nbsp;
-                  <FormattedMessage id="route" defaultMessage="Route" />
-                  &nbsp;({suggestion.region || suggestion.competentAuthority})
+                  <FormattedMessage
+                    id={suggestion.mode.toLowerCase()}
+                    defaultMessage="Route"
+                  />
+                  &nbsp;{region}
                 </span>
               </span>,
               suggestion.longName,
@@ -170,7 +179,8 @@ export function uniqByLabel(features) {
       isEqual(
         getNameLabel(feat1.properties)[1],
         getNameLabel(feat2.properties)[1],
-      ) && feat1.properties.layer === feat2.properties.layer
+      ) &&
+      feat1.properties.layer === feat2.properties.layer
     );
   });
 }
