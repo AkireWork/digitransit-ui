@@ -45,7 +45,12 @@ const SuggestionItem = pure(
           loading,
         })}
       >
-        <span className="autosuggestIcon">{icon}</span>
+        <span
+          className="autosuggestIcon"
+          style={{ color: `#${item.properties.color || 'cbcbcb'}` }}
+        >
+          {icon}
+        </span>
         <div>
           <p className="suggestion-name">{name}</p>
           <p className="suggestion-label">{label}</p>

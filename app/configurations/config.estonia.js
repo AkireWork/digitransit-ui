@@ -914,7 +914,7 @@ export default {
   timetablesSelection: [
     {
       type: 'urban-lines',
-      icon_type: 'bus-withoutBox',
+      icon_type: 'bus',
       areas: [
         { name: 'Tallinn', competent_authority: ['Tallinna linn'] },
         { name: 'Tartu', competent_authority: ['Tartu linn'] },
@@ -930,7 +930,7 @@ export default {
     },
     {
       type: 'county-lines',
-      icon_type: 'bus-withoutBox',
+      icon_type: 'bus',
       areas: [
         { name: 'Harjumaa', competent_authority: ['Harjumaa'] },
         { name: 'Hiiumaa', competent_authority: ['Hiiumaa'] },
@@ -952,19 +952,19 @@ export default {
     },
     {
       type: 'long-distance-lines',
-      icon_type: 'bus-withoutBox',
+      icon_type: 'bus',
       areas: [{ name: '', competent_authority: [''] }],
       route_colors: ['#660000'],
     },
     {
       type: 'train-lines',
-      icon_type: 'rail-withoutBox',
+      icon_type: 'rail',
       areas: [{ name: '', competent_authority: [''] }],
       route_colors: ['#ff711d'],
     },
     {
       type: 'ferry-lines',
-      icon_type: 'ferry-withoutBox',
+      icon_type: 'ferry',
       areas: [{ name: '', competent_authority: [''] }],
       route_colors: ['#8bb4c5'],
     },
