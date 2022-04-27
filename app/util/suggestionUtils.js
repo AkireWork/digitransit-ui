@@ -237,12 +237,12 @@ export function getIcon(layer) {
     ['localadmin', 'icon-icon_city'],
     ['venue', 'icon-icon_city'],
     ['neighbourhood', 'icon-icon_city'],
-    ['route-BUS', 'icon-icon_bus'],
-    ['route-TRAM', 'icon-icon_tram'],
-    ['route-RAIL', 'icon-icon_rail'],
-    ['route-SUBWAY', 'icon-icon_subway'],
-    ['route-FERRY', 'icon-icon_ferry'],
-    ['route-AIRPLANE', 'icon-icon_airplane'],
+    ['route-BUS', 'icon-icon_bus-withoutBox'],
+    ['route-TRAM', 'icon-icon_tram-withoutBox'],
+    ['route-RAIL', 'icon-icon_rail-withoutBox'],
+    ['route-SUBWAY', 'icon-icon_subway-withoutBox'],
+    ['route-FERRY', 'icon-icon_ferry-withoutBox'],
+    ['route-AIRPLANE', 'icon-icon_airplane-withoutBox'],
   ]);
 
   const defaultIcon = 'icon-icon_place';

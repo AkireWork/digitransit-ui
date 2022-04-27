@@ -37,6 +37,7 @@ const SuggestionItem = pure(
 
     const [name, label] = getNameLabel(item.properties, false);
     const competentAuthority = item.properties.competentAuthority;
+    const itemColor = item.properties.color ? `#${item.properties.color}` : '';
 
     const ri = (
       <div
@@ -45,10 +46,7 @@ const SuggestionItem = pure(
           loading,
         })}
       >
-        <span
-          className="autosuggestIcon"
-          style={{ color: `#${item.properties.color || 'cbcbcb'}` }}
-        >
+        <span className="autosuggestIcon" style={{ color: itemColor }}>
           {icon}
         </span>
         <div>
