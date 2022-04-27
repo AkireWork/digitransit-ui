@@ -92,8 +92,8 @@ const Timetables = ({ routes, currentLanguage, params }, { config }) => {
                 >
                   <Icon
                     height={0.75}
-                    img={`icon-icon_${timetablesSelection.icon_type}`}
-                    color={routeItem.color}
+                    img={`icon-icon_${routeItem.mode.toLowerCase()}`}
+                    color={`#${routeItem.color}`}
                   />
                   <div
                     style={{
@@ -104,6 +104,19 @@ const Timetables = ({ routes, currentLanguage, params }, { config }) => {
                     }}
                   >
                     {routeItem.shortName}
+                  </div>
+                  <div
+                      style={{
+                        width: '110px',
+                        display: 'inline-block',
+                        margin: 'auto auto',
+                        paddingLeft: '5px',
+                      }}
+                  >
+                    <FormattedMessage
+                        id={routeItem.mode.toLowerCase()}
+                        defaultMessage="Route"
+                    />
                   </div>
                   <span>{routeItem.longName}</span>
                 </Link>
@@ -146,6 +159,7 @@ export default Relay.createContainer(
           longName
           competentAuthority
           color
+          mode
           patterns {
             headsign
             code
