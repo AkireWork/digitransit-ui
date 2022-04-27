@@ -23,6 +23,7 @@ class PatternStopsContainer extends React.PureComponent {
     breakpoint: PropTypes.string.isRequired,
   };
 
+
   static contextTypes = {
     router: routerShape.isRequired,
   };

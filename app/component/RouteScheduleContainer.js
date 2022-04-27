@@ -14,6 +14,8 @@ import Loading from './Loading';
 import Icon from './Icon';
 import { RealtimeStateType } from '../constants';
 import TimetableWeekViewPdf from './TimetableWeekViewPdf';
+import TimetableWeekViewPdfButton from './TimetableWeekViewPdfButton';
+import RouteStopListContainer from './RouteStopListContainer';
 
 const DATE_FORMAT = 'YYYYMMDD';
 
@@ -25,36 +27,12 @@ const isTripCanceled = trip =>
     .map(x => x[1])
     .every(st => st.realtimeState === RealtimeStateType.Canceled);
 
-const RouteTypeLine = color => {
-  switch (color) {
-    case 'ff711d':
-      return 'route-type-train';
-    case 'de2c42':
-      return 'route-type-city-line-bus';
-    case '016e12':
-      return 'route-type-city-line-tram';
-    case '1ccc48':
-      return 'route-type-city-line-trolley';
-    case 'bd4819':
-      return 'route-type-city-line-commercial';
-    case '3bb5db':
-      return 'route-type-regional-line-pso';
-    case '094f82':
-      return 'route-type-regional-line-commercial';
-    case '660000':
-      return 'route-type-long-distance-bus-line';
-    case '8bb4c5':
-      return 'route-type-ferry';
-    default:
-      return '';
-  }
-}
-
 class RouteScheduleContainer extends Component {
   static propTypes = {
     pattern: PropTypes.object.isRequired,
     relay: PropTypes.object.isRequired,
     serviceDay: PropTypes.string.isRequired,
+    patternForPdf: PropTypes.object,
   };
 
   static contextTypes = {
@@ -180,39 +158,6 @@ class RouteScheduleContainer extends Component {
     );
   };
 
-  injectTranslationsForPdf = patterns => {
-    return patterns.map(pattern => {
-      pattern.patternTimetable.forEach(timetable => {
-        // eslint-disable-next-line no-param-reassign
-        timetable.trip.serviceOperatorLabel = this.context.intl.formatMessage({
-          id: 'service-operator',
-          defaultMessage: 'Operator:',
-        });
-        // eslint-disable-next-line no-param-reassign
-        timetable.trip.serviceManagerLabel = this.context.intl.formatMessage({
-          id: 'service-manager',
-          defaultMessage: 'Manager:',
-        });
-        // eslint-disable-next-line no-param-reassign
-        timetable.trip.routeTypeLabel = this.context.intl.formatMessage({
-          id: RouteTypeLine(timetable.trip.route.color),
-          defaultMessage: 'Regional line (Commercial)',
-        });
-        // eslint-disable-next-line no-param-reassign
-        timetable.trip.routeValidFromLabel = this.context.intl.formatMessage({
-          id: 'timetable-valid-from',
-          defaultMessage: 'The timetable is valid from:',
-        });
-        // eslint-disable-next-line no-param-reassign
-        timetable.trip.routeValidTillLabel = this.context.intl.formatMessage({
-          id: 'timetable-valid-till',
-          defaultMessage: 'The timetable is valid until:',
-        });
-      });
-      return pattern;
-    });
-  };
-
   openRoutePDF = (e, routePDFUrl) => {
     e.stopPropagation();
     window.open(routePDFUrl);
@@ -265,11 +210,8 @@ class RouteScheduleContainer extends Component {
             onDateChange={this.changeDate}
           />
           {showWeekView() && (
-            <TimetableWeekViewPdf
-              {...this.props}
-              patterns={this.injectTranslationsForPdf(
-                this.props.pattern.route.patterns,
-              )}
+            <TimetableWeekViewPdfButton
+              pattern={this.props.patternForPdf}
             />
           )}
 
@@ -311,14 +253,14 @@ class RouteScheduleContainer extends Component {
 }
 
 const connectedComponent = connectToStores(
-    Relay.createContainer(RouteScheduleContainer, {
-      initialVariables: {
-        serviceDay: moment().format(DATE_FORMAT),
-        stopId: null,
-        serviceDate: null,
-      },
-      fragments: {
-        pattern: () => Relay.QL`
+  Relay.createContainer(RouteScheduleContainer, {
+    initialVariables: {
+      serviceDay: moment().format(DATE_FORMAT),
+      stopId: null,
+      serviceDate: null,
+    },
+    fragments: {
+      pattern: () => Relay.QL`
         fragment on Pattern {
           stops {
             id
@@ -330,64 +272,6 @@ const connectedComponent = connectToStores(
             shortName
             color
             longName
-            patterns {
-                stops {
-                    name
-                }
-                patternTimetable (stopId: $stopId) {
-                  validity {
-                    validFrom
-                    validTill
-                  }
-                  weekdays
-                  trip {
-                    id
-                    gtfsId
-                    tripLongName
-                    wheelchairAccessible
-                    tripTimesWeekdaysGroups
-                    tripTimesValidTill
-                    departureStoptime (serviceDate: $serviceDate) {
-                      scheduledDeparture
-                    }
-                    route {
-                        color
-                        shortName
-                        longName
-                        agency {
-                            name
-                        }
-                        competentAuthority
-                    }
-                    stoptimesForWeek {
-                        parts
-                        weekdays
-                        calendarDatesByFirstStoptime {
-                            time
-                            calendarDateExceptions {
-                                exceptionType
-                                dates
-                            }
-                        }
-                        tripTimesByWeekdaysList {
-                            tripTimeByStopNameList {
-                                stopName
-                                differentDeparture
-                                tripTimeShort {
-                                    headsign
-                                    realtimeState
-                                    scheduledArrival
-                                    scheduledDeparture
-                                    serviceDay
-                                    pickupType
-                                    dropoffType
-                                }
-                            }
-                        }
-                    }
-                  }
-                }
-            }
           }
           tripsForDate(serviceDay: $serviceDay) {
             id
@@ -405,15 +289,22 @@ const connectedComponent = connectToStores(
           }
         }
       `,
-      },
-    }),
-    [],
-    context => ({
-      serviceDay: context
-          .getStore('TimeStore')
-          .getCurrentTime()
-          .format(DATE_FORMAT),
-    }),
+      patternForPdf: () =>
+        Relay.QL`
+      fragment on Pattern {
+        code
+        ${TimetableWeekViewPdfButton.getFragment('pattern')}
+      }
+    `,
+    },
+  }),
+  [],
+  context => ({
+    serviceDay: context
+      .getStore('TimeStore')
+      .getCurrentTime()
+      .format(DATE_FORMAT),
+  }),
 );
 
 export { connectedComponent as default, RouteScheduleContainer as Component };
