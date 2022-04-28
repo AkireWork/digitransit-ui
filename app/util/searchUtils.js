@@ -516,6 +516,7 @@ function getRoutes(input, config) {
           mode
           longName
           competentAuthority
+          color
           patterns { 
             code
           }
