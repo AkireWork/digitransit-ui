@@ -13,11 +13,6 @@ import {
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import Icon from './Icon';
-import Relay from "react-relay/classic";
-import take from "lodash/take";
-import {routeNameCompare} from "../util/searchUtils";
-import StopPageHeader from "./StopPageHeader";
-import StopCardHeaderContainer from "./StopCardHeaderContainer";
 
 Font.register({
   family: 'Lato',
@@ -166,7 +161,7 @@ function TextDoubleCell(props) {
   );
 }
 
-export default function TimetableWeekViewPdf({ patterns }) {
+function TimetableWeekViewPdf({ patterns }) {
   let hasDifferentArrivalDepartures = false;
 
   const renderTime = tripTime => {
@@ -219,11 +214,13 @@ export default function TimetableWeekViewPdf({ patterns }) {
           const tripWeekdays = tripsOnThisPattern.map(tmtbl => tmtbl.weekdays);
           const tripStartTimes = tripsOnThisPattern.map(tmtbl => tmtbl.trip.departureStoptime.scheduledDeparture);
 
+          const copyPattern = JSON.parse(JSON.stringify(pattern));
           // eslint-disable-next-line no-param-reassign
-          timetable.trip.stoptimesForWeek = timetable.trip.stoptimesForWeek.filter(stoptime => tripStartTimes.some(starttime => starttime === stoptime.calendarDatesByFirstStoptime.time))
-          timetable.trip.stoptimesForWeek.forEach((stopTime, indx) => (stopTime.weekdays = tripWeekdays[indx]));
-
-          timetables.push(timetable);
+          copyPattern.trip.stoptimesForWeek = copyPattern.trip.stoptimesForWeek.filter(stoptime => tripStartTimes.some(starttime => starttime === stoptime.calendarDatesByFirstStoptime.time));
+          copyPattern.trip.stoptimesForWeek.forEach((stopTime, indx) => (stopTime.weekdays = tripWeekdays[indx]));
+          copyPattern.validity = timetable.validity;
+          copyPattern.columnId = timetable.__dataID__;
+          timetables.push(copyPattern);
           timetableStarts.push(timetable.validity.validFrom);
         }
       });
@@ -233,12 +230,12 @@ export default function TimetableWeekViewPdf({ patterns }) {
 
   return (
     <Document>
-      {getTimetables(patterns)?.map(({ trip, validity, __dataID__ }, i) => {
+      {getTimetables(patterns)?.map(({ trip, validity, columnId }, i) => {
         const stoptimesChunks = chunkArray(trip.stoptimesForWeek, 7);
 
         return (
           // eslint-disable-next-line dot-notation
-          <Page size="A4" style={styles.page} key={__dataID__}>
+          <Page size="A4" style={styles.page} key={columnId}>
             <View style={styles.header}>
               <View style={{ flexDirection: 'row', marginBottom: '20px' }}>
                 <Text
@@ -282,7 +279,7 @@ export default function TimetableWeekViewPdf({ patterns }) {
                     const idxs = getIdxs(chunk);
                     return (
                       // eslint-disable-next-line react/no-array-index-key
-                      <Table wrap={false} key={chunk.__dataID__}>
+                      <Table wrap={false} key={index}>
                         <FirstColumn last={tttidx === list.length - 1}>
                           <HeaderCell>&nbsp;</HeaderCell>
 
@@ -410,3 +407,67 @@ export default function TimetableWeekViewPdf({ patterns }) {
 TimetableWeekViewPdf.propTypes = {
   patterns: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
+
+export default function PDFButton(props) {
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const renderPDF = () => {
+    setIsGenerating(true);
+
+    setTimeout(() => {
+      const docBlob = pdf(TimetableWeekViewPdf(props)).toBlob();
+
+      docBlob
+          .then(blob => {
+            // create a blobURI pointing to our Blob
+            const blobUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.onclick = () => {
+              window.open(blobUrl);
+              return false;
+            };
+            // some browser needs the anchor to be in the doc
+            document.body.append(link);
+            link.click();
+            link.remove();
+            // in case the Blob uses a lot of memory
+            // setTimeout(() => URL.revokeObjectURL(blobUrl), 7000);
+          })
+          .catch(err => {
+            // TODO: show error result
+            console.error(err);
+            alert('couldnt generate your pdf, please try again later');
+          })
+          .finally(() => {
+            setIsGenerating(false);
+          });
+    }, 50);
+  };
+
+  return (
+      <button
+          className="secondary-button small"
+          style={{
+            fontSize: '0.8125rem',
+            textDecoration: 'none',
+            marginBottom: '0.7em',
+            marginLeft: 'auto',
+            marginRight: '0.7em',
+            display: 'flex !important',
+          }}
+          disabled={isGenerating}
+          onClick={renderPDF}
+      >
+        <Icon img="icon-icon_print" />
+        {isGenerating ? (
+            <FormattedMessage id="loading" defaultMessage="Loading..." />
+        ) : (
+            <FormattedMessage
+                id="print-timetable-plan"
+                defaultMessage="Koondplaan"
+            />
+        )}
+      </button>
+  );
+}
