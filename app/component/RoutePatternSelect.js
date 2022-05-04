@@ -121,14 +121,7 @@ class RoutePatternSelect extends Component {
     } = this.props;
     const { router } = this.context;
 
-    const safePatterns = this.getSafePatterns(route.patterns, serviceDay);
-
-    let patterns =
-      activeTab === 'aikataulu' || activeTab === 'pysakit'
-        ? safePatterns
-        : safePatterns.filter(
-            p => Array.isArray(p.tripsForDate) && p.tripsForDate.length > 0,
-          );
+    let patterns = this.getSafePatterns(route.patterns, serviceDay);
 
     if (patterns.length === 0) {
       return null;

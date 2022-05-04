@@ -156,7 +156,6 @@ class RoutePage extends React.Component {
     }
 
     this.setState({ validFrom });
-    console.log(`route page: ${this.state.validFrom}`);
     // if config contains mqtt feed and old client has not been removed
     if (client) {
       const { realTime } = config;
