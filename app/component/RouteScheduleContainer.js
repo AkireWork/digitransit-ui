@@ -180,39 +180,6 @@ class RouteScheduleContainer extends Component {
     );
   };
 
-  injectTranslationsForPdf = patterns => {
-    return patterns.map(pattern => {
-      pattern.patternTimetable.forEach(timetable => {
-        // eslint-disable-next-line no-param-reassign
-        timetable.trip.serviceOperatorLabel = this.context.intl.formatMessage({
-          id: 'service-operator',
-          defaultMessage: 'Operator:',
-        });
-        // eslint-disable-next-line no-param-reassign
-        timetable.trip.serviceManagerLabel = this.context.intl.formatMessage({
-          id: 'service-manager',
-          defaultMessage: 'Manager:',
-        });
-        // eslint-disable-next-line no-param-reassign
-        timetable.trip.routeTypeLabel = this.context.intl.formatMessage({
-          id: RouteTypeLine(timetable.trip.route.color),
-          defaultMessage: 'Regional line (Commercial)',
-        });
-        // eslint-disable-next-line no-param-reassign
-        timetable.trip.routeValidFromLabel = this.context.intl.formatMessage({
-          id: 'timetable-valid-from',
-          defaultMessage: 'The timetable is valid from:',
-        });
-        // eslint-disable-next-line no-param-reassign
-        timetable.trip.routeValidTillLabel = this.context.intl.formatMessage({
-          id: 'timetable-valid-till',
-          defaultMessage: 'The timetable is valid until:',
-        });
-      });
-      return pattern;
-    });
-  };
-
   openRoutePDF = (e, routePDFUrl) => {
     e.stopPropagation();
     window.open(routePDFUrl);
@@ -221,6 +188,37 @@ class RouteScheduleContainer extends Component {
   printRouteTimetable = e => {
     e.stopPropagation();
     window.print();
+  };
+
+  injectTranslationsForPdf = patterns => {
+    return patterns.map(pattern => {
+      // eslint-disable-next-line no-param-reassign
+      pattern.trip.serviceOperatorLabel = this.context.intl.formatMessage({
+        id: 'service-operator',
+        defaultMessage: 'Operator:',
+      });
+      // eslint-disable-next-line no-param-reassign
+      pattern.trip.serviceManagerLabel = this.context.intl.formatMessage({
+        id: 'service-manager',
+        defaultMessage: 'Manager:',
+      });
+      // eslint-disable-next-line no-param-reassign
+      pattern.trip.routeTypeLabel = this.context.intl.formatMessage({
+        id: RouteTypeLine(pattern.trip.route.color),
+        defaultMessage: 'Regional line (Commercial)',
+      });
+      // eslint-disable-next-line no-param-reassign
+      pattern.trip.routeValidFromLabel = this.context.intl.formatMessage({
+        id: 'timetable-valid-from',
+        defaultMessage: 'The timetable is valid from:',
+      });
+      // eslint-disable-next-line no-param-reassign
+      pattern.trip.routeValidTillLabel = this.context.intl.formatMessage({
+        id: 'timetable-valid-till',
+        defaultMessage: 'The timetable is valid until:',
+      });
+      return pattern;
+    });
   };
 
   initState(props, isInitialState) {
@@ -265,12 +263,12 @@ class RouteScheduleContainer extends Component {
             onDateChange={this.changeDate}
           />
           {showWeekView() && (
-            <TimetableWeekViewPdf
-              {...this.props}
-              patterns={this.injectTranslationsForPdf(
-                this.props.pattern.route.patterns,
-              )}
-            />
+              <TimetableWeekViewPdf
+                  {...this.props}
+                  patterns={this.injectTranslationsForPdf(
+                      this.props.pattern.route.patterns,
+                  )}
+              />
           )}
 
           {this.dateForPrinting()}
@@ -311,14 +309,14 @@ class RouteScheduleContainer extends Component {
 }
 
 const connectedComponent = connectToStores(
-    Relay.createContainer(RouteScheduleContainer, {
-      initialVariables: {
-        serviceDay: moment().format(DATE_FORMAT),
-        stopId: null,
-        serviceDate: null,
-      },
-      fragments: {
-        pattern: () => Relay.QL`
+  Relay.createContainer(RouteScheduleContainer, {
+    initialVariables: {
+      serviceDay: moment().format(DATE_FORMAT),
+      stopId: null,
+      serviceDate: null,
+    },
+    fragments: {
+      pattern: () => Relay.QL`
         fragment on Pattern {
           stops {
             id
@@ -334,22 +332,13 @@ const connectedComponent = connectToStores(
                 stops {
                     name
                 }
-                patternTimetable (stopId: $stopId) {
-                  validity {
-                    validFrom
-                    validTill
-                  }
-                  weekdays
-                  trip {
+                trip {
                     id
                     gtfsId
                     tripLongName
                     wheelchairAccessible
                     tripTimesWeekdaysGroups
                     tripTimesValidTill
-                    departureStoptime (serviceDate: $serviceDate) {
-                      scheduledDeparture
-                    }
                     route {
                         color
                         shortName
@@ -385,6 +374,18 @@ const connectedComponent = connectToStores(
                             }
                         }
                     }
+                }
+                patternTimetable (stopId: $stopId) {
+                  validity {
+                    validFrom
+                    validTill
+                  }
+                  weekdays
+                  trip {
+                    id
+                    departureStoptime (serviceDate: $serviceDate) {
+                      scheduledDeparture
+                    }
                   }
                 }
             }
@@ -405,15 +406,15 @@ const connectedComponent = connectToStores(
           }
         }
       `,
-      },
-    }),
-    [],
-    context => ({
-      serviceDay: context
-          .getStore('TimeStore')
-          .getCurrentTime()
-          .format(DATE_FORMAT),
-    }),
+    },
+  }),
+  [],
+  context => ({
+    serviceDay: context
+      .getStore('TimeStore')
+      .getCurrentTime()
+      .format(DATE_FORMAT),
+  }),
 );
 
 export { connectedComponent as default, RouteScheduleContainer as Component };
