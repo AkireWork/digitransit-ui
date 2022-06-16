@@ -23,6 +23,7 @@ class MapLayerStore extends Store {
       ticketMachine: true,
     },
     showAllBusses: false,
+    amenities: true,
     geoJson: {},
   };
 
@@ -84,6 +85,7 @@ export const mapLayerShape = PropTypes.shape({
     ticketMachine: PropTypes.bool,
   }).isRequired,
   showAllBusses: PropTypes.bool,
+  amenities: PropTypes.bool,
   geoJson: PropTypes.object,
 });
 

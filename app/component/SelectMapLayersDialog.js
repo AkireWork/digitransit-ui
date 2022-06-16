@@ -64,7 +64,16 @@ class SelectMapLayersDialog extends React.Component {
   };
 
   renderContents = (
-    { citybike, parkAndRide, stop, terminal, ticketSales, geoJson, showAllBusses },
+    {
+      amenities,
+      citybike,
+      parkAndRide,
+      stop,
+      terminal,
+      ticketSales,
+      geoJson,
+      showAllBusses,
+    },
     config,
     lang,
   ) => {
@@ -145,75 +154,81 @@ class SelectMapLayersDialog extends React.Component {
               }
             />
           )}
-          {config.cityBike &&
-            config.cityBike.showCityBikes && (
+          {config.amenities && config.amenities.showAmenities && (
+            <Checkbox
+              checked={amenities}
+              defaultMessage="Amenity"
+              labelId="map-layer-amenities"
+              onChange={e =>
+                this.updateSetting({ amenities: e.target.checked })
+              }
+            />
+          )}
+          {config.cityBike && config.cityBike.showCityBikes && (
+            <Checkbox
+              checked={citybike}
+              defaultMessage="Citybike station"
+              labelId="map-layer-citybike"
+              onChange={e => {
+                this.updateSetting({ citybike: e.target.checked });
+              }}
+            />
+          )}
+          {config.parkAndRide && config.parkAndRide.showParkAndRide && (
+            <Checkbox
+              checked={parkAndRide}
+              defaultMessage="Park &amp; ride"
+              labelId="map-layer-park-and-ride"
+              onChange={e =>
+                this.updateSetting({ parkAndRide: e.target.checked })
+              }
+            />
+          )}
+        </div>
+        {config.ticketSales && config.ticketSales.showTicketSales && (
+          <div className="checkbox-grouping">
+            <Checkbox
+              checked={ticketSales.ticketMachine}
+              defaultMessage="Ticket machine"
+              labelId="map-layer-ticket-sales-machine"
+              onChange={e =>
+                this.updateTicketSalesSetting({
+                  ticketMachine: e.target.checked,
+                })
+              }
+            />
+            <Checkbox
+              checked={ticketSales.salesPoint}
+              defaultMessage="Travel Card top up"
+              labelId="map-layer-ticket-sales-point"
+              onChange={e =>
+                this.updateTicketSalesSetting({
+                  salesPoint: e.target.checked,
+                  servicePoint: e.target.checked,
+                })
+              }
+            />
+          </div>
+        )}
+        {config.geoJson && Array.isArray(config.geoJson.layers) && (
+          <div className="checkbox-grouping">
+            {config.geoJson.layers.map(gj => (
               <Checkbox
-                checked={citybike}
-                defaultMessage="Citybike station"
-                labelId="map-layer-citybike"
+                checked={
+                  (gj.isOffByDefault && geoJson[gj.url] === true) ||
+                  (!gj.isOffByDefault && geoJson[gj.url] !== false)
+                }
+                defaultMessage={gj.name[lang]}
+                key={gj.url}
                 onChange={e => {
-                  this.updateSetting({ citybike: e.target.checked });
+                  const newSetting = {};
+                  newSetting[gj.url] = e.target.checked;
+                  this.updateGeoJsonSetting(newSetting);
                 }}
               />
-            )}
-          {config.parkAndRide &&
-            config.parkAndRide.showParkAndRide && (
-              <Checkbox
-                checked={parkAndRide}
-                defaultMessage="Park &amp; ride"
-                labelId="map-layer-park-and-ride"
-                onChange={e =>
-                  this.updateSetting({ parkAndRide: e.target.checked })
-                }
-              />
-            )}
-        </div>
-        {config.ticketSales &&
-          config.ticketSales.showTicketSales && (
-            <div className="checkbox-grouping">
-              <Checkbox
-                checked={ticketSales.ticketMachine}
-                defaultMessage="Ticket machine"
-                labelId="map-layer-ticket-sales-machine"
-                onChange={e =>
-                  this.updateTicketSalesSetting({
-                    ticketMachine: e.target.checked,
-                  })
-                }
-              />
-              <Checkbox
-                checked={ticketSales.salesPoint}
-                defaultMessage="Travel Card top up"
-                labelId="map-layer-ticket-sales-point"
-                onChange={e =>
-                  this.updateTicketSalesSetting({
-                    salesPoint: e.target.checked,
-                    servicePoint: e.target.checked,
-                  })
-                }
-              />
-            </div>
-          )}
-        {config.geoJson &&
-          Array.isArray(config.geoJson.layers) && (
-            <div className="checkbox-grouping">
-              {config.geoJson.layers.map(gj => (
-                <Checkbox
-                  checked={
-                    (gj.isOffByDefault && geoJson[gj.url] === true) ||
-                    (!gj.isOffByDefault && geoJson[gj.url] !== false)
-                  }
-                  defaultMessage={gj.name[lang]}
-                  key={gj.url}
-                  onChange={e => {
-                    const newSetting = {};
-                    newSetting[gj.url] = e.target.checked;
-                    this.updateGeoJsonSetting(newSetting);
-                  }}
-                />
-              ))}
-            </div>
-          )}
+            ))}
+          </div>
+        )}
       </React.Fragment>
     );
   };

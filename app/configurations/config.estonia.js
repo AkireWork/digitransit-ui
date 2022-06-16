@@ -28,6 +28,7 @@ export default {
     STOP_MAP: `${MAP_URL}/map/v1/estonia-stop-map/`,
     CITYBIKE_MAP: `${MAP_URL}/map/v1/hsl-citybike-map/`,
     PARK_AND_RIDE_MAP: `${MAP_URL}/map/v1/estonia-parkandride-bikestop-map/`,
+    AMENITIES_MAP: `${MAP_URL}/map/v1/estonia-amenities-map/`,
     ALERTS: process.env.ALERTS_URL || `${API_URL}/realtime/service-alerts/v1`,
     FONT:
       'https://fonts.googleapis.com/css?family=Lato:300,400,900%7CPT+Sans+Narrow:400,700',
@@ -278,6 +279,24 @@ export default {
 
     cityBikeMinZoom: 14,
     cityBikeSmallIconZoom: 14,
+    // When should bikeshare availability be rendered in orange rather than green
+    fewAvailableCount: 3,
+  },
+
+  amenities: {
+    // Config for map features. NOTE: availability for routing is controlled by
+    // transportModes.citybike.availableForSelection
+    showAmenities: true,
+    showStationId: true,
+
+    // useUrl: {
+    //   fi: 'https://www.hsl.fi/kaupunkipyorat',
+    //   sv: 'https://www.hsl.fi/sv/stadscyklar',
+    //   en: 'https://www.hsl.fi/en/citybikes',
+    // },
+
+    amenitiesMinZoom: 14,
+    amenitiesSmallIconZoom: 14,
     // When should bikeshare availability be rendered in orange rather than green
     fewAvailableCount: 3,
   },
@@ -924,6 +943,7 @@ export default {
         { name: 'Rakvere', competent_authority: ['Rakvere linnaliin'] },
         { name: 'Kuressaare', competent_authority: ['Saaremaa'] },
         { name: 'Sillamäe', competent_authority: ['Sillamäe linn'] },
+        { name: 'Jõhvi linn', competent_authority: ['Jõhvi linn'] },
       ],
       route_colors: ['#de2c42', '#016e12', '#1ccc48', '#bd4819'],
     },

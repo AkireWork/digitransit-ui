@@ -13,28 +13,43 @@ const FULL_CIRCLE = Math.PI * 2;
 export const getCaseRadius = memoize(
   glfun({
     base: 1.15,
-    stops: [[11.9, 0], [12, 1.5], [22, 26]],
+    stops: [
+      [11.9, 0],
+      [12, 1.5],
+      [22, 26],
+    ],
   }),
 );
 
 export const getStopRadius = memoize(
   glfun({
     base: 1.15,
-    stops: [[11.9, 0], [12, 1], [22, 24]],
+    stops: [
+      [11.9, 0],
+      [12, 1],
+      [22, 24],
+    ],
   }),
 );
 
 export const getHubRadius = memoize(
   glfun({
     base: 1.15,
-    stops: [[14, 0], [14.1, 2], [22, 20]],
+    stops: [
+      [14, 0],
+      [14.1, 2],
+      [22, 20],
+    ],
   }),
 );
 
 export const getMapIconScale = memoize(
   glfun({
     base: 1,
-    stops: [[13, 0.8], [20, 1.6]],
+    stops: [
+      [13, 0.8],
+      [20, 1.6],
+    ],
   }),
 );
 
@@ -202,7 +217,7 @@ export const drawRoundIconAlertBadge = async (
   }
 
   const iconSize = iconRadius * 2;
-  const badgeSize = iconSize * 3 / 4;
+  const badgeSize = (iconSize * 3) / 4;
   if (badgeSize < 7) {
     return;
   }
@@ -276,6 +291,12 @@ export function drawParkAndRideIcon(tile, geom, width, height) {
       drawIconImage(image, tile, geom, width, height);
     },
   );
+}
+
+export function drawAmenitiesIcon(tile, geom, width, height) {
+  getImageFromSpriteCache('icon-icon_place', width, height).then(image => {
+    drawIconImage(image, tile, geom, width, height);
+  });
 }
 
 export function drawParkAndRideBicycleIcon(tile, geom, width, height) {
