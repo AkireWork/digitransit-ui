@@ -286,7 +286,7 @@ export default {
   amenities: {
     // Config for map features. NOTE: availability for routing is controlled by
     // transportModes.citybike.availableForSelection
-    showAmenities: true,
+    showAmenities: false,
     showStationId: true,
 
     // useUrl: {
@@ -295,8 +295,8 @@ export default {
     //   en: 'https://www.hsl.fi/en/citybikes',
     // },
 
-    amenitiesMinZoom: 14,
-    amenitiesSmallIconZoom: 14,
+    amenitiesMinZoom: 17,
+    amenitiesSmallIconZoom: 18,
     // When should bikeshare availability be rendered in orange rather than green
     fewAvailableCount: 3,
   },
@@ -943,6 +943,7 @@ export default {
         { name: 'Rakvere', competent_authority: ['Rakvere linnaliin'] },
         { name: 'Kuressaare', competent_authority: ['Saaremaa'] },
         { name: 'Sillamäe', competent_authority: ['Sillamäe linn'] },
+        { name: 'Jõhvi linn', competent_authority: ['Jõhvi linn'] },
       ],
       route_colors: ['#de2c42', '#016e12', '#1ccc48', '#bd4819'],
     },

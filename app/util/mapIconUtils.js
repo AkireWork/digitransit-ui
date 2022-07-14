@@ -285,6 +285,54 @@ export function drawTerminalIcon(tile, geom, type, name) {
   });
 }
 
+export function getAmenityIcon(value) {
+  const layerIcon = new Map([
+    ['place', 'icon-icon_dot'],
+    ['bar', 'icon-icon_amenity_sustenance'],
+    ['biergarten', 'icon-icon_amenity_sustenance'],
+    ['cafe', 'icon-icon_amenity_sustenance'],
+    ['fast_food', 'icon-icon_amenity_sustenance'],
+    ['food_court', 'icon-icon_amenity_sustenance'],
+    ['ice_cream', 'icon-icon_amenity_sustenance'],
+    ['pub', 'icon-icon_amenity_sustenance'],
+    ['restaurant', 'icon-icon_amenity_sustenance'],
+    ['driving_school', 'icon-icon_amenity_education'],
+    ['kindergarten', 'icon-icon_amenity_education'],
+    ['language_school', 'icon-icon_amenity_education'],
+    ['library', 'icon-icon_amenity_education'],
+    ['toy_library', 'icon-icon_amenity_education'],
+    ['music_school', 'icon-icon_amenity_education'],
+    ['school', 'icon-icon_amenity_education'],
+    ['university', 'icon-icon_amenity_education'],
+    ['college', 'icon-icon_amenity_education'],
+    ['charging_station', 'icon-icon_amenity_charging_station'],
+    ['fuel', 'icon-icon_amenity_fuel'],
+    ['motorcycle_parking', 'icon-icon_amenity_parking'],
+    ['parking', 'icon-icon_amenity_parking'],
+    ['parking_entrance', 'icon-icon_amenity_parking'],
+    ['parking_space', 'icon-icon_amenity_parking'],
+    ['taxi', 'icon-icon_amenity_taxi'],
+    ['bank', 'icon-icon_amenity_bank'],
+    ['clinic', 'icon-icon_amenity_medical'],
+    ['dentist', 'icon-icon_amenity_medical'],
+    ['doctors', 'icon-icon_amenity_medical'],
+    ['hospital', 'icon-icon_amenity_medical'],
+    ['nursing_home', 'icon-icon_amenity_medical'],
+    ['pharmacy', 'icon-icon_amenity_medical'],
+    ['veterinary', 'icon-icon_amenity_vet'],
+    ['arts_centre', 'icon-icon_arts_centre'],
+    ['cinema', 'icon-icon_amenity_cinema'],
+    ['community_centre', 'icon-icon_amenity_community'],
+    ['conference_centre', 'icon-icon_amenity_community'],
+    ['events_venue', 'icon-icon_amenity_community'],
+    ['nightclub', 'icon-icon_amenity_nightclub'],
+    ['theatre', 'icon-icon_amenity_theatre'],
+  ]);
+
+  const defaultIcon = 'icon-icon_dot';
+  return layerIcon.get(value) || defaultIcon;
+}
+
 export function drawParkAndRideIcon(tile, geom, width, height) {
   getImageFromSpriteCache('icon-icon_car_park-withoutBox', width, height).then(
     image => {
@@ -293,8 +341,20 @@ export function drawParkAndRideIcon(tile, geom, width, height) {
   );
 }
 
-export function drawAmenitiesIcon(tile, geom, width, height) {
-  getImageFromSpriteCache('icon-icon_place', width, height).then(image => {
+export function drawAmenitiesIcon(key, tile, geom, width, height) {
+  getImageFromSpriteCache(getAmenityIcon(key), width, height).then(image => {
+    drawIconImage(image, tile, geom, width, height);
+  });
+}
+
+export function drawHistoricIcon(tile, geom, width, height) {
+  getImageFromSpriteCache('icon-icon_historic', width, height).then(image => {
+    drawIconImage(image, tile, geom, width, height);
+  });
+}
+
+export function drawTourismIcon(tile, geom, width, height) {
+  getImageFromSpriteCache('icon-icon_tourism', width, height).then(image => {
     drawIconImage(image, tile, geom, width, height);
   });
 }

@@ -3,6 +3,8 @@ import Protobuf from 'pbf';
 
 import {
   drawAmenitiesIcon,
+  drawHistoricIcon,
+  drawTourismIcon,
 } from '../../../util/mapIconUtils';
 import { Contour } from '../../../util/geo-utils';
 import { isBrowser } from '../../../util/browser';
@@ -56,12 +58,37 @@ export default class Amenities {
                 ).centroid();
               }
               [[feature.geom]] = feature.loadGeometry();
-              drawAmenitiesIcon(
-                this.tile,
-                feature.geom,
-                this.width,
-                this.height,
-              );
+              if (!feature.properties) {
+                drawAmenitiesIcon(
+                  'place',
+                  this.tile,
+                  feature.geom,
+                  this.width,
+                  this.height,
+                );
+              } else if (feature.properties.historic) {
+                drawHistoricIcon(
+                  this.tile,
+                  feature.geom,
+                  this.width,
+                  this.height,
+                );
+              } else if (feature.properties.tourism) {
+                drawTourismIcon(
+                  this.tile,
+                  feature.geom,
+                  this.width,
+                  this.height,
+                );
+              } else {
+                drawAmenitiesIcon(
+                  feature.properties.amenity,
+                  this.tile,
+                  feature.geom,
+                  this.width,
+                  this.height,
+                );
+              }
             }
           }
         },
