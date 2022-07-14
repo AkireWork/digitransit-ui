@@ -295,8 +295,8 @@ export default {
     //   en: 'https://www.hsl.fi/en/citybikes',
     // },
 
-    amenitiesMinZoom: 14,
-    amenitiesSmallIconZoom: 14,
+    amenitiesMinZoom: 17,
+    amenitiesSmallIconZoom: 18,
     // When should bikeshare availability be rendered in orange rather than green
     fewAvailableCount: 3,
   },
