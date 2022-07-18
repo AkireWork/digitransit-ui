@@ -286,7 +286,7 @@ export default {
   amenities: {
     // Config for map features. NOTE: availability for routing is controlled by
     // transportModes.citybike.availableForSelection
-    showAmenities: false,
+    showAmenities: true,
     showStationId: true,
 
     // useUrl: {
