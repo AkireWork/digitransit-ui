@@ -33,6 +33,10 @@ export default class Amenities {
         return undefined;
       }
 
+      if (!this.config.amenities.showNavigationCard) {
+        return undefined;
+      }
+
       return res.arrayBuffer().then(
         buf => {
           const vt = new VectorTile(new Protobuf(buf));

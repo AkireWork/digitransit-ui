@@ -288,6 +288,7 @@ export default {
     // transportModes.citybike.availableForSelection
     showAmenities: true,
     showStationId: true,
+    showNavigationCard: true,
 
     // useUrl: {
     //   fi: 'https://www.hsl.fi/kaupunkipyorat',
