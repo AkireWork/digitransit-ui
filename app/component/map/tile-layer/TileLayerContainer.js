@@ -26,6 +26,7 @@ import TileContainer from './TileContainer';
 import Loading from '../../Loading';
 import { isFeatureLayerEnabled } from '../../../util/mapLayerUtils';
 import MapLayerStore, { mapLayerShape } from '../../../store/MapLayerStore';
+import AmenityPopup from "../popups/AmenityPopup";
 
 const initialState = {
   selectableTargets: undefined,
@@ -236,6 +237,16 @@ class TileLayerContainer extends GridLayer {
               renderLoading={this.state.showSpinner ? loadingPopup : undefined}
               renderFetched={data => <StopMarkerPopup {...data} />}
             />
+          );
+        } else if (this.state.selectableTargets[0].layer === 'amenities') {
+          id = this.state.selectableTargets[0].feature.properties.FID;
+          contents = (
+              <AmenityPopup
+                  properties={this.state.selectableTargets[0].feature.properties}
+                  name="Huvipunkt"
+                  lat={this.state.coords.lat}
+                  lon={this.state.coords.lng}
+              />
           );
         } else if (this.state.selectableTargets[0].layer === 'citybike') {
           ({ id } = this.state.selectableTargets[0].feature.properties);

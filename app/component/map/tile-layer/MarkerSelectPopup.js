@@ -44,7 +44,7 @@ function MarkerSelectPopup(props) {
       return (
         <SelectAmenitiesRow
           {...option.feature.properties}
-          key={option.feature.properties.carParkId}
+          key={option.feature.properties.id}
           selectRow={() => props.selectRow(option)}
         />
       );
