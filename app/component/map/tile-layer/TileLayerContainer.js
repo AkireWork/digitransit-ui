@@ -24,7 +24,7 @@ import TicketSalesPopup from '../popups/TicketSalesPopup';
 import LocationPopup from '../popups/LocationPopup';
 import TileContainer from './TileContainer';
 import Loading from '../../Loading';
-import { isFeatureLayerEnabled } from '../../../util/mapLayerUtils';
+import {getAmenityName, isFeatureLayerEnabled} from '../../../util/mapLayerUtils';
 import MapLayerStore, { mapLayerShape } from '../../../store/MapLayerStore';
 import AmenityPopup from "../popups/AmenityPopup";
 
@@ -243,7 +243,7 @@ class TileLayerContainer extends GridLayer {
           contents = (
               <AmenityPopup
                   properties={this.state.selectableTargets[0].feature.properties}
-                  name="Huvipunkt"
+                  name={getAmenityName(this.state.selectableTargets[0].feature.properties, 'Huvipunkt')}
                   lat={this.state.coords.lat}
                   lon={this.state.coords.lng}
               />
