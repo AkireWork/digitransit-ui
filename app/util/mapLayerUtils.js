@@ -61,3 +61,35 @@ export const isFeatureLayerEnabled = (
   }
   return isLayerEnabled(layerName, mapLayers);
 };
+
+export const getAmenityName = (properties, defaultValue) => {
+  if (properties.name) {
+    return properties.name;
+  }
+  if (properties.alt_name) {
+    return properties.alt_name;
+  }
+  if (properties.description) {
+    return properties.description;
+  }
+  if (properties.historic || properties.tourism) {
+    return 'Vaatamisväärsus';
+  }
+  if (properties.amenity && properties.amenity.toLowerCase().includes('parking')) {
+    return 'Parkimine';
+  }
+  return defaultValue;
+};
+
+export const getAmenityType = (properties) => {
+  if (!properties) {
+    return 'place';
+  }
+  if (properties.historic) {
+    return 'historic';
+  }
+  if (properties.tourism) {
+    return 'tourism';
+  }
+  return properties.amenity;
+};

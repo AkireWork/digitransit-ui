@@ -8,6 +8,8 @@ import {
 } from '../../../util/mapIconUtils';
 import { Contour } from '../../../util/geo-utils';
 import { isBrowser } from '../../../util/browser';
+import pick from "lodash/pick";
+import {getAmenityType} from "../../../util/mapLayerUtils";
 
 const showFacilities = 14;
 
@@ -62,37 +64,14 @@ export default class Amenities {
                 ).centroid();
               }
               [[feature.geom]] = feature.loadGeometry();
-              if (!feature.properties) {
-                drawAmenitiesIcon(
-                  'place',
+              this.features.push(pick(feature, ['geom', 'properties']));
+              drawAmenitiesIcon(
+                  getAmenityType(feature.properties),
                   this.tile,
                   feature.geom,
                   this.width,
                   this.height,
-                );
-              } else if (feature.properties.historic) {
-                drawHistoricIcon(
-                  this.tile,
-                  feature.geom,
-                  this.width,
-                  this.height,
-                );
-              } else if (feature.properties.tourism) {
-                drawTourismIcon(
-                  this.tile,
-                  feature.geom,
-                  this.width,
-                  this.height,
-                );
-              } else {
-                drawAmenitiesIcon(
-                  feature.properties.amenity,
-                  this.tile,
-                  feature.geom,
-                  this.width,
-                  this.height,
-                );
-              }
+              );
             }
           }
         },

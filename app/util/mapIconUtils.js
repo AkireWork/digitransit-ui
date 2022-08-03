@@ -327,6 +327,8 @@ export function getAmenityIcon(value) {
     ['events_venue', 'icon-icon_amenity_community'],
     ['nightclub', 'icon-icon_amenity_nightclub'],
     ['theatre', 'icon-icon_amenity_theatre'],
+    ['historic', 'icon-icon_historic'],
+    ['tourism', 'icon-icon_tourism'],
   ]);
 
   const defaultIcon = 'icon-icon_dot';

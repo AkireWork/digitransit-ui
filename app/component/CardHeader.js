@@ -107,7 +107,7 @@ CardHeader.propTypes = {
   secondaryLink: PropTypes.node,
   name: PropTypes.string.isRequired,
   url: PropTypes.string,
-  description: PropTypes.string.isRequired,
+  description: PropTypes.string,
   code: PropTypes.string,
   externalLink: PropTypes.node,
   icon: PropTypes.string,
