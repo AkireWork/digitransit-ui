@@ -161,6 +161,60 @@ function TextDoubleCell(props) {
   );
 }
 
+function getWeekdaysList(value, oldValue) {
+  let result = oldValue;
+  if (!result) {
+    result = [];
+  }
+  if (!value) {
+    return result;
+  }
+  const weekdays = 'ETKNRLP'.split('');
+  let take = false;
+  if (value.includes('-')) {
+    for (let i = 0; i < weekdays.length; i++) {
+      if (value.includes(weekdays[i])) {
+        result.push(weekdays[i]);
+        take = !take;
+      } else if (take === true) {
+        result.push(weekdays[i]);
+      }
+    }
+  } else {
+    const newDays = weekdays.filter(day => value.includes(day));
+    newDays.forEach(day => result.push(day));
+  }
+  return result;
+}
+
+function getWeekdaysShort(value) {
+  let result = '';
+  if (!value) {
+    return result;
+  }
+  if (value.length < 3) {
+    result = value.join(', ');
+  } else {
+    const weekdays = 'ETKNRLP'.split('');
+    let taken = 0;
+    for (let i = 0; i < weekdays.length; i++) {
+      if (value.includes(weekdays[i])) {
+        if (result === '') {
+          result = `${weekdays[i]}-`;
+        } else if (taken === value.length - 1) {
+          result += weekdays[i];
+        }
+        // eslint-disable-next-line no-plusplus
+        taken++;
+      } else if (taken !== 0 && taken < value.length) {
+        result = value.join(', ');
+        break;
+      }
+    }
+  }
+  return result;
+}
+
 function TimetableWeekViewPdf({ patterns }) {
   let hasDifferentArrivalDepartures = false;
 
@@ -210,14 +264,51 @@ function TimetableWeekViewPdf({ patterns }) {
       pattern.patternTimetable?.forEach((timetable, index, self) => {
         if (!timetableStarts.some(st => st === timetable.validity.validFrom)) {
           // eslint-disable-next-line no-param-reassign
-          const tripsOnThisPattern = self.filter(tmtbl => tmtbl.validity.validFrom === timetable.validity.validFrom);
+          const tripsOnThisPattern = self.filter(
+            tmtbl => tmtbl.validity.validFrom === timetable.validity.validFrom,
+          );
+          const tripsMap = new Map();
+          tripsOnThisPattern.forEach(tmtbl =>
+            tripsMap.set(
+              tmtbl.trip.departureStoptime.scheduledDeparture,
+              getWeekdaysList(
+                tmtbl.weekdays,
+                tripsMap.get(tmtbl.trip.departureStoptime.scheduledDeparture),
+              ),
+            ),
+          );
+/*          const tripsOnThisPattern = new Map(
+            self
+              .filter(
+                tmtbl =>
+                  tmtbl.validity.validFrom === timetable.validity.validFrom,
+              )
+              .map(tmtbl => {
+                return [
+                  tmtbl.trip.departureStoptime.scheduledDeparture,
+                  tmtbl.weekdays,
+                ];
+              }),
+          );*/
           const tripWeekdays = tripsOnThisPattern.map(tmtbl => tmtbl.weekdays);
-          const tripStartTimes = tripsOnThisPattern.map(tmtbl => tmtbl.trip.departureStoptime.scheduledDeparture);
+          const tripStartTimes = tripsOnThisPattern.map(
+            tmtbl => tmtbl.trip.departureStoptime.scheduledDeparture,
+          );
 
           const copyPattern = JSON.parse(JSON.stringify(pattern));
-          // eslint-disable-next-line no-param-reassign
-          copyPattern.trip.stoptimesForWeek = copyPattern.trip.stoptimesForWeek.filter(stoptime => tripStartTimes.some(starttime => starttime === stoptime.calendarDatesByFirstStoptime.time));
-          copyPattern.trip.stoptimesForWeek.forEach((stopTime, indx) => (stopTime.weekdays = tripWeekdays[indx]));
+          copyPattern.trip.stoptimesForWeek = copyPattern.trip.stoptimesForWeek.filter(
+            stoptime =>
+              Array.from(tripsMap.keys()).some(
+                starttime =>
+                  starttime === stoptime.calendarDatesByFirstStoptime.time,
+              ),
+          );
+          copyPattern.trip.stoptimesForWeek.forEach(
+            stopTime =>
+              (stopTime.weekdays = getWeekdaysShort(
+                tripsMap.get(stopTime.calendarDatesByFirstStoptime.time),
+              )),
+          );
           copyPattern.validity = timetable.validity;
           copyPattern.columnId = timetable.__dataID__;
           timetables.push(copyPattern);
@@ -418,56 +509,56 @@ export default function PDFButton(props) {
       const docBlob = pdf(TimetableWeekViewPdf(props)).toBlob();
 
       docBlob
-          .then(blob => {
-            // create a blobURI pointing to our Blob
-            const blobUrl = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.onclick = () => {
-              window.open(blobUrl);
-              return false;
-            };
-            // some browser needs the anchor to be in the doc
-            document.body.append(link);
-            link.click();
-            link.remove();
-            // in case the Blob uses a lot of memory
-            // setTimeout(() => URL.revokeObjectURL(blobUrl), 7000);
-          })
-          .catch(err => {
-            // TODO: show error result
-            console.error(err);
-            alert('couldnt generate your pdf, please try again later');
-          })
-          .finally(() => {
-            setIsGenerating(false);
-          });
+        .then(blob => {
+          // create a blobURI pointing to our Blob
+          const blobUrl = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.onclick = () => {
+            window.open(blobUrl);
+            return false;
+          };
+          // some browser needs the anchor to be in the doc
+          document.body.append(link);
+          link.click();
+          link.remove();
+          // in case the Blob uses a lot of memory
+          // setTimeout(() => URL.revokeObjectURL(blobUrl), 7000);
+        })
+        .catch(err => {
+          // TODO: show error result
+          console.error(err);
+          alert('couldnt generate your pdf, please try again later');
+        })
+        .finally(() => {
+          setIsGenerating(false);
+        });
     }, 50);
   };
 
   return (
-      <button
-          className="secondary-button small"
-          style={{
-            fontSize: '0.8125rem',
-            textDecoration: 'none',
-            marginBottom: '0.7em',
-            marginLeft: 'auto',
-            marginRight: '0.7em',
-            display: 'flex !important',
-          }}
-          disabled={isGenerating}
-          onClick={renderPDF}
-      >
-        <Icon img="icon-icon_print" />
-        {isGenerating ? (
-            <FormattedMessage id="loading" defaultMessage="Loading..." />
-        ) : (
-            <FormattedMessage
-                id="print-timetable-plan"
-                defaultMessage="Koondplaan"
-            />
-        )}
-      </button>
+    <button
+      className="secondary-button small"
+      style={{
+        fontSize: '0.8125rem',
+        textDecoration: 'none',
+        marginBottom: '0.7em',
+        marginLeft: 'auto',
+        marginRight: '0.7em',
+        display: 'flex !important',
+      }}
+      disabled={isGenerating}
+      onClick={renderPDF}
+    >
+      <Icon img="icon-icon_print" />
+      {isGenerating ? (
+        <FormattedMessage id="loading" defaultMessage="Loading..." />
+      ) : (
+        <FormattedMessage
+          id="print-timetable-plan"
+          defaultMessage="Koondplaan"
+        />
+      )}
+    </button>
   );
 }
