@@ -277,24 +277,6 @@ function TimetableWeekViewPdf({ patterns }) {
               ),
             ),
           );
-/*          const tripsOnThisPattern = new Map(
-            self
-              .filter(
-                tmtbl =>
-                  tmtbl.validity.validFrom === timetable.validity.validFrom,
-              )
-              .map(tmtbl => {
-                return [
-                  tmtbl.trip.departureStoptime.scheduledDeparture,
-                  tmtbl.weekdays,
-                ];
-              }),
-          );*/
-          const tripWeekdays = tripsOnThisPattern.map(tmtbl => tmtbl.weekdays);
-          const tripStartTimes = tripsOnThisPattern.map(
-            tmtbl => tmtbl.trip.departureStoptime.scheduledDeparture,
-          );
-
           const copyPattern = JSON.parse(JSON.stringify(pattern));
           copyPattern.trip.stoptimesForWeek = copyPattern.trip.stoptimesForWeek.filter(
             stoptime =>
