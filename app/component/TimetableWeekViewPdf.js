@@ -285,12 +285,12 @@ function TimetableWeekViewPdf({ patterns }) {
                   starttime === stoptime.calendarDatesByFirstStoptime.time,
               ),
           );
-          copyPattern.trip.stoptimesForWeek.forEach(
+/*          copyPattern.trip.stoptimesForWeek.forEach(
             stopTime =>
               (stopTime.weekdays = getWeekdaysShort(
                 tripsMap.get(stopTime.calendarDatesByFirstStoptime.time),
               )),
-          );
+          );*/
           copyPattern.validity = timetable.validity;
           copyPattern.columnId = timetable.__dataID__;
           timetables.push(copyPattern);
