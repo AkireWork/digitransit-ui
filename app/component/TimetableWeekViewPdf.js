@@ -161,60 +161,6 @@ function TextDoubleCell(props) {
   );
 }
 
-function getWeekdaysList(value, oldValue) {
-  let result = oldValue;
-  if (!result) {
-    result = [];
-  }
-  if (!value) {
-    return result;
-  }
-  const weekdays = 'ETKNRLP'.split('');
-  let take = false;
-  if (value.includes('-')) {
-    for (let i = 0; i < weekdays.length; i++) {
-      if (value.includes(weekdays[i])) {
-        result.push(weekdays[i]);
-        take = !take;
-      } else if (take === true) {
-        result.push(weekdays[i]);
-      }
-    }
-  } else {
-    const newDays = weekdays.filter(day => value.includes(day));
-    newDays.forEach(day => result.push(day));
-  }
-  return result;
-}
-
-function getWeekdaysShort(value) {
-  let result = '';
-  if (!value) {
-    return result;
-  }
-  if (value.length < 3) {
-    result = value.join(', ');
-  } else {
-    const weekdays = 'ETKNRLP'.split('');
-    let taken = 0;
-    for (let i = 0; i < weekdays.length; i++) {
-      if (value.includes(weekdays[i])) {
-        if (result === '') {
-          result = `${weekdays[i]}-`;
-        } else if (taken === value.length - 1) {
-          result += weekdays[i];
-        }
-        // eslint-disable-next-line no-plusplus
-        taken++;
-      } else if (taken !== 0 && taken < value.length) {
-        result = value.join(', ');
-        break;
-      }
-    }
-  }
-  return result;
-}
-
 function TimetableWeekViewPdf({ patterns }) {
   let hasDifferentArrivalDepartures = false;
 
@@ -259,42 +205,25 @@ function TimetableWeekViewPdf({ patterns }) {
     const timetables = [];
     // eslint-disable-next-line no-unused-expressions
     ptrns?.forEach(pattern => {
-      const timetableStarts = [];
+      const timetablePeriods = [];
       // eslint-disable-next-line no-unused-expressions
-      pattern.patternTimetable?.forEach((timetable, index, self) => {
-        if (!timetableStarts.some(st => st === timetable.validity.validFrom)) {
-          // eslint-disable-next-line no-param-reassign
-          const tripsOnThisPattern = self.filter(
-            tmtbl => tmtbl.validity.validFrom === timetable.validity.validFrom,
-          );
-          const tripsMap = new Map();
-          tripsOnThisPattern.forEach(tmtbl =>
-            tripsMap.set(
-              tmtbl.trip.departureStoptime.scheduledDeparture,
-              getWeekdaysList(
-                tmtbl.weekdays,
-                tripsMap.get(tmtbl.trip.departureStoptime.scheduledDeparture),
-              ),
-            ),
-          );
+      pattern.trip.stoptimesForWeek?.forEach(stopTimes => {
+        if (
+          !timetablePeriods.some(
+            st => st === stopTimes.validFrom + stopTimes.validTill,
+          )
+        ) {
           const copyPattern = JSON.parse(JSON.stringify(pattern));
           copyPattern.trip.stoptimesForWeek = copyPattern.trip.stoptimesForWeek.filter(
-            stoptime =>
-              Array.from(tripsMap.keys()).some(
-                starttime =>
-                  starttime === stoptime.calendarDatesByFirstStoptime.time,
-              ),
+            stoptime => stoptime.validFrom === stopTimes.validFrom,
           );
-/*          copyPattern.trip.stoptimesForWeek.forEach(
-            stopTime =>
-              (stopTime.weekdays = getWeekdaysShort(
-                tripsMap.get(stopTime.calendarDatesByFirstStoptime.time),
-              )),
-          );*/
-          copyPattern.validity = timetable.validity;
-          copyPattern.columnId = timetable.__dataID__;
+          copyPattern.validity = {
+            validFrom: stopTimes.validFrom,
+            validTill: stopTimes.validTill,
+          };
+          copyPattern.columnId = stopTimes.__dataID__;
           timetables.push(copyPattern);
-          timetableStarts.push(timetable.validity.validFrom);
+          timetablePeriods.push(stopTimes.validFrom + stopTimes.validTill);
         }
       });
     });
