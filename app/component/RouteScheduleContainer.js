@@ -373,20 +373,9 @@ const connectedComponent = connectToStores(
                                 }
                             }
                         }
+                        validFrom
+                        validTill
                     }
-                }
-                patternTimetable (stopId: $stopId) {
-                  validity {
-                    validFrom
-                    validTill
-                  }
-                  weekdays
-                  trip {
-                    id
-                    departureStoptime (serviceDate: $serviceDate) {
-                      scheduledDeparture
-                    }
-                  }
                 }
             }
           }
