@@ -167,7 +167,7 @@ class RoutePatternSelect extends Component {
         o => o.key.substr(0, o.key.length - 10) !== params.patternId,
       )
     ) {
-      router.replace(`/${PREFIX_ROUTES}/${gtfsId}/pysakit/${options[0].value}`);
+      router.replace(`/${PREFIX_ROUTES}/${gtfsId}/pysakit/${options[0].props.value.trim()}`);
     } else if (options.length > 0 && this.state.loading === true) {
       this.setState({ loading: false });
     }
