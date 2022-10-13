@@ -16,7 +16,7 @@ function SelectAmenitiesRow(props, { intl }) {
         </div>
         <div className="padding-vertical-normal select-row-text">
           <span className="header-primary no-margin link-color">
-            {getAmenityName(props, 'Huvipunkt')}
+            {getAmenityName(props, 'Huvipunkt', intl)}
           </span>
         </div>
         <div className="clear" />

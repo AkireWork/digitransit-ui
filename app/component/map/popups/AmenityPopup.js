@@ -33,7 +33,7 @@ export default class AmenityPopup extends React.Component {
   render() {
     const icon = getAmenityIcon(getAmenityType(this.props.properties));
 
-    const name = getAmenityName(this.props.properties, this.props.name);
+    const name = getAmenityName(this.props.properties, this.props.name, this.context.intl);
 
     return (
       <Card>

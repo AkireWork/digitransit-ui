@@ -62,7 +62,7 @@ export const isFeatureLayerEnabled = (
   return isLayerEnabled(layerName, mapLayers);
 };
 
-export const getAmenityName = (properties, defaultValue) => {
+export const getAmenityName = (properties, defaultValue, translations) => {
   if (properties.name) {
     return properties.name;
   }
@@ -73,15 +73,35 @@ export const getAmenityName = (properties, defaultValue) => {
     return properties.description;
   }
   if (properties.historic || properties.tourism) {
-    return 'Vaatamisväärsus';
+    return translations
+      ? translations.formatMessage({
+          id: 'historic',
+          defaultMessage: 'Historic',
+        })
+      : defaultValue;
   }
-  if (properties.amenity && properties.amenity.toLowerCase().includes('parking')) {
-    return 'Parkimine';
+  if (
+    properties.amenity &&
+    properties.amenity.toLowerCase().includes('parking')
+  ) {
+    return translations
+        ? translations.formatMessage({
+          id: 'parking',
+          defaultMessage: 'Parking',
+        })
+        : defaultValue;
+  } if (properties.amenity) {
+    return translations
+        ? translations.formatMessage({
+          id: properties.amenity,
+          defaultMessage: defaultValue,
+        })
+        : defaultValue;
   }
   return defaultValue;
 };
 
-export const getAmenityType = (properties) => {
+export const getAmenityType = properties => {
   if (!properties) {
     return 'place';
   }

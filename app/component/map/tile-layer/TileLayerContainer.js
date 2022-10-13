@@ -243,7 +243,7 @@ class TileLayerContainer extends GridLayer {
           contents = (
               <AmenityPopup
                   properties={this.state.selectableTargets[0].feature.properties}
-                  name={getAmenityName(this.state.selectableTargets[0].feature.properties, 'Huvipunkt')}
+                  name="Huvipunkt"
                   lat={this.state.coords.lat}
                   lon={this.state.coords.lng}
               />
